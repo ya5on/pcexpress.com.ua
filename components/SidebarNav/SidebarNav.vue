@@ -44,7 +44,7 @@
       <nuxt-link  to="/">
         <span>Home</span>
       </nuxt-link>
-      <nuxt-link to="/shop">
+      <nuxt-link to="/categories">
         <span>Каталог товаров</span>
       </nuxt-link>
       <nuxt-link to="/terms-and-conditions">

@@ -10,13 +10,11 @@
         <nuxt-link :to="`/category/${category.id}`" class="menu-button">{{ category.title }}</nuxt-link>
         <ul class="menu-sub-list">
           <li class="menu-item"
-              v-for="sub in ALL_CATS"
-              v-if="sub.parent_id === category.id"
+              v-for="sub in SUB_CATS(category.id)"
               :key="sub.id">
             <nuxt-link :to="`/category/${sub.id}`" class="menu-button">{{ sub.title }}</nuxt-link>
             <ul class="menu-sub-list">
-              <li class="menu-item" v-for="subSub in ALL_CATS"
-                  v-if="subSub.parent_id === sub.id"
+              <li class="menu-item" v-for="subSub in SUB_CATS(sub.id)"
                   :key="subSub.id">
                 <nuxt-link :to="`/category/${subSub.id}`" class="menu-button">{{ subSub.title }}</nuxt-link>
               </li>
@@ -39,6 +37,7 @@
     computed: {
       ...mapGetters([
         'ALL_CATS',
+        'SUB_CATS',
         'MAIN_CATS',
       ]),
 

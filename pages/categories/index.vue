@@ -20,15 +20,16 @@
     computed: {
       ...mapGetters([
         'MAIN_CATS',
+        'ALL_CATS'
       ])
     },
     methods: {
       ...mapActions([
-        'GET_CATEGORIES'
+        'GET_CATEGORIES_LIST'
       ]),
     },
     mounted() {
-      this.GET_CATEGORIES()
+      this.GET_CATEGORIES_LIST()
     },
 
   }

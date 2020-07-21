@@ -19,7 +19,7 @@
             <nuxt-link to="/contacts" exact no-prefetch active-class="active" class="u-header-topbar__nav-link"><i class="ec ec-map-pointer"></i>Контакты</nuxt-link>
           </li>
           <li class="u-header-topbar__nav-item">
-            <nuxt-link to="/terms-and-conditions" class="u-header-topbar__nav-link"><i class="ec ec-support"></i>info</nuxt-link>
+            <nuxt-link to="/info" class="u-header-topbar__nav-link"><i class="ec ec-support"></i>info</nuxt-link>
           </li>
           <li class="u-header-topbar__nav-item">
             <nuxt-link to="/track-your-order" class="u-header-topbar__nav-link"><i class="ec ec-transport"></i> Отследить заказ</nuxt-link>

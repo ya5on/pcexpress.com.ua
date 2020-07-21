@@ -118,14 +118,12 @@
       ...mapGetters([
         'PRODUCTS',
         'ALL_CATS',
-        'CATEGORY'
       ]),
     },
     methods: {
       ...mapActions([
         'GET_PRODUCTS',
         'GET_CATEGORIES_LIST',
-        'GET_CURRENT_CATEGORY'
       ]),
     },
     mounted() {
