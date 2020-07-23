@@ -8,7 +8,10 @@
       <li class="breadcrumb-item">
         <i class="ec ec-arrow-right-categproes"></i>
       </li>
-      <li class="breadcrumb-item">category title</li>
+      <li class="breadcrumb-item">
+        <nuxt-link to="/">{{$route.params.id}}</nuxt-link>
+      </li>
+
       <li class="breadcrumb-item">
         <i class="ec ec-arrow-right-categproes"></i>
       </li>
@@ -29,7 +32,7 @@
         </h2>
         <div class="product__stock-code">
           <p>Наличие:
-            <span class="text-green" v-if="PRODUCT.amnt"> {{PRODUCT.amnt}} </span>
+            <span class="text-green" v-if="PRODUCT.amnt"> {{PRODUCT.amnt}} шт </span>
             <span class="text-green" v-else-if="PRODUCT.amnt === 0"> Закончился </span>
           </p>
 
@@ -92,16 +95,19 @@
     filters: {},
     computed: {
       ...mapGetters([
-        'PRODUCT'
+        'PRODUCT',
+        'SUB_CATS',
       ]),
     },
     methods: {
       ...mapActions([
         'GET_PRODUCT',
+        'GET_CATEGORIES_LIST'
       ]),
     },
     mounted() {
       this.$store.dispatch('GET_PRODUCT', { id: this.$route.params.id })
+      this.GET_CATEGORIES_LIST()
     }
   }
 </script>

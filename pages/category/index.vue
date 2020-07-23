@@ -1,12 +1,37 @@
 <template>
-  <div>
-    2523
+  <div class="container">
+    <ul>
+      <li v-for="category in ALL_CATS"
+          :key="category.id">
+        {{category.title}}
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
+  import {mapActions, mapGetters} from 'vuex'
+
   export default {
-    name: "index"
+    data() {
+      return {}
+    },
+    computed: {
+      ...mapGetters([
+        'ALL_CATS',
+        'SUB_CATS',
+        'MAIN_CATS',
+      ]),
+
+    },
+    methods: {
+      ...mapActions([
+        'GET_CATEGORIES_LIST'
+      ]),
+    },
+    mounted() {
+      this.GET_CATEGORIES_LIST()
+    },
   }
 </script>
 

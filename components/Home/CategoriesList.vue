@@ -1,26 +1,26 @@
 <template>
   <div class="menu">
-      <div class="menu-title">
-        <nuxt-link to="/categories/">Все категории</nuxt-link>
-      </div>
-    <ul class="menu-list">
-      <li class="menu-item"
-          v-for="category in MAIN_CATS"
+    <ul class="menu-categories">
+      <li class="menu-item" v-for="category in MAIN_CATS"
           :key="category.id">
-        <nuxt-link :to="`/category/${category.id}`" class="menu-button">{{ category.title }}</nuxt-link>
-        <ul class="menu-sub-list">
-          <li class="menu-item"
-              v-for="sub in SUB_CATS(category.id)"
-              :key="sub.id">
-            <nuxt-link :to="`/category/${sub.id}`" class="menu-button">{{ sub.title }}</nuxt-link>
-            <ul class="menu-sub-list">
-              <li class="menu-item" v-for="subSub in SUB_CATS(sub.id)"
-                  :key="subSub.id">
-                <nuxt-link :to="`/category/${subSub.id}`" class="menu-button">{{ subSub.title }}</nuxt-link>
-              </li>
-            </ul>
-          </li>
-        </ul>
+        <nuxt-link :to="`/category/${category.id}`" class="menu-button">
+          {{ category.title }}{{ category.id }}
+        </nuxt-link>
+        <div class="submenu">
+          <ul class="menu-sub-list" v-if="SUB_CATS.length !== 0">
+            <li class="menu-item"
+                v-for="sub in SUB_CATS(category.id)"
+                :key="sub.id">
+              <nuxt-link :to="`/category/${sub.id}`" style="color: #1869E5" class="menu-button">{{ sub.title }}</nuxt-link>
+              <ul class="">
+                <li class="menu-item" v-for="subSub in SUB_CATS(sub.id)"
+                    :key="subSub.id">
+                  <nuxt-link :to="`/category/${subSub.id}`" class="menu-button">{{ subSub.title }}</nuxt-link>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
       </li>
     </ul>
   </div>
@@ -28,11 +28,10 @@
 
 <script>
   import {mapActions, mapGetters} from 'vuex'
-  export default {
-    data(){
-      return{
 
-      }
+  export default {
+    data() {
+      return {}
     },
     computed: {
       ...mapGetters([
@@ -54,78 +53,104 @@
   }
 </script>
 
-<style lang="sass">
-  .menu
-    width: 100%
-    display: flex
-    flex-direction: column
-    background-color: #fff
-    box-shadow: 0 10px 20px rgba(64, 64, 64, 0.15)
+<style lang="scss">
+  .menu {
+    position: relative;
+  }
 
-    ul
-      list-style: none
+  .menu > ul {
+    position: relative;
+    background-color: #e9e9e9;
+    display: block;
+  }
 
-    .menu-title
-      background: #FED700
-      padding: 8px
+  .menu > ul > li {
+    display: block;
+    width: 100%;
+  }
 
-      a
-        font-size: 14px
-        padding: 8px
+  .menu > ul > li > a {
+    padding: 10px 10px;
+    color: #333;
+    text-decoration: none;
+    width: 100%;
+    display: block;
+    overflow: hidden;
+    position: relative;
+    border-bottom: 1px solid #ccc;
+  }
 
-    .menu-list
-      margin: 0
-      display: block
-      width: 100%
-      padding: 8px
+  .menu > ul > li:last-child > a {
+    border-bottom: 0;
+  }
 
-    .menu-sub-list
-      display: none
-      padding: 8px
-      background-color: transparent
-      border-radius: 10px
-      /*box-shadow: 0 10px 20px rgba(64, 64, 64, 0.15)*/
-      position: absolute
-      left: 100%
-      right: 0
-      z-index: 100
-      width: 100%
-      top: 0
-      flex-direction: column
+  .submenu {
+    visibility: hidden;
+    position: absolute;
+    transition: width 0.3s;
+    height: 100%;
+  }
 
-      .menu-item
-        border: none
-        padding: 0
+  .menu > ul > li:hover .submenu {
+    top: 0;
+    left: 100%;
+    z-index: 99;
+    visibility: visible;
+  }
+  .menu-sub-list {
+    display: block;
+    padding: 20px 30px;
+    background-color: #fff;
+    color: #fff;
+    border: 1px solid #1E9ECF;
+    width: 100%;
+  }
+  .submenu h2 {
+    color: #1E9ECF;
+    line-height: 1;
+    margin: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+  }
 
-    .menu-sub-list:hover
-      display: flex
+  .submenu .submenu-content {
+    display: block;
+    overflow: hidden;
+    position: relative;
+  }
 
-    .menu-item
-      position: relative
-      /*border-bottom: 1px solid #000*/
-      margin-bottom: 5px
+  .menu-item .submenu-content {
+    margin-left: -15px;
+    margin-right: -15px;
+  }
 
-      &:last-of-type
-        border: none
-        margin-bottom: 0
+  .menu-item .section {
+    width: 33.333%;
+    float: left;
+    padding: 0 15px;
+    position: relative;
+  }
 
-    .menu-button
-      font: inherit
-      border: 0
-      padding: 8px 8px
-      width: 100%
-      border-radius: 8px
-      display: flex
-      align-items: center
-      position: relative
-      text-align: left
-      background-color: lightgray
+  .menu-item .links ul {
+    margin: 0;
+    padding: 0;
+  }
 
-    .menu-button:hover
-      background-color: lightskyblue
+  .menu-item .links ul li {
+    display: block;
+    border-bottom: 1px solid #eee;
+  }
 
-    .menu-button:hover + .menu-sub-list
-      display: flex
+  .menu-item .links ul li:last-child {
+    border-bottom: 0;
+  }
+
+  .menu-item .links ul li a {
+    color: #555;
+    display: block;
+    text-decoration: none;
+    padding: 15px 0;
+  }
 
 </style>
 

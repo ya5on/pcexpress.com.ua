@@ -8,7 +8,7 @@
       <li class="breadcrumb-item">
         <i class="ec ec-arrow-right-categproes"></i>
       </li>
-      <li class="breadcrumb-item">cat title</li>
+      <li class="breadcrumb-item" >cat title</li>
     </ul>
     <!-- End breadcrumb -->
     <!--SHOP-GRID-->
@@ -111,14 +111,19 @@
 
   export default {
     data() {
-      return {}
-    },
+      return {
 
+      }
+    },
+    created() {
+
+    },
     computed: {
       ...mapGetters([
         'PRODUCTS',
         'ALL_CATS',
       ]),
+
     },
     methods: {
       ...mapActions([

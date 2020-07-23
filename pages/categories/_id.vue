@@ -4,7 +4,6 @@
         <ul class="menu-list">
           <li class="menu-item"
               v-for="category in SUB_CATS"
-              v-if="category.parent_id === category.id"
               :key="category.id">
             <nuxt-link :to="`/categories/${(category.id)}`" class="menu-button">{{ category.title}},{{ category.count }}</nuxt-link>
           </li>
