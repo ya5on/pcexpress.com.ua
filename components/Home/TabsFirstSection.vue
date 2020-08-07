@@ -724,6 +724,7 @@
       +col
       +size(10)
       +size-md(12)
+      overflow-x: auto
 
   .tab-pane
     display: none

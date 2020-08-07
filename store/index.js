@@ -4,7 +4,6 @@ export const state = () => ({
   categories: [],
   products: [],
   product: {},
-  all: []
 });
 
 export const mutations = {
@@ -16,9 +15,6 @@ export const mutations = {
   },
   SET_PRODUCT:(state, product) => {
     state.product = product
-  },
-  SET_ALL:(state, all) => {
-    state.all = all
   },
 };
 
@@ -56,15 +52,6 @@ export const actions = {
     commit('SET_PRODUCT', product.data)
     return product
   },
-  async GET_ALL({commit}) {
-    const all = await axios('https://b2b.nikolink.com/api/get-items.php?cat=5&token=0e94e098eac6e56a22496613b325473b7de8cb0a',{
-      method: "GET",
-    })
-    commit('SET_ALL', all.data);
-    return all;
-
-  },
-
 };
 
 export const getters = {
@@ -83,7 +70,4 @@ export const getters = {
   PRODUCT(state){
     return state.product;
   },
-  ALL(state){
-    return state.all;
-  }
 };

@@ -100,24 +100,12 @@
               <div class="nav__item">
                 <h6>Каталог товаров</h6>
                 <!-- List Group -->
-                <ul class="list-group">
-                  <li>
-                    <nuxt-link class="list-group-item" to="/">Компьютеры БУ</nuxt-link>
-                  </li>
-                  <li>
-                    <nuxt-link class="list-group-item" to="/">Мониторы БУ</nuxt-link>
-                  </li>
-                  <li>
-                    <nuxt-link class="list-group-item" to="/">Ноутбуки БУ</nuxt-link>
-                  </li>
-                  <li>
-                    <nuxt-link class="list-group-item" to="/">Комплектующие БУ</nuxt-link>
-                  </li>
-                  <li>
-                    <nuxt-link class="list-group-item" to="/">Игоровые компьютеры</nuxt-link>
-                  </li>
-                  <li>
-                    <nuxt-link class="list-group-item" to="/">Аренда компьютерной техники</nuxt-link>
+                <ul class="list-group" style="flex-direction: column-reverse; display: flex">
+                  <li class="" v-for="category in MAIN_CATS"
+                      :key="category.id">
+                    <nuxt-link :to="`/category/${category.id}`" class="list-group-item">
+                      {{ category.title }}
+                    </nuxt-link>
                   </li>
                   <!-- End List Group -->
                 </ul>
@@ -178,8 +166,23 @@
 </template>
 
 <script>
+  import {mapActions, mapGetters} from 'vuex'
   export default {
-    name: "FooterContent"
+    name: "FooterContent",
+    computed: {
+      ...mapGetters([
+        'MAIN_CATS',
+      ]),
+
+    },
+    methods: {
+      ...mapActions([
+        'GET_CATEGORIES_LIST'
+      ]),
+    },
+    mounted() {
+      this.GET_CATEGORIES_LIST()
+    },
   }
 </script>
 
@@ -277,7 +280,6 @@
       +md(justify-content, space-around)
 
     .nav__item
-      +col
       +size(4)
       +size-sm(12)
       margin-bottom: 1rem
@@ -294,7 +296,7 @@
           padding-bottom: 5px
 
       .list-group-item
-        font-size: 0.875rem
+        font-size: 0.84rem
 
 
 

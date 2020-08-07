@@ -23,7 +23,13 @@ export default {
       {
         href: "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css",
         rel: "stylesheet"
-      }
+      },
+      {
+        rel:'stylesheet',
+        href:'https://apimgmtstorelinmtekiynqw.blob.core.windows.net/content/MediaLibrary/Widget/Tracking/styles/tracking.css'
+      },
+    ],
+    script: [
 
     ]
   },
@@ -31,22 +37,20 @@ export default {
   serverMiddleware: [
   ],
   router: {
-    prefetchLinks: false
+
   },
   loading: { color: '#ddd' },
   css: [
     '@/assets/sass/style.sass',
-    'swiper/swiper.scss',
-    'swiper/swiper-bundle.css',
-    'viewerjs/dist/viewer.css'
   ],
   plugins: [
     '~/plugins/vue-backtotop',
-    '~/plugins/vue-swiper',
-    '~/plugins/v-viewer',
+    { src: '~/plugins/vue-html-remove', ssr: false },
+    { src: '~/plugins/vue-carousel', ssr: false }
   ],
   modules: [
     '@nuxtjs/axios',
+    // '@nuxtjs/markdownit',
     'nuxt-trailingslash-module',
     'nuxt-webfontloader',
     'cookie-universal-nuxt',
@@ -70,8 +74,16 @@ export default {
   ** Axios module configuration
   */
   axios: {
-    // See https://github.com/nuxt-community/axios-module#options
+
   },
+
+  // markdownit: {
+  //   preset: "default",
+  //   linkify: true,
+  //   breaks: true,
+  //   injected: true
+  // },
+
   render: {
     // http2: {
     //     push: true,

@@ -3,14 +3,17 @@
     <Header />
     <nuxt/>
     <Footer />
+    <ToTopBtn />
   </div>
 </template>
 
 <script>
   import Header from "../components/Header/Header";
   import Footer from "../components/Footer/Footer";
+  import ToTopBtn from "../components/TopBtn";
   export default {
     components: {
+      ToTopBtn,
       Footer,
       Header
     },
@@ -28,7 +31,7 @@
     },
 
     head() {
-      const canonical = `https://mysite.com${this.$route.path
+      const canonical = `https://localhost:3000${this.$route.path
         .toLowerCase()
         .replace(/\/$/, '')}`
       return {
@@ -37,7 +40,6 @@
 
         ],
         script: [
-// { src: 'https://markknol.github.io/console-log-viewer/console-log-viewer.js' }
         ],
         link: [{rel: 'canonical', href: canonical}]
       }

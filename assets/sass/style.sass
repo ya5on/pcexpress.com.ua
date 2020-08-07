@@ -25,6 +25,8 @@ strong
   +wrapper
   margin: 0 auto
   width: 100%
+  +sm(padding-left, 10px)
+  +sm(padding-right, 10px)
 
 .ec
   display: inline-block
@@ -44,8 +46,34 @@ strong
 .flex-end
   justify-content: flex-end
 
+table
+  display: block
+  width: 100%
+tbody
+  width: 100%
+td
+  display: inline-block
+  &:first-letter
+    text-transform: capitalize
 
 
+.breadcrumb
+  display: flex
+  margin-bottom: 1rem
+  margin-top: 1rem
+
+  &-item
+    margin-right: 10px
+
+  .ec
+    color: #333e48
+    font-size: 14px
 
 
+.page-enter-active,
+.page-leave-active
+  transition: opacity .3s
 
+.page-enter,
+.page-leave-active
+  opacity: 0

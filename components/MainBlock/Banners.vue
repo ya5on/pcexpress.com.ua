@@ -1,33 +1,33 @@
 <template>
   <ul class="list-group">
     <li class="list-group-item">
-      <nuxt-link to="/" class="list-group-link">
-        <img class="img-fluid" src="../../../assets/img/300X300/img6.jpg" alt="Image Description">
-        <h6 class="">Accessories</h6>
+      <nuxt-link to="/category/24" class="list-group-link">
+        <img class="img-fluid" src="../../assets/img/main-block-pics/intel.jpg" alt="Image Description">
+        <h6 class="">Процессоры</h6>
       </nuxt-link>
     </li>
     <li class="list-group-item">
-      <nuxt-link to="/" class="list-group-link">
-        <img class="img-fluid" src="../../../assets/img/300X300/img6.jpg" alt="Image Description">
-        <h6 class="">Laptop Speakers</h6>
+      <nuxt-link to="/category/13" class="list-group-link">
+        <img class="img-fluid" src="../../assets/img/main-block-pics/hdd.jpg" alt="Image Description">
+        <h6 class="">Жесткие диски (HDD)</h6>
       </nuxt-link>
     </li>
     <li class="list-group-item">
-      <nuxt-link to="/" class="list-group-link">
-        <img class="img-fluid" src="../../../assets/img/300X300/img6.jpg" alt="Image Description">
-        <h6 class="">All in One</h6>
+      <nuxt-link to="/category/27" class="list-group-link">
+        <img class="img-fluid" src="../../assets/img/main-block-pics/ozu.jpg" alt="Image Description">
+        <h6 class="">Оперативная память</h6>
       </nuxt-link>
     </li>
     <li class="list-group-item">
-      <nuxt-link to="/" class="list-group-link">
-        <img class="img-fluid" src="../../../assets/img/300X300/img6.jpg" alt="Image Description">
-        <h6 class="">Audio Speakers</h6>
+      <nuxt-link to="/category/599" class="list-group-link">
+        <img class="img-fluid" src="../../assets/img/main-block-pics/motherboard.jpg" alt="Image Description">
+        <h6 class="">Материнские платы</h6>
       </nuxt-link>
     </li>
     <li class="list-group-item">
-      <nuxt-link to="/" class="list-group-link">
-        <img class="img-fluid" src="../../../assets/img/300X300/img6.jpg" alt="Image Description">
-        <h6 class="">Camera</h6>
+      <nuxt-link to="/category/14" class="list-group-link">
+        <img class="img-fluid" src="../../assets/img/main-block-pics/acc.jpg" alt="Image Description">
+        <h6 class="">Комплектующие для ПК</h6>
       </nuxt-link>
     </li>
   </ul>
@@ -70,6 +70,8 @@
 
     img
       margin-bottom: 0.25rem
+      max-height: 124.5px
+      max-width: 124.5px
       +sm(max-width, 100px)
 
     h6

@@ -5,7 +5,8 @@
         <!-- Nav -->
         <nav class="u-header__navbar">
           <!-- Fullscreen Toggle Button -->
-          <SidebarNav />
+<!--          <SidebarNav />-->
+          <Burger class="mobile" />
           <!-- End Fullscreen Toggle Button -->
           <!-- Logo -->
           <nuxt-link class="u-header__navbar-logo" to="/"
@@ -68,11 +69,11 @@
         <!-- Secondary Menu -->
         <div class="u-header__social d-none">
           <div class="u-header__social--block">
-            <a class="u-header__social--link" href="viber://chat?number=+380637857462" title="Написать в Telegram">
-              <img src="../../assets/svg/components/telegram.svg" alt="">
-            </a>
             <a class="u-header__social--link" href="https://t.me/Mikola_Dziuba">
               <img src="../../assets/svg/components/viber.svg" alt="" title="Написать в Viber">
+            </a>
+            <a class="u-header__social--link" href="viber://chat?number=+380637857462" title="Написать в Telegram">
+              <img src="../../assets/svg/components/telegram.svg" alt="">
             </a>
           </div>
         </div>
@@ -120,15 +121,21 @@
 
 <script>
   import SidebarNav from "../SidebarNav/SidebarNav";
+  import Burger from "../SidebarNav/Burger";
   export default {
     name: "Navbar",
     components: {
+      Burger,
       SidebarNav
     },
   }
 </script>
 
 <style lang="sass" scoped>
+  .mobile
+    display: none
+    +lg(display, block)
+
   .u-header
     padding-bottom: .4rem
     padding-top: .4rem
@@ -144,7 +151,8 @@
       +col
       +size(2)
       display: flex
-      align-items: center
+      align-items: baseline
+      +sm(margin-left, 25px)
 
       .ec
         font-size: 22px

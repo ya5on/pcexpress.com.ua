@@ -3,7 +3,7 @@
   <!-- breadcrumb -->
   <ul class="breadcrumb">
     <li class="breadcrumb-item">
-      <nuxt-link to="/">Home</nuxt-link>
+      <nuxt-link to="/">Главная</nuxt-link>
     </li>
     <li class="breadcrumb-item">
       <i class="ec ec-arrow-right-categproes"></i>
@@ -58,18 +58,6 @@
 </script>
 
 <style lang="sass" scoped>
-  .breadcrumb
-    display: flex
-    margin-bottom: 1rem
-    margin-top: 1rem
-
-    &-item
-      margin-right: 10px
-
-    .ec
-      color: #333e48
-      font-size: 14px
-
 
   .info
 

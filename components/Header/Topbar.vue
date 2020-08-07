@@ -22,7 +22,7 @@
             <nuxt-link to="/info" class="u-header-topbar__nav-link"><i class="ec ec-support"></i>info</nuxt-link>
           </li>
           <li class="u-header-topbar__nav-item">
-            <nuxt-link to="/track-your-order" class="u-header-topbar__nav-link"><i class="ec ec-transport"></i> Отследить заказ</nuxt-link>
+            <nuxt-link to="/track-your-order" class="u-header-topbar__nav-link"><i class="ec ec-transport"></i>Отследить заказ НП</nuxt-link>
           </li>
           <li class="u-header-topbar__nav-item">
             <!-- Account Sidebar Toggle Button -->

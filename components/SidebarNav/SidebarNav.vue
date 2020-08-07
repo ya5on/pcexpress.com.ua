@@ -173,7 +173,7 @@
     transition: .25s ease-in-out;
   }
 
-  .av-icon span:nth-child(1) {
+  .nav-icon span:nth-child(1) {
     top: 0;
   }
 

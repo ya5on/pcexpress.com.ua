@@ -3,24 +3,17 @@
     <!-- breadcrumb -->
     <ul class="breadcrumb">
       <li class="breadcrumb-item">
-        <nuxt-link to="/">Home</nuxt-link>
+        <nuxt-link to="/">Главная</nuxt-link>
       </li>
       <li class="breadcrumb-item">
         <i class="ec ec-arrow-right-categproes"></i>
       </li>
-      <li class="breadcrumb-item" >cat title</li>
+      <li class="breadcrumb-item">{{ALL_CATS[this.$route.params.id]}}</li>
     </ul>
     <!-- End breadcrumb -->
     <!--SHOP-GRID-->
     <div class="shop">
-      <div class="shop__nav d-none">
-        <ul>
-          <li v-for="category in ALL_CATS"
-              :key="category.id">
-            <nuxt-link :to="`/category/${category.id}`">{{ category.title }}</nuxt-link>
-          </li>
-        </ul>
-      </div>
+      <CategoriesList class="shop__nav d-none" />
       <div class="shop__grid">
 
         <div class="shop__bar">
@@ -28,17 +21,16 @@
           <p class="font-size-14 text-gray-90 mb-0">Товаров: {{ PRODUCTS.length }}</p>
         </div>
 
+        <div class="shop__mobile">
+          <Catalogue class="shop__mobile--catalog"/>
+        </div>
+
         <div class="shop__control">
-          <div class="d-none">
+          <div>
             <ul class="nav">
               <li class="nav-item">
                 <div class="d-md-flex">
-                  <i class="fa fa-th"></i>
-                </div>
-              </li>
-              <li class="nav-item">
-                <div class="d-md-flex">
-                  <i class="fa fa-list"></i>
+                  <i class="fa" :class="[view ? 'fa-th-list' : 'fa-th']" @click="toggleView()" title="Сменить вид"></i>
                 </div>
               </li>
             </ul>
@@ -58,7 +50,7 @@
           </div>
         </div>
 
-        <div class="shop__list">
+        <div :class="[view ? 'shop__list' : 'shop__plate']">
           <div v-if="PRODUCTS.length === 0" style="text-align: center; margin: 35px; font-size: 28px">Товаров нет</div>
           <div v-else class="product-item" v-for="product in PRODUCTS" :key="product.id">
             <div class="product-item__inner">
@@ -73,7 +65,7 @@
                 </div>
                 <div>
                   <div class="product-code">
-                    {{ product.code }}
+                    Код: {{ product.code }}
                   </div>
                   <div class="product-get">
                     <div class="product-price">
@@ -108,11 +100,26 @@
 
 <script>
   import {mapActions, mapGetters} from 'vuex'
+  import Catalogue from "../../components/Catalogue";
+  import CategoriesList from "../../components/CategoriesList";
 
   export default {
+    components: {Catalogue, CategoriesList},
+    // head () {
+    //   return {
+    //     title: this.category.cTitle,
+    //     meta: [
+    //       {
+    //         hid: 'description',
+    //         name: 'description',
+    //         content: this.category.cMetaDescription
+    //       }
+    //     ]
+    //   }
+    // },
     data() {
       return {
-
+        view: true,
       }
     },
     created() {
@@ -122,6 +129,8 @@
       ...mapGetters([
         'PRODUCTS',
         'ALL_CATS',
+        'MAIN_CATS',
+        'SUB_CATS',
       ]),
 
     },
@@ -130,29 +139,22 @@
         'GET_PRODUCTS',
         'GET_CATEGORIES_LIST',
       ]),
+      toggleView(){
+        this.view = !this.view;
+      },
     },
     mounted() {
       this.$store.dispatch('GET_PRODUCTS', { cat: this.$route.params.id })
       this.GET_CATEGORIES_LIST()
-    },
+      // const title = this.$store.state.ALL_CATS.find(c => c.id === this.$route.params.id)
 
+
+    },
   }
 </script>
 
 
 <style lang="sass" scoped>
-  .breadcrumb
-    display: flex
-    margin-bottom: 1rem
-    margin-top: 1rem
-
-    &-item
-      margin-right: 10px
-
-    .ec
-      color: #333e48
-      font-size: 14px
-
   .shop
     +row-flex
     flex-wrap: nowrap !important
@@ -160,12 +162,12 @@
 
     &__nav
       +col
-      +size(2.5)
-      border: 1px solid red
+      +size(2.8)
+      height: 100%
 
     &__grid
       +col
-      +size(9.5)
+      +size(9.2)
       +size-lg(12)
       display: flex
       flex-direction: column
@@ -182,6 +184,12 @@
       p
         font-size: 0.875rem
 
+    &__mobile
+      display: none
+      margin-bottom: 1rem
+      +lg(display, flex)
+
+
     &__control
       display: flex
       align-items: center
@@ -195,118 +203,213 @@
 
         &-item
           margin-right: 7px
+          cursor: pointer
 
           i
-            font-size: 1.2rem
+            font-size: 1.6rem
             font-weight: 500
 
     &__list
       padding-top: 2rem
       display: flex
       flex-wrap: wrap
+      +sm(padding-top, 1rem)
 
-    .product-item
-      max-width: 20%
-      display: flex
-      flex-direction: column
-      justify-content: space-between
-      transition: all .2s ease
-      +sm(max-width, 50%)
-
-      &:hover
-        transition: all .2s ease
-        transform: scale(1.01)
-        box-shadow: 0 0 10px rgba(75, 54, 124, .5)
-
-        .product-item__footer
-          opacity: 1
-
-      &__inner
-        border-right: 1px solid #e7eaf3
-        height: 100%
-
-      &__body
-        padding: 16px 24px
+      .product-item
+        max-width: 20%
         display: flex
         flex-direction: column
         justify-content: space-between
-        height: 100%
-
-      &__title
-        font-size: 0.875rem
-        line-height: 1.125rem
-        margin-bottom: 10px
-        display: -webkit-box
-        -webkit-line-clamp: 2
-        -webkit-box-orient: vertical
-        overflow: hidden
+        transition: all .2s ease
+        +sm(max-width, 50%)
 
         &:hover
+          transition: all .2s ease
+          transform: scale(1.01)
+          box-shadow: 0 0 10px rgba(75, 54, 124, .5)
 
-        a
-          color: #0062bd
-          font-weight: 700
+          .product-item__footer
+            opacity: 1
 
-    .product-get
-      display: flex
-      align-items: baseline
-      justify-content: space-between
+        &__inner
+          border-right: 1px solid #e7eaf3
+          height: 100%
+          +sm(border, 1px solid #e7eaf3)
 
-    .product-code
-      padding: .3rem 0
+        &__body
+          padding: 16px 20px
+          display: flex
+          flex-direction: column
+          justify-content: space-between
+          height: 100%
+          +sm(padding, 10px 10px)
 
-    .product-price
-      font-size: 1.25038rem
-      +md(font-size, 1rem)
+        &__title
+          font-size: 0.875rem
+          line-height: 1.125rem
+          margin-bottom: 10px
+          display: -webkit-box
+          -webkit-line-clamp: 3
+          -webkit-box-orient: vertical
+          overflow: hidden
 
-    .btn-add
-      width: 2.188rem
-      height: 2.188rem
-      background-color: #e6e6e6
-      color: #fff
-      display: flex
-      align-items: center
-      justify-content: center
-      border-radius: 6.1875rem
-      transition: all 0.2s ease-in-out
-      +sm(width, 1.6rem)
-      +sm(height, 1.6rem)
+          &:hover
 
-      &:hover
-        background-color: #fed700
-        transform: translateY(-2px)
-        transition: all 0.2s ease-in-out
+          a
+            color: #0062bd
+            font-weight: 700
 
-      i
-        font-size: 1.25rem
-        color: #fff
-        +sm(font-size, 1rem)
-
-    .product-item__footer
-      margin-top: 5px
-      padding-left: 24px
-      padding-right: 24px
-      padding-bottom: 8px
-      opacity: 0
-      transition: all 0.4s ease-in-out
-      +sm(display,none)
-
-      .border-top
-        border-top: 1px solid #e7eaf3
-        padding-top: .5rem
+      .product-get
         display: flex
         align-items: baseline
         justify-content: space-between
-        font-size: 13px
+
+      .product-code
+        padding: .3rem 0
+        font-size: .7rem
+
+      .product-price
+        font-size: 1.25038rem
+        +md(font-size, 1rem)
+
+      .btn-add
+        width: 2.188rem
+        height: 2.188rem
+        background-color: #fed700
+        color: #fff
+        display: flex
+        align-items: center
+        justify-content: center
+        border-radius: 6.1875rem
+        transition: all 0.2s ease-in-out
+        +sm(width, 2rem)
+        +sm(height, 2rem)
+
+        &:hover
+          transform: translateY(-2px)
+          transition: all 0.2s ease-in-out
 
         i
-          font-size: 0.8rem
-          margin-right: 4px
+          font-size: 1.25rem
+          color: #fff
+          +sm(font-size, 1.3rem)
+
+      .product-item__footer
+        margin-top: 5px
+        padding-left: 24px
+        padding-right: 24px
+        padding-bottom: 8px
+        opacity: 0
+        transition: all 0.4s ease-in-out
+        +sm(display,none)
+
+        .border-top
+          border-top: 1px solid #e7eaf3
+          padding-top: .5rem
+          display: flex
+          align-items: baseline
+          justify-content: space-between
+          font-size: 13px
+
+          i
+            font-size: 0.8rem
+            margin-right: 4px
+
+          a
+            font-size: 12px
+
+      .ec
+        color: #333e48
+
+    &__plate
+      padding-top: 2rem
+      display: flex
+      flex-direction: column
+
+      .product-item
+        width: 100%
+        display: flex
+        flex-direction: column
+        transition: all .2s ease
+        margin-bottom: 10px
+        border: 1px solid #e7eaf3
+
+        &__inner
+          height: 100%
+
+        &__body
+          padding: 16px 24px
+          display: flex
+          flex-direction: column
+          justify-content: space-between
+          height: 100%
+
+          .img-fluid
+            max-width: 20%
+            +sm(max-width, 30%)
+            +xs(max-width, 50%)
+
+        &__title
+          font-size: 0.875rem
+          line-height: 1.125rem
+          margin-bottom: 10px
+          display: -webkit-box
+          -webkit-line-clamp: 3
+          -webkit-box-orient: vertical
+          overflow: hidden
+          a
+            color: #0062bd
+            font-weight: 700
+
+      .product-get
+        display: flex
+        align-items: baseline
+        justify-content: space-between
+
+      .product-code
+        padding: .3rem 0
+        font-size: .7rem
+
+      .product-price
+        font-size: 1.25038rem
+        +md(font-size, 1rem)
+
+      .btn-add
+        width: 2.188rem
+        height: 2.188rem
+        background-color: #fed700
+        color: #fff
+        display: flex
+        align-items: center
+        justify-content: center
+        border-radius: 6.1875rem
+        transition: all 0.2s ease-in-out
+        +sm(width, 2rem)
+        +sm(height, 2rem)
+
+        &:hover
+          transform: translateY(-2px)
+          transition: all 0.2s ease-in-out
+
+        i
+          font-size: 1.25rem
+          color: #fff
+          +sm(font-size, 1.3rem)
+
+      .product-item__footer
+        margin-top: 5px
+        padding-left: 24px
+        padding-right: 24px
+        padding-bottom: 8px
+        transition: all 0.4s ease-in-out
+
+        i
+            font-size: 1.4rem
+            margin-right: 4px
 
         a
-          font-size: 12px
+            font-size: 12px
 
-    .ec
-      color: #333e48
-
+      .ec
+        color: #333e48
 </style>

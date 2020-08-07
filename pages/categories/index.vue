@@ -1,11 +1,11 @@
 <template>
   <div class="container">
     <h1>CATEGORIES</h1>
-    <ul class="menu-list">
+    <ul class="menu-list" style="display: flex; flex-direction: column-reverse;">
       <li class="menu-item"
           v-for="category in MAIN_CATS"
           :key="category.id">
-        <nuxt-link :to="`/category/${category.id}`" class="menu-button">{{ category.title}},{{ category.count }}</nuxt-link>
+        <nuxt-link :to="`/category/${category.id}`" class="menu-button">{{ category.title}}--------------{{ category.id }}</nuxt-link>
       </li>
     </ul>
   </div>

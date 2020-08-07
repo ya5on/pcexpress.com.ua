@@ -5,8 +5,8 @@
     <BannerFull />
     <PopularCategories />
     <BannerHalf />
-    <TabsFirstSection />
-    <TabsSecondSection />
+<!--    <TabsFirstSection />-->
+<!--    <TabsSecondSection />-->
     <Recommendation />
     <BannerThird />
     <Brands />
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import MainBlock from "../components/Home/MainBlock/MainBlock";
+import MainBlock from "../components/MainBlock/MainBlock";
 import DealsOfDay from "../components/Home/DealsOfDay";
 import BannerFull from "../components/Home/BannerFull";
 import PopularCategories from "../components/Home/PopularCategories";

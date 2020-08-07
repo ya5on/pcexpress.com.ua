@@ -3,7 +3,7 @@
     <div class="other__item">
       <nuxt-link to="/" class="other__link">
         <div class="other__img">
-          <img class="" src="../../../assets/img/140X140/img1.png" alt="Image Description">
+          <img class="" src="../../assets/img/140X140/img1.png" alt="Image Description">
         </div>
         <div class="other__content">
           <div class="other__text">
@@ -21,7 +21,7 @@
     <div class="other__item">
       <nuxt-link to="/" class="other__link">
         <div class="other__img">
-          <img class="" src="../../../assets/img/140X140/img1.png" alt="Image Description">
+          <img class="" src="../../assets/img/140X140/img1.png" alt="Image Description">
         </div>
         <div class="other__content">
           <div class="other__text">
@@ -39,7 +39,7 @@
     <div class="other__item">
       <nuxt-link to="/" class="other__link">
         <div class="other__img">
-          <img class="" src="../../../assets/img/140X140/img1.png" alt="Image Description">
+          <img class="" src="../../assets/img/140X140/img1.png" alt="Image Description">
         </div>
         <div class="other__content">
           <div class="other__text">
