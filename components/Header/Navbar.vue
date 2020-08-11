@@ -59,9 +59,9 @@
         <!-- Search Bar -->
         <div class="u-header__search-bar d-none">
           <form class="search">
-            <input type="text" class="searchTerm" placeholder="Поиск">
-            <button type="submit" class="searchButton">
-              <i class="fa fa-search"></i>
+            <input type="text" class="searchTerm" placeholder="Поиск" v-model="searchValue">
+            <button class="searchButton">
+              <i class="fa fa-search" @click.prevent="search(searchValue)"></i>
             </button>
           </form>
         </div>
@@ -106,7 +106,7 @@
               <li class="u-header__links--item relative">
                 <nuxt-link to="/cart" class="" title="Корзина">
                   <i class="ec ec-shopping-bag"></i>
-                  <span class="cart-count">0</span>
+                  <span class="cart-count">{{ $store.state.cartCount }}</span>
                   <span class="d-none cart-price"></span>
                 </nuxt-link>
               </li>
@@ -122,16 +122,37 @@
 <script>
   import SidebarNav from "../SidebarNav/SidebarNav";
   import Burger from "../SidebarNav/Burger";
+  import {mapGetters, mapActions} from 'vuex'
   export default {
     name: "Navbar",
     components: {
       Burger,
       SidebarNav
     },
+    data(){
+      return {
+        searchValue: ''
+      }
+    },
+    computed: {
+      ...mapGetters([
+        'SEARCH_VALUE'
+      ]),
+    },
+    methods: {
+      ...mapActions([
+      'GET_SEARCH_VALUE'
+      ]),
+      search(value){
+        this.GET_SEARCH_VALUE(value);
+        this.$router.push('/category')
+      }
+    }
   }
 </script>
 
 <style lang="sass" scoped>
+
   .mobile
     display: none
     +lg(display, block)

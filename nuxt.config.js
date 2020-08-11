@@ -48,13 +48,20 @@ export default {
     { src: '~/plugins/vue-html-remove', ssr: false },
     { src: '~/plugins/vue-carousel', ssr: false }
   ],
+
   modules: [
     '@nuxtjs/axios',
     // '@nuxtjs/markdownit',
     'nuxt-trailingslash-module',
     'nuxt-webfontloader',
     'cookie-universal-nuxt',
-    '@nuxtjs/style-resources'
+    '@nuxtjs/style-resources',
+    ['nuxt-vuex-localstorage', {
+      ...(isDev && {
+        mode: 'debug'
+      }),
+      localStorage: [''] //  If not entered, “localStorage” is the default value
+    }]
   ],
 
   webfontloader: {

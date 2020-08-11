@@ -2,6 +2,8 @@
   <div id="app">
     <Header />
     <nuxt/>
+    <Login />
+    <Registration />
     <Footer />
     <ToTopBtn />
   </div>
@@ -11,8 +13,12 @@
   import Header from "../components/Header/Header";
   import Footer from "../components/Footer/Footer";
   import ToTopBtn from "../components/TopBtn";
+  import Login from "../components/modal/Login";
+  import Registration from "../components/modal/Registration";
   export default {
     components: {
+      Registration,
+      Login,
       ToTopBtn,
       Footer,
       Header

@@ -8,7 +8,7 @@
       <li class="breadcrumb-item">
         <i class="ec ec-arrow-right-categproes"></i>
       </li>
-      <li class="breadcrumb-item">{{ALL_CATS[this.$route.params.id]}}</li>
+      <li class="breadcrumb-item">cat title</li>
     </ul>
     <!-- End breadcrumb -->
     <!--SHOP-GRID-->
@@ -36,23 +36,23 @@
             </ul>
           </div>
           <div class="d-flex">
-            <form method="get">
               <!-- Select -->
               <div class="dropdown">
                 <select class="">
-                  <option value="one" selected="">Default sorting</option>
-                  <option value="five">Sort by price: low to high</option>
-                  <option value="six">Sort by price: high to low</option>
+                  <option value="one" selected="">Сортировка</option>
+                  <option value="1" @click="sortByPriceLow">От дешевых к дорогим</option>
+                  <option value="2" @click="sortByPriceHigh">От дорогих к дешевым</option>
                 </select>
+<!--                <div @click="sortByPriceLow">От дешевых к дорогим</div>-->
+<!--                <div @click="sortByPriceHigh">От дорогих к дешевым</div>-->
               </div>
               <!-- End Select -->
-            </form>
           </div>
         </div>
 
         <div :class="[view ? 'shop__list' : 'shop__plate']">
           <div v-if="PRODUCTS.length === 0" style="text-align: center; margin: 35px; font-size: 28px">Товаров нет</div>
-          <div v-else class="product-item" v-for="product in PRODUCTS" :key="product.id">
+          <div v-else class="product-item" v-for="product in paginatedProducts" :key="product.id">
             <div class="product-item__inner">
               <div class="product-item__body">
                 <h5 class="product-item__title">
@@ -69,12 +69,11 @@
                   </div>
                   <div class="product-get">
                     <div class="product-price">
-                      ${{ product.price }}
+                      {{ product.price | toFix | formattedPrice }}
                     </div>
                     <div class="product-add-cart">
-                      <a href="#" class="btn-add">
-                        <i class="ec ec-add-to-cart"></i>
-                      </a>
+                      <button class="btn-add" v-if="" @click="addToCart(product)"><i class="ec ec-add-to-cart"></i></button>
+<!--                      <button class="button is-text" v-if="isProductAdded" @click="removeFromCart(product.id, false)">delete</button>-->
                     </div>
                   </div>
                 </div>
@@ -89,8 +88,16 @@
               </div>
             </div>
           </div>
+          <div class="shop__pagination">
+            <div class="page"
+                 v-for="page in pages"
+                 :key="page"
+                 :class="{'page__selected' : page === pageNum}"
+                 @click="pageClick(page)">
+            {{ page }}
+            </div>
+          </div>
         </div>
-
       </div>
     </div>
     <!--END SHOP-GRID-->
@@ -102,37 +109,37 @@
   import {mapActions, mapGetters} from 'vuex'
   import Catalogue from "../../components/Catalogue";
   import CategoriesList from "../../components/CategoriesList";
-
+  import toFix from "../../components/filters/toFixed";
+  import formattedPrice from "../../components/filters/priceFix";
   export default {
     components: {Catalogue, CategoriesList},
-    // head () {
-    //   return {
-    //     title: this.category.cTitle,
-    //     meta: [
-    //       {
-    //         hid: 'description',
-    //         name: 'description',
-    //         content: this.category.cMetaDescription
-    //       }
-    //     ]
-    //   }
-    // },
     data() {
       return {
         view: true,
+        productsPerPage: 20,
+        pageNum: 1
       }
     },
-    created() {
-
+    filters: {
+      toFix,
+      formattedPrice
     },
+    created() {},
     computed: {
       ...mapGetters([
         'PRODUCTS',
         'ALL_CATS',
         'MAIN_CATS',
-        'SUB_CATS',
+        'SEARCH_VALUE',
       ]),
-
+      pages(){
+        return Math.ceil(this.PRODUCTS.length / this.productsPerPage);
+      },
+      paginatedProducts(){
+        let from = (this.pageNum -1) * this.productsPerPage,
+            to = from + this.productsPerPage;
+        return this.PRODUCTS.slice(from, to);
+      }
     },
     methods: {
       ...mapActions([
@@ -142,13 +149,31 @@
       toggleView(){
         this.view = !this.view;
       },
+      addToCart (product) {
+        this.$store.commit('addToCart', product);
+      },
+      removeFromCart(product) {
+        this.$store.commit('removeFromCart', product);
+      },
+      isProductAdded(product){
+        let found = this.state.cart.find(p => p.id === product.id)
+      },
+      pageClick(page){
+        this.pageNum = page;
+      },
+      sortByPriceLow(){
+        this.PRODUCTS.sort((a,b) => a.price - b.price)
+      },
+      sortByPriceHigh(){
+        this.PRODUCTS.sort((a,b) => b.price - a.price)
+      }
     },
     mounted() {
       this.$store.dispatch('GET_PRODUCTS', { cat: this.$route.params.id })
+      // this.cat = this.$store.getters.getCat(this.$route.params.id);
       this.GET_CATEGORIES_LIST()
       // const title = this.$store.state.ALL_CATS.find(c => c.id === this.$route.params.id)
-
-
+      console.log(this.$route.params.id)
     },
   }
 </script>
@@ -159,6 +184,7 @@
     +row-flex
     flex-wrap: nowrap !important
     justify-content: space-between
+    margin-bottom: 4rem
 
     &__nav
       +col
@@ -282,6 +308,9 @@
         justify-content: center
         border-radius: 6.1875rem
         transition: all 0.2s ease-in-out
+        border: none
+        outline: none
+        cursor: pointer
         +sm(width, 2rem)
         +sm(height, 2rem)
 
@@ -384,6 +413,9 @@
         justify-content: center
         border-radius: 6.1875rem
         transition: all 0.2s ease-in-out
+        border: none
+        outline: none
+        cursor: pointer
         +sm(width, 2rem)
         +sm(height, 2rem)
 
@@ -412,4 +444,31 @@
 
       .ec
         color: #333e48
+
+    &__pagination
+      width: 100%
+      display: flex
+      justify-content: center
+      flex-wrap: wrap
+
+      .page
+        width: 35px
+        height: 35px
+        line-height: 34px
+        text-align: center
+        border-radius: 20px
+        border: 1px solid #e6e6e6
+        padding: 0
+        color: #7d7d7d
+        margin: 0 5px
+        cursor: pointer
+
+        &:hover
+          background-color: #E6E6E6
+
+        &__selected
+          font-weight: 700
+          color: #262626
+          background-color: #fed700
+          border-color: #fed700
 </style>

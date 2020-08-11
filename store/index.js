@@ -1,9 +1,25 @@
+import Vue from 'vue'
 import axios, * as others from 'axios'
 
+export const strict = false // костыль!!!
+
 export const state = () => ({
+  searchValue: '',
   categories: [],
   products: [],
-  product: {},
+  product: [],
+  userInfo: {
+    isLoggedIn: false,
+    isSignedUp: false,
+    name: '',
+  },
+  systemInfo: {
+    openLoginModal: false,
+    openSignupModal: false,
+  },
+  cart: [],
+  cartCount: 0,
+
 });
 
 export const mutations = {
@@ -16,6 +32,80 @@ export const mutations = {
   SET_PRODUCT:(state, product) => {
     state.product = product
   },
+  SET_SEARCH_VALUE:(state, value) => {
+    state.searchValue = value
+  },
+  //---------------------------------------------------------------------
+  addToCart(state, product) {
+    let found = state.cart.find(p => p.id === product.id);
+
+    if (found) {
+      found.quantity ++;
+      found.totalPrice = found.quantity * found.price;
+    } else {
+      state.cart.push(product);
+
+      Vue.set(product, 'quantity', 1);
+      Vue.set(product, 'totalPrice', product.price);
+    }
+
+    state.cartCount++;
+    this.commit('saveCart');
+  },
+  removeFromCart(state, product) {
+    let index = state.cart.indexOf(product);
+
+    if (index > -1) {
+      let product = state.cart[index];
+      state.cartCount -= product.quantity;
+
+      state.cart.splice(index, 1);
+    }
+    this.commit('saveCart');
+  },
+  saveCart(state) {
+    window.localStorage.setItem('cart', JSON.stringify(state.cart));
+    window.localStorage.setItem('cartCount', state.cartCount);
+  },
+  // storeCart(state) {
+  //   let parsed = JSON.stringify(this.cart);
+  //   localStorage.setItem('cart', parsed)
+  //   this.viewStorageCart();
+  // },
+
+  // viewStorageCart () {
+  //   if(localStorage.getItem('cart')) {
+  //     this.cartList = JSON.parse(localStorage.getItem('cart'))
+  //   }
+  // },
+  removeProductsFromFavourite: state => {
+    state.products.filter(el => {
+      el.isFavourite = false;
+    });
+  },
+  //---------------------------------------------------------------------
+  SET_USER(state, authUser) {
+    state.authUser = authUser
+  },
+  isUserLoggedIn: (state, isUserLoggedIn) => {
+    state.userInfo.isLoggedIn = isUserLoggedIn;
+  },
+  isUserSignedUp: (state, isSignedUp) => {
+    state.userInfo.isSignedUp = isSignedUp;
+  },
+  setUserName: (state, name) => {
+    state.userInfo.name = name;
+  },
+  showLoginModal: (state, show) => {
+    state.systemInfo.openLoginModal = show;
+  },
+  showSignupModal: (state, show) => {
+    state.systemInfo.openSignupModal = show;
+  },
+  showCheckoutModal: (state, show) => {
+    state.systemInfo.openCheckoutModal = show;
+  },
+  //---------------------------------------------------------------------
 };
 
 export const actions = {
@@ -52,6 +142,17 @@ export const actions = {
     commit('SET_PRODUCT', product.data)
     return product
   },
+  async GET_SEARCH_VALUE({commit}, value){
+    const searchValue = await axios("https://b2b.nikolink.com/api/get-items.php", {
+      method: "GET",
+      params: {
+        value,
+        token: "0e94e098eac6e56a22496613b325473b7de8cb0a",
+      }
+    })
+    commit('SET_SEARCH_VALUE', value)
+    return searchValue
+  },
 };
 
 export const getters = {
@@ -70,4 +171,28 @@ export const getters = {
   PRODUCT(state){
     return state.product;
   },
+  SEARCH_VALUE(state){
+    return state.searchValue;
+  },
+  //---------------------------------------------------------------------login,logout,modals
+  isUserLoggedIn: state => {
+    return state.userInfo.isLoggedIn;
+  },
+  isUserSignedUp: state => {
+    return state.userInfo.isSignedUp;
+  },
+  getUserName: state => {
+    return state.userInfo.name;
+  },
+  isLoginModalOpen: state => {
+    return state.systemInfo.openLoginModal;
+  },
+  isSignupModalOpen: state => {
+    return state.systemInfo.openSignupModal;
+  },
+  isCheckoutModalOpen: state => {
+    return state.systemInfo.openCheckoutModal;
+  },
+//---------------------------------------------------------------------
+
 };

@@ -20,14 +20,14 @@
     <!-- End breadcrumb -->
     <div class="product">
       <div class="product__imgs">
-        <div v-if="PRODUCT.imgs">
-            <swiper class="swiper gallery-top"  ref="swiperTop">
-              <swiper-slide v-for="(image, imageIndex) in PRODUCT.imgs" :key="image">
-                <img :src="image" class="img-fluid" :key="imageIndex"/>
-              </swiper-slide>
-            </swiper>
-        </div>
-        <div v-else>
+<!--        <div v-if="PRODUCT.imgs">-->
+<!--            <swiper class="swiper gallery-top"  ref="swiperTop">-->
+<!--              <swiper-slide v-for="(image, imageIndex) in PRODUCT.imgs" :key="image">-->
+<!--                <img :src="image" class="img-fluid" :key="imageIndex"/>-->
+<!--              </swiper-slide>-->
+<!--            </swiper>-->
+<!--        </div>-->
+        <div >
           <img :src="`${PRODUCT.img}`" alt="">
         </div>
       </div>
@@ -54,14 +54,14 @@
       </div>
       <div class="product__add">
         <div class="product__price">
-          <div class="font-size-36">${{ PRODUCT.price }}</div>
+          <div class="font-size-36">{{ PRODUCT.price | toFix | formattedPrice }}</div>
           <a href="#" class="pay-parts">
             <i class="ec ec-favorites mr-1 font-size-15"></i>
             Оплата частями
           </a>
         </div>
         <div class="add-cart">
-          <a href="#" class="btn"><i class="ec ec-add-to-cart"></i> Add to Cart</a>
+          <button class="btn" @click="addToCart(PRODUCT)"><i class="ec ec-add-to-cart"></i>Купить</button>
         </div>
       </div>
     </div>
@@ -70,6 +70,8 @@
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
+import toFix from "../../components/filters/toFixed";
+import formattedPrice from "../../components/filters/priceFix";
 
 export default {
   name: "product-page",
@@ -88,9 +90,11 @@ export default {
     }
   },
   data() {
-    return {
-
-    }
+    return {}
+  },
+  filters: {
+    toFix,
+    formattedPrice
   },
   computed: {
     ...mapGetters([
@@ -103,6 +107,9 @@ export default {
       'GET_PRODUCT',
       'GET_CATEGORIES_LIST'
     ]),
+    addToCart (PRODUCT) {
+      this.$store.commit('addToCart', PRODUCT);
+    },
   },
   mounted() {
     this.$store.dispatch('GET_PRODUCT', {id: this.$route.params.id})
@@ -192,7 +199,8 @@ export default {
     .btn
       cursor: pointer
       background-color: #fed700
-      border-color: #fed700
+      border-color: transparent
+      outline: none
       width: 100%
       display: inline-block
       font-weight: 700
@@ -200,10 +208,11 @@ export default {
       text-align: center
       user-select: none
       padding: 0.67rem 1rem
-      font-size: 0.875rem
+      font-size: 1rem
       line-height: 1.5
       border-radius: 1.4rem
       transition: all 0.2s ease-in-out
+
 
     .ec
       color: #fff
