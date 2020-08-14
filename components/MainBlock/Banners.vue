@@ -50,14 +50,13 @@
     background-color: #fff
     font-size: 0.875rem
     border-right: 1px solid #e7eaf3
-    transition: all .2s ease
+    transition: all .3s ease
 
     &:first-of-type
       border-left: 1px solid #e7eaf3
 
     &:hover
-      transition: all .2s ease
-      transform: scale(1.01)
+      transition: all .3s ease
       box-shadow: 0 0 10px rgba(75,54,124,.5)
       z-index: 9999
 

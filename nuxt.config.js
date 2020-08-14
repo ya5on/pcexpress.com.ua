@@ -46,7 +46,8 @@ export default {
   plugins: [
     '~/plugins/vue-backtotop',
     { src: '~/plugins/vue-html-remove', ssr: false },
-    { src: '~/plugins/vue-carousel', ssr: false }
+    { src: '~/plugins/vue-carousel', ssr: false },
+    { src: '~/plugins/vue-tabs', ssr: false },
   ],
 
   modules: [

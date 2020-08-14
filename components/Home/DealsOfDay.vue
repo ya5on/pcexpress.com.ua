@@ -3,116 +3,41 @@
     <div class="deals">
       <div class="deals__timer">
         <div class="d-flex">
-          <h3 class="deals__title">Deals of The Day</h3>
-          <div class="countdown">
-            <Timer deadline="12/26/2022"/> <!--  таймер: месяц число год-->
-          </div>
+          <h3 class="deals__title">Компьютеры Б/У</h3>
+<!--          <div class="countdown">-->
+<!--            <Timer deadline="12/26/2022"/> &lt;!&ndash;  таймер: месяц число год&ndash;&gt;-->
+<!--          </div>-->
         </div>
-        <nuxt-link to="/">
-          Go to Daily Deals Section
+        <nuxt-link to="/category/610" class="deals__link">
+          Смотреть все
           <i class="ec ec-arrow-right-categproes"></i>
         </nuxt-link>
       </div>
       <div class="deals__list">
-        <div class="product-item">
+        <div class="product-item" v-for="product in filteredSix" :key="product.id">
           <div class="product-item__inner">
             <div class="product-item__body">
               <div class="text">
-                <a href="../shop/product-categories-7-column-full-width.html" class="text__cat">Speakers</a></div>
+                <nuxt-link to="" class="text__wish">
+                  <i class="ec ec-favorites"></i>
+                </nuxt-link>
+              </div>
               <h5 class="product-item__title">
-                <a href="../shop/single-product-fullwidth.html"
-                >Wireless Audio System
-                  Multiroom 360 degree Full base audio</a></h5>
+                <nuxt-link :to="`/product/${product.id}`">{{ product.name }}</nuxt-link>
+              </h5>
               <div class="text">
-                <a href="../shop/single-product-fullwidth.html" class="d-block">
-                  <img class="img-fluid" src="~/assets/img/212X200/img2.jpg" alt="Image Description"></a>
+                <nuxt-link :to="`/product/${product.id}`" class="d-block">
+                  <img class="img-fluid" :src="`${product.img}`" alt="">
+                </nuxt-link>
               </div>
               <div class="product-get">
                 <div class="prodcut-price">
-                  $685,00
+                  {{ product.price | toFix | formattedPrice }}
                 </div>
                 <div class="prodcut-add-cart">
-                  <a href="../shop/single-product-fullwidth.html" class="btn-add">
-                    <i class="ec ec-add-to-cart"></i>
-                  </a>
+                  <button class="btn-add" v-if="" @click="addToCart(product)"><i class="ec ec-add-to-cart"></i></button>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="product-item__footer">
-            <div class="border-top">
-              <a href="../shop/compare.html" class="font-size-13">
-                <i class="ec ec-compare mr-1 font-size-15"></i> Compare</a>
-              <a href="../shop/wishlist.html" class="font-size-13">
-                <i class="ec ec-favorites mr-1 font-size-15"></i> Wishlist</a>
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item__inner">
-            <div class="product-item__body">
-              <div class="text">
-                <a href="../shop/product-categories-7-column-full-width.html" class="text__cat">Speakers</a></div>
-              <h5 class="product-item__title">
-                <a href="../shop/single-product-fullwidth.html"
-                >Wireless Audio System
-                  Multiroom 360 degree Full base audio</a></h5>
-              <div class="text">
-                <a href="../shop/single-product-fullwidth.html" class="d-block">
-                  <img class="img-fluid" src="~/assets/img/212X200/img2.jpg" alt="Image Description"></a>
-              </div>
-              <div class="product-get">
-                <div class="prodcut-price">
-                  $685,00
-                </div>
-                <div class="prodcut-add-cart">
-                  <a href="../shop/single-product-fullwidth.html" class="btn-add">
-                    <i class="ec ec-add-to-cart"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="product-item__footer">
-            <div class="border-top">
-              <a href="../shop/compare.html" class="font-size-13">
-                <i class="ec ec-compare mr-1 font-size-15"></i> Compare</a>
-              <a href="../shop/wishlist.html" class="font-size-13">
-                <i class="ec ec-favorites mr-1 font-size-15"></i> Wishlist</a>
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item__inner">
-            <div class="product-item__body">
-              <div class="text">
-                <a href="../shop/product-categories-7-column-full-width.html" class="text__cat">Speakers</a></div>
-              <h5 class="product-item__title">
-                <a href="../shop/single-product-fullwidth.html"
-                >Wireless Audio System
-                  Multiroom 360 degree Full base audio</a></h5>
-              <div class="text">
-                <a href="../shop/single-product-fullwidth.html" class="d-block">
-                  <img class="img-fluid" src="~/assets/img/212X200/img2.jpg" alt="Image Description"></a>
-              </div>
-              <div class="product-get">
-                <div class="prodcut-price">
-                  $685,00
-                </div>
-                <div class="prodcut-add-cart">
-                  <a href="../shop/single-product-fullwidth.html" class="btn-add">
-                    <i class="ec ec-add-to-cart"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="product-item__footer">
-            <div class="border-top">
-              <a href="../shop/compare.html" class="font-size-13">
-                <i class="ec ec-compare mr-1 font-size-15"></i> Compare</a>
-              <a href="../shop/wishlist.html" class="font-size-13">
-                <i class="ec ec-favorites mr-1 font-size-15"></i> Wishlist</a>
             </div>
           </div>
         </div>
@@ -123,26 +48,42 @@
 
 <script>
   import Timer from "./Timer";
-
+  import {mapActions, mapGetters} from 'vuex'
+  import toFix from "../../components/filters/toFixed";
+  import formattedPrice from "../../components/filters/priceFix";
   export default {
     name: "DealsOfDay",
     components: {Timer},
     data() {
-      return {
-        swiperOption: {
-          autoplay: 1000,
-          loop: true,
-          pagination: '.swiper-pagination',
-          slidesPerView: 1,
-          paginationClickable: true,
-          spaceBetween: 30,
-        }
+      return {}
+    },
+    filters: {
+      toFix,
+      formattedPrice
+    },
+    computed: {
+      ...mapGetters([
+        'PRODUCTS'
+      ]),
+      filteredSix(){
+        return this.PRODUCTS.slice(0, 6)
       }
     },
+    methods: {
+      ...mapActions([
+        'GET_PRODUCTS'
+      ]),
+      addToCart (product) {
+        this.$store.commit('addToCart', product);
+      },
+    },
+    mounted() {
+      this.$store.dispatch('GET_PRODUCTS', {cat: 610})
+    }
   }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
   .deals
     margin-top: 40px
     margin-bottom: 1rem
@@ -165,6 +106,7 @@
       margin-right: 2rem
       +sm(margin-bottom, 5px)
 
+
       &:after
         content: ' '
         height: 2px
@@ -175,43 +117,79 @@
         bottom: -1px
         left: 0
 
+    &__link
+      +sm(padding, 5px 0)
+
     &__list
       padding-top: 2rem
       display: flex
-      +md(overflow-x, auto)
+      justify-content: space-between
+      +md(flex-wrap, wrap)
+      +sm(justify-content, center)
+      +xs(justify-content, space-around)
 
     .product-item
-      max-width: 200px
-      transition: all .2s ease
+      +size(2)
+      +size-md(4)
+      +size-sm(6)
+      width: 100%
+      max-width: 230px
+      transition: all .4s ease
+      display: flex
+      flex-direction: column
+      justify-content: space-between
+      +md(margin-bottom, 20px)
+      +xs(border, 1px solid #e7eaf3)
+
 
       &:hover
-        transition: all .2s ease
-        transform: scale(1.01)
+        transition: all .4s ease
         box-shadow: 0 0 10px rgba(75, 54, 124, .5)
 
         .product-item__footer
           opacity: 1
 
       &__inner
+        height: 100%
         border-right: 1px solid #e7eaf3
+        +xs(border-right, none)
 
       &__body
-        padding: 16px 24px
+        padding: 16px 20px
+        display: flex
+        flex-direction: column
+        justify-content: space-between
+        height: 100%
+        +lg(padding, 10px 10px)
 
       .text
-        margin-bottom: 10px
+        display: flex
+        justify-content: space-between
+
+        .img-fluid
+          max-height: 200px
+          margin-top: 5px
 
         &__cat
           font-size: 0.74987rem
 
+        &__wish
+          margin-left: auto
+
+          .ec
+            color: #fed700
+            font-size: 22px
+
       &__title
         font-size: 0.875rem
         line-height: 1.125rem
-        margin-bottom: 10px
+        margin-bottom: auto
         display: -webkit-box
-        -webkit-line-clamp: 2
+        -webkit-line-clamp: 3
         -webkit-box-orient: vertical
         overflow: hidden
+        +lg(font-size, .7rem)
+        +lg(-webkit-line-clamp, 2)
 
         a
           color: #0062bd
@@ -229,13 +207,16 @@
     .btn-add
       width: 2.188rem
       height: 2.188rem
-      background-color: #e6e6e6
+      background-color: #fed700
       color: #fff
       display: flex
       align-items: center
       justify-content: center
       border-radius: 6.1875rem
       transition: all 0.2s ease-in-out
+      outline: none
+      border: none
+      cursor: pointer
       +sm(width, 1.6rem)
       +sm(height, 1.6rem)
 
@@ -248,25 +229,6 @@
         font-size: 1.25rem
         color: #fff
         +sm(font-size, 1rem)
-
-    .product-item__footer
-      margin-top: 5px
-      padding-left: 24px
-      padding-right: 24px
-      padding-bottom: 8px
-      opacity: 0
-      transition: all 0.4s ease-in-out
-
-      .border-top
-        border-top: 1px solid #e7eaf3
-        padding-top: .5rem
-        display: flex
-        align-items: center
-        justify-content: space-between
-        font-size: 13px
-
-        i
-          font-size: 0.8rem
 
     .ec
       color: #333e48

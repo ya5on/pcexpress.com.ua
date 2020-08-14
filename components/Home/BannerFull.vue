@@ -35,6 +35,8 @@
     h1
       line-height: 2.375rem
       font-size: 2.00025rem
+      +sm(font-size, 1.8rem)
+      +sm(line-height, 1.8rem)
 
     .price-box
       padding: 0.5rem 2rem
@@ -42,6 +44,8 @@
       background-color: #fed700
       text-align: left
       margin-left: 2rem
+      +sm(margin-left, 0)
+      +sm(padding, 0.5rem 1rem)
 
       em
         font-size: 0.875rem

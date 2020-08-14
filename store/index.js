@@ -7,6 +7,7 @@ export const state = () => ({
   searchValue: '',
   categories: [],
   products: [],
+  tabProducts: [],
   product: [],
   userInfo: {
     isLoggedIn: false,
@@ -28,6 +29,9 @@ export const mutations = {
   },
   SET_PRODUCTS:(state, products) => {
     state.products = products
+  },
+  SET_TAB_PRODUCTS:(state, tabProducts) => {
+    state.tabProducts = tabProducts
   },
   SET_PRODUCT:(state, product) => {
     state.product = product
@@ -131,6 +135,17 @@ export const actions = {
     commit('SET_PRODUCTS', products.data)
     return products
   },
+  async TAB_PRODUCTS({ commit }, { cat }) {
+    const tabProducts = await axios("https://b2b.nikolink.com/api/get-items.php", {
+      method: "GET",
+      params: {
+        cat,
+        token: "0e94e098eac6e56a22496613b325473b7de8cb0a"
+      }
+    })
+    commit('SET_TAB_PRODUCTS', tabProducts.data)
+    return tabProducts
+  },
   async GET_PRODUCT({ commit }, { id }) {
     const product = await axios("https://b2b.nikolink.com/api/get-item.php", {
       method: "GET",
@@ -167,6 +182,9 @@ export const getters = {
   },
   PRODUCTS(state){
     return state.products;
+  },
+  TAB_PRODUCTS(state){
+    return state.tabProducts;
   },
   PRODUCT(state){
     return state.product;

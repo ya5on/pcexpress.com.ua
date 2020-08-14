@@ -155,9 +155,6 @@
       removeFromCart(product) {
         this.$store.commit('removeFromCart', product);
       },
-      isProductAdded(product){
-        let found = this.state.cart.find(p => p.id === product.id)
-      },
       pageClick(page){
         this.pageNum = page;
       },
@@ -170,9 +167,7 @@
     },
     mounted() {
       this.$store.dispatch('GET_PRODUCTS', { cat: this.$route.params.id })
-      // this.cat = this.$store.getters.getCat(this.$route.params.id);
       this.GET_CATEGORIES_LIST()
-      // const title = this.$store.state.ALL_CATS.find(c => c.id === this.$route.params.id)
       console.log(this.$route.params.id)
     },
   }
@@ -246,12 +241,11 @@
         display: flex
         flex-direction: column
         justify-content: space-between
-        transition: all .2s ease
+        transition: all .3s ease
         +sm(max-width, 50%)
 
         &:hover
-          transition: all .2s ease
-          transform: scale(1.01)
+          transition: all .3s ease
           box-shadow: 0 0 10px rgba(75, 54, 124, .5)
 
           .product-item__footer
@@ -269,6 +263,9 @@
           justify-content: space-between
           height: 100%
           +sm(padding, 10px 10px)
+
+          .img-fluid
+            max-height: 200px
 
         &__title
           font-size: 0.875rem
