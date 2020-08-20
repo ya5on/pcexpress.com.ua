@@ -40,7 +40,7 @@
                       {{ product.price | toFix | formattedPrice }}
                     </div>
                     <div class="product-add-cart">
-                      <button class="btn-add"><i class="ec ec-add-to-cart"></i></button>
+                      <button class="btn-add" v-if="" @click="addToCart(product)"><i class="ec ec-add-to-cart"></i></button>
                     </div>
                   </div>
                 </div>
@@ -81,6 +81,9 @@ import formattedPrice from "../filters/priceFix";
         ...mapActions([
           'GET_CATEGORIES_LIST',
         ]),
+        addToCart (product) {
+          this.$store.commit('addToCart', product);
+        },
       },
       mounted() {
         this.GET_CATEGORIES_LIST()
@@ -246,33 +249,5 @@ import formattedPrice from "../filters/priceFix";
     .product-price
       font-size: 1.25038rem
       +md(font-size, 1rem)
-
-    .btn-add
-      width: 2.188rem
-      height: 2.188rem
-      background-color: #fed700
-      color: #fff
-      display: flex
-      align-items: center
-      justify-content: center
-      border-radius: 6.1875rem
-      transition: all 0.2s ease-in-out
-      outline: none
-      border: none
-      cursor: pointer
-      +sm(width, 1.6rem)
-      +sm(height, 1.6rem)
-
-      &:hover
-        background-color: #fed700
-        transform: translateY(-2px)
-        transition: all 0.2s ease-in-out
-
-      i
-        font-size: 1.25rem
-        color: #fff
-        +sm(font-size, 1rem)
-
-
 
 </style>

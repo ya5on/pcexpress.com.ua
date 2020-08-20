@@ -91,9 +91,10 @@
                   <i class="font-size-22 ec ec-compare"></i>
                 </nuxt-link>
               </li>
-              <li class="u-header__links--item d-none">
-                <nuxt-link to="/wishlist" class="" title="Список желаний">
+              <li class="u-header__links--item d-none relative">
+                <nuxt-link to="/user/wishlist" class="" title="Список желаний">
                   <i class="ec ec-favorites"></i>
+                  <span class="cart-count" v-if="$store.state.favourites.length >= 1">{{ $store.state.favouritesCount }}</span>
                 </nuxt-link>
               </li>
               <!-- Mobile Cabinet -->
@@ -106,7 +107,7 @@
               <li class="u-header__links--item relative">
                 <nuxt-link to="/cart" class="" title="Корзина">
                   <i class="ec ec-shopping-bag"></i>
-                  <span class="cart-count">{{ $store.state.cartCount }}</span>
+                  <span class="cart-count" v-if="$store.state.cart.length >= 1">{{ $store.state.cartCount }}</span>
                   <span class="d-none cart-price"></span>
                 </nuxt-link>
               </li>

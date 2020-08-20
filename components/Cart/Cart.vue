@@ -15,7 +15,7 @@
       <div v-if="$store.state.cart.length > 0" class="cart__main">
         <h1 class="">Корзина</h1>
         <div class="cart__table">
-          <form class="cart__form" action="#" method="post">
+          <div class="cart__form">
             <div class="cart__grid cart__title">
               <div class="product-remove"></div>
               <div class="product-thumbnail"></div>
@@ -25,8 +25,8 @@
               <div class="product-subtotal">Сумма</div>
             </div>
             <div class="cart__grid"
-                       v-for="product in $store.state.cart"
-                       :key="product.id">
+                 v-for="product in $store.state.cart"
+                 :key="product.id">
               <div class="product-remove">
                 <span class="removeBtn"
                       title="Удалить из корзины"
@@ -44,22 +44,38 @@
               </div>
               <div class="product-quantity">
                 <p class="product__sub">Количество:</p>
-<!--                <span class="quantity__btn" @click="decrement">-</span>-->
+                <!--                <span class="quantity__btn" @click="decrement">-</span>-->
                 <p>{{ product.quantity > 0 ? ` ${product.quantity}` : '' }}</p>
-<!--                <span class="quantity__btn" @click="increment">+</span>-->
+                <!--                <span class="quantity__btn" @click="increment">+</span>-->
               </div>
               <div class="product-subtotal">
                 <p class="product__sub">sub_total:</p>
                 <p>{{ product.price * product.quantity | toFix | formattedPrice}}</p>
               </div>
             </div>
-            <hr class="navbar-divider">
             <div class="cart__grid">
-              <nuxt-link class="total-price" to="">
+              <div class="total-price">
                 Итого: {{ cartTotalCost | toFix | formattedPrice }}
-              </nuxt-link>
+              </div>
             </div>
-          </form>
+              <div class="cart__block">
+                <div class="cart__coupon d-none">
+                  <!-- Apply coupon Form -->
+                  <label class="sr-only" for="subscribeSrEmailExample1">Активировать код</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" name="text" id="subscribeSrEmailExample1" placeholder="Введите код" required="">
+                    <div class="input-group-append">
+                      <button class="btn" type="button" id="subscribeButtonExample2"><span class="">Активировать скидку</span></button>
+                    </div>
+                  </div>
+                  <!-- End Apply coupon Form -->
+                </div>
+                <div class="d-flex">
+                  <nuxt-link to="/category" class="btn-next">Продолжить покупки</nuxt-link>
+                  <nuxt-link to="/checkout" class="btn-order">Оформить заказ</nuxt-link>
+                </div>
+              </div>
+          </div>
         </div>
       </div>
       <div v-else class="cart__main">
@@ -136,7 +152,7 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 .total-price
   display: flex
   justify-content: flex-end
@@ -224,7 +240,7 @@ export default {
       .img-fluid
         border: 1px solid #e7eaf3
         padding: 0.25rem
-        max-width: 150px
+        max-height: 150px
         +md(max-width, 100px)
 
     .product-name
@@ -279,5 +295,102 @@ export default {
       display: none
       padding-right: 10px
       +sm(display, inline-block)
+
+    .total-price
+      font-weight: bold
+      border-top: 1px solid #dadce0
+      padding: 10px
+
+  &__block
+    padding-top: 1rem
+    display: flex
+    flex-wrap: wrap
+    justify-content: space-between
+    align-items: center
+
+  &__coupon
+    width: 40%
+    +md(width, 100%)
+
+    .input-group
+      position: relative
+      display: flex
+      align-items: stretch
+      width: 100%
+      +md(width, 50%)
+
+    .form-control
+      border-radius: 1.4rem 0 0 1.4rem
+      position: relative
+      flex: 1 1 auto
+      margin-bottom: 0
+      display: block
+      height: calc(1.5em + 1.34rem + 2px)
+      padding: 0.67rem 1rem
+      font-size: 0.875rem
+      font-weight: 400
+      line-height: 1.5
+      color: #818181
+      background-color: #fff
+      background-clip: padding-box
+      border: 1px solid #dddddd
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out
+
+
+    .input-group-append
+      margin-left: -1px
+      display: flex
+
+      .btn
+        border-radius: 0 1.4rem 1.4rem 0
+        position: relative
+        z-index: 2
+        cursor: pointer
+        color: #fff
+        background-color: #333e48
+        border-color: #333e48
+        display: inline-block
+        font-weight: 700
+        text-align: center
+        user-select: none
+        padding: 0.67rem 1rem
+        font-size: 0.875rem
+        transition: all 0.2s ease-in-out
+        outline: none
+        box-sizing: border-box
+
+  .btn-next
+    display: inline-block
+    color: #333e48
+    text-align: center
+    user-select: none
+    font-size: 0.875rem
+    line-height: 1.5
+    border-radius: 1.4rem
+    transition: all 0.2s ease-in-out
+    background: rgba(119, 131, 143, 0.1)
+    border-color: transparent
+    padding: 0.67rem 2rem
+    margin-right: 10px
+    &:hover
+      color: #dadce0
+      background-color: #333e48
+
+  .btn-order
+    color: #333e48
+    background-color: #fed700
+    border-color: #fed700
+    display: inline-block
+    font-weight: 700
+    text-align: center
+    user-select: none
+    padding: 0.67rem 2rem
+    font-size: 0.875rem
+    line-height: 1.5
+    border-radius: 1.4rem
+    transition: all 0.2s ease-in-out
+    &:hover
+      color: #dadce0
+      background-color: #333e48
 
 </style>

@@ -38,13 +38,7 @@
           <div class="d-flex">
               <!-- Select -->
               <div class="dropdown">
-                <select class="">
-                  <option value="one" selected="">Сортировка</option>
-                  <option value="1" @click="sortByPriceLow">От дешевых к дорогим</option>
-                  <option value="2" @click="sortByPriceHigh">От дорогих к дешевым</option>
-                </select>
-<!--                <div @click="sortByPriceLow">От дешевых к дорогим</div>-->
-<!--                <div @click="sortByPriceHigh">От дорогих к дешевым</div>-->
+                <CustomSelect />
               </div>
               <!-- End Select -->
           </div>
@@ -111,13 +105,18 @@
   import CategoriesList from "../../components/CategoriesList";
   import toFix from "../../components/filters/toFixed";
   import formattedPrice from "../../components/filters/priceFix";
+  import CustomSelect from "../../components/CustomSelect";
   export default {
-    components: {Catalogue, CategoriesList},
+    components: {CustomSelect, Catalogue, CategoriesList},
     data() {
       return {
         view: true,
         productsPerPage: 20,
-        pageNum: 1
+        pageNum: 1,
+        // options: [
+        //   {name: 'От дешевых к дорогим', value: 1},
+        //   {name: 'От дорогих к дешевым', value: 2},
+        // ]
       }
     },
     filters: {
@@ -158,12 +157,6 @@
       pageClick(page){
         this.pageNum = page;
       },
-      sortByPriceLow(){
-        this.PRODUCTS.sort((a,b) => a.price - b.price)
-      },
-      sortByPriceHigh(){
-        this.PRODUCTS.sort((a,b) => b.price - a.price)
-      }
     },
     mounted() {
       this.$store.dispatch('GET_PRODUCTS', { cat: this.$route.params.id })
@@ -294,31 +287,6 @@
       .product-price
         font-size: 1.25038rem
         +md(font-size, 1rem)
-
-      .btn-add
-        width: 2.188rem
-        height: 2.188rem
-        background-color: #fed700
-        color: #fff
-        display: flex
-        align-items: center
-        justify-content: center
-        border-radius: 6.1875rem
-        transition: all 0.2s ease-in-out
-        border: none
-        outline: none
-        cursor: pointer
-        +sm(width, 2rem)
-        +sm(height, 2rem)
-
-        &:hover
-          transform: translateY(-2px)
-          transition: all 0.2s ease-in-out
-
-        i
-          font-size: 1.25rem
-          color: #fff
-          +sm(font-size, 1.3rem)
 
       .product-item__footer
         margin-top: 5px

@@ -21,6 +21,9 @@ export const state = () => ({
   cart: [],
   cartCount: 0,
 
+  favourites: [],
+  checkoutStatus: null
+
 });
 
 export const mutations = {
@@ -71,21 +74,8 @@ export const mutations = {
     window.localStorage.setItem('cart', JSON.stringify(state.cart));
     window.localStorage.setItem('cartCount', state.cartCount);
   },
-  // storeCart(state) {
-  //   let parsed = JSON.stringify(this.cart);
-  //   localStorage.setItem('cart', parsed)
-  //   this.viewStorageCart();
-  // },
+  addToFav(state, product){
 
-  // viewStorageCart () {
-  //   if(localStorage.getItem('cart')) {
-  //     this.cartList = JSON.parse(localStorage.getItem('cart'))
-  //   }
-  // },
-  removeProductsFromFavourite: state => {
-    state.products.filter(el => {
-      el.isFavourite = false;
-    });
   },
   //---------------------------------------------------------------------
   SET_USER(state, authUser) {
