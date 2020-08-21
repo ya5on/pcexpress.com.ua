@@ -66,8 +66,7 @@
                       {{ product.price | toFix | formattedPrice }}
                     </div>
                     <div class="product-add-cart">
-                      <button class="btn-add" v-if="" @click="addToCart(product)"><i class="ec ec-add-to-cart"></i></button>
-<!--                      <button class="button is-text" v-if="isProductAdded" @click="removeFromCart(product.id, false)">delete</button>-->
+                      <button class="btn-add" @click="addToCart(product)"><i class="ec ec-add-to-cart"></i></button>
                     </div>
                   </div>
                 </div>
@@ -77,13 +76,14 @@
               <div class="border-top">
                 <a href="#" class="">
                   <i class="ec ec-compare mr-1 font-size-15"></i>Сравнить</a>
-                <a href="#" class="">
+                <a href="#" class="" @click="addToFavorites(product)">
                   <i class="ec ec-favorites mr-1 font-size-15"></i>Сохранить</a>
               </div>
             </div>
           </div>
           <div class="shop__pagination">
             <div class="page"
+                 v-if="pages >= 2"
                  v-for="page in pages"
                  :key="page"
                  :class="{'page__selected' : page === pageNum}"
@@ -113,10 +113,6 @@
         view: true,
         productsPerPage: 20,
         pageNum: 1,
-        // options: [
-        //   {name: 'От дешевых к дорогим', value: 1},
-        //   {name: 'От дорогих к дешевым', value: 2},
-        // ]
       }
     },
     filters: {
@@ -129,7 +125,6 @@
         'PRODUCTS',
         'ALL_CATS',
         'MAIN_CATS',
-        'SEARCH_VALUE',
       ]),
       pages(){
         return Math.ceil(this.PRODUCTS.length / this.productsPerPage);
@@ -144,19 +139,17 @@
       ...mapActions([
         'GET_PRODUCTS',
         'GET_CATEGORIES_LIST',
+        'addToCart'
       ]),
       toggleView(){
         this.view = !this.view;
       },
-      addToCart (product) {
-        this.$store.commit('addToCart', product);
-      },
-      removeFromCart(product) {
-        this.$store.commit('removeFromCart', product);
-      },
       pageClick(page){
         this.pageNum = page;
       },
+      addToFavorites(product) {
+        this.$store.commit('addToFavorites', product);
+      }
     },
     mounted() {
       this.$store.dispatch('GET_PRODUCTS', { cat: this.$route.params.id })
@@ -415,6 +408,7 @@
       display: flex
       justify-content: center
       flex-wrap: wrap
+      +sm(margin-top, 15px)
 
       .page
         width: 35px

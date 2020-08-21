@@ -59,9 +59,9 @@
         <!-- Search Bar -->
         <div class="u-header__search-bar d-none">
           <form class="search">
-            <input type="text" class="searchTerm" placeholder="Поиск" v-model="searchValue">
+            <input type="text" class="searchTerm" placeholder="Поиск">
             <button class="searchButton">
-              <i class="fa fa-search" @click.prevent="search(searchValue)"></i>
+              <i class="fa fa-search"></i>
             </button>
           </form>
         </div>
@@ -94,7 +94,7 @@
               <li class="u-header__links--item d-none relative">
                 <nuxt-link to="/user/wishlist" class="" title="Список желаний">
                   <i class="ec ec-favorites"></i>
-                  <span class="cart-count" v-if="$store.state.favourites.length >= 1">{{ $store.state.favouritesCount }}</span>
+                  <span class="cart-count" v-if="$store.state.favorites.length > 0 ">{{ $store.state.favorites.length }}</span>
                 </nuxt-link>
               </li>
               <!-- Mobile Cabinet -->
@@ -107,7 +107,7 @@
               <li class="u-header__links--item relative">
                 <nuxt-link to="/cart" class="" title="Корзина">
                   <i class="ec ec-shopping-bag"></i>
-                  <span class="cart-count" v-if="$store.state.cart.length >= 1">{{ $store.state.cartCount }}</span>
+                  <span class="cart-count" v-if="totalQty >= 1">{{ totalQty }}</span>
                   <span class="d-none cart-price"></span>
                 </nuxt-link>
               </li>
@@ -123,7 +123,7 @@
 <script>
   import SidebarNav from "../SidebarNav/SidebarNav";
   import Burger from "../SidebarNav/Burger";
-  import {mapGetters, mapActions} from 'vuex'
+  import {mapGetters} from "vuex";
   export default {
     name: "Navbar",
     components: {
@@ -131,24 +131,17 @@
       SidebarNav
     },
     data(){
-      return {
-        searchValue: ''
-      }
+      return {}
     },
     computed: {
       ...mapGetters([
-        'SEARCH_VALUE'
+        'cart',
       ]),
-    },
-    methods: {
-      ...mapActions([
-      'GET_SEARCH_VALUE'
-      ]),
-      search(value){
-        this.GET_SEARCH_VALUE(value);
-        this.$router.push('/category')
+      totalQty(){
+        return this.cart.reduce((a, b) => a + b.qty, 0)
       }
-    }
+    },
+    methods: {}
   }
 </script>
 

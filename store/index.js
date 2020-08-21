@@ -1,10 +1,9 @@
-import Vue from 'vue'
+
 import axios, * as others from 'axios'
 
 export const strict = false // костыль!!!
 
 export const state = () => ({
-  searchValue: '',
   categories: [],
   products: [],
   tabProducts: [],
@@ -19,64 +18,74 @@ export const state = () => ({
     openSignupModal: false,
   },
   cart: [],
-  cartCount: 0,
-
-  favourites: [],
-  checkoutStatus: null
+  favorites: []
 
 });
-
+//-------------------------------MUTATIONS-----------------------------
 export const mutations = {
-  SET_CATEGORIES_LIST:(state, categories) => {
+  SET_CATEGORIES_LIST: (state, categories) => {
     state.categories = categories
   },
-  SET_PRODUCTS:(state, products) => {
+  SET_PRODUCTS: (state, products) => {
     state.products = products
   },
-  SET_TAB_PRODUCTS:(state, tabProducts) => {
+  SET_TAB_PRODUCTS: (state, tabProducts) => {
     state.tabProducts = tabProducts
   },
-  SET_PRODUCT:(state, product) => {
+  SET_PRODUCT: (state, product) => {
     state.product = product
   },
-  SET_SEARCH_VALUE:(state, value) => {
-    state.searchValue = value
-  },
-  //---------------------------------------------------------------------
-  addToCart(state, product) {
-    let found = state.cart.find(p => p.id === product.id);
-
-    if (found) {
-      found.quantity ++;
-      found.totalPrice = found.quantity * found.price;
+  //
+  //---------------------------------------------------------------------CART--
+  addProductToCart(state, product){
+    const addedProduct = state.cart.find(c => c.id === product.id);
+    if (addedProduct){
+      addedProduct.qty++
     } else {
-      state.cart.push(product);
-
-      Vue.set(product, 'quantity', 1);
-      Vue.set(product, 'totalPrice', product.price);
+      state.cart.push({...product, qty: 1})
     }
-
-    state.cartCount++;
-    this.commit('saveCart');
+    this.commit('saveData');
   },
-  removeFromCart(state, product) {
-    let index = state.cart.indexOf(product);
-
+  addQty(state, id){
+    const currentProduct = state.cart.find(c => c.id === id);
+    currentProduct.qty++
+    this.commit('saveData');
+  },
+  reduceQty(state, id){
+    const currentProduct = state.cart.find(c => c.id === id);
+    if (currentProduct.qty > 1){
+      currentProduct.qty--
+    } else {
+      state.cart = state.cart.filter(c => c.id !== id);
+    }
+    this.commit('saveData');
+  },
+  removeFromCart(state, id){
+    state.cart = state.cart.filter(c => c.id !== id);
+    this.commit('saveData');
+  },
+  //-------------------------------------------------------------------FAVORITES
+  addToFavorites(state, product){
+    const addedProduct = state.favorites.find(c => c.id === product.id);
+    if (addedProduct){
+      alert("Уже в избранном!")
+    } else {
+      state.favorites.push({...product, qty: 1})
+    }
+    this.commit('saveData');
+  },
+  removeFromFavorites(state, product){
+    let index = state.favorites.indexOf(product);
     if (index > -1) {
-      let product = state.cart[index];
-      state.cartCount -= product.quantity;
-
-      state.cart.splice(index, 1);
+      state.favorites.splice(index, 1);
     }
-    this.commit('saveCart');
+    this.commit('saveData');
   },
-  saveCart(state) {
+  saveData(state){
     window.localStorage.setItem('cart', JSON.stringify(state.cart));
-    window.localStorage.setItem('cartCount', state.cartCount);
+    window.localStorage.setItem('favorites', JSON.stringify(state.favorites));
   },
-  addToFav(state, product){
 
-  },
   //---------------------------------------------------------------------
   SET_USER(state, authUser) {
     state.authUser = authUser
@@ -96,15 +105,25 @@ export const mutations = {
   showSignupModal: (state, show) => {
     state.systemInfo.openSignupModal = show;
   },
-  showCheckoutModal: (state, show) => {
-    state.systemInfo.openCheckoutModal = show;
-  },
   //---------------------------------------------------------------------
 };
-
+//-------------------------------ACTIONS-----------------------------
 export const actions = {
+  addToCart({commit}, product){
+    commit('addProductToCart', product)
+  },
+  addQty({commit}, id){
+    commit('addQty', id)
+  },
+  reduceQty({commit}, id){
+    commit('reduceQty', id)
+  },
+  removeFromCart({commit}, id){
+    commit('removeFromCart', id)
+  },
+
   async GET_CATEGORIES_LIST({commit}) {
-    const categories = await axios('https://b2b.nikolink.com/api/get-cat.php',{
+    const categories = await axios('https://b2b.nikolink.com/api/get-cat.php', {
       method: "GET",
       params: {
         token: "0e94e098eac6e56a22496613b325473b7de8cb0a"
@@ -114,7 +133,7 @@ export const actions = {
     return categories;
 
   },
-  async GET_PRODUCTS({ commit }, { cat }) {
+  async GET_PRODUCTS({commit}, {cat}) {
     const products = await axios("https://b2b.nikolink.com/api/get-items.php", {
       method: "GET",
       params: {
@@ -125,7 +144,7 @@ export const actions = {
     commit('SET_PRODUCTS', products.data)
     return products
   },
-  async TAB_PRODUCTS({ commit }, { cat }) {
+  async TAB_PRODUCTS({commit}, {cat}) {
     const tabProducts = await axios("https://b2b.nikolink.com/api/get-items.php", {
       method: "GET",
       params: {
@@ -136,7 +155,7 @@ export const actions = {
     commit('SET_TAB_PRODUCTS', tabProducts.data)
     return tabProducts
   },
-  async GET_PRODUCT({ commit }, { id }) {
+  async GET_PRODUCT({commit}, {id}) {
     const product = await axios("https://b2b.nikolink.com/api/get-item.php", {
       method: "GET",
       params: {
@@ -147,40 +166,26 @@ export const actions = {
     commit('SET_PRODUCT', product.data)
     return product
   },
-  async GET_SEARCH_VALUE({commit}, value){
-    const searchValue = await axios("https://b2b.nikolink.com/api/get-items.php", {
-      method: "GET",
-      params: {
-        value,
-        token: "0e94e098eac6e56a22496613b325473b7de8cb0a",
-      }
-    })
-    commit('SET_SEARCH_VALUE', value)
-    return searchValue
-  },
 };
-
+//-------------------------------GETTERS-----------------------------
 export const getters = {
-  ALL_CATS(state){
+  ALL_CATS(state) {
     return state.categories;
   },
-  MAIN_CATS(state){
+  MAIN_CATS(state) {
     return state.categories.filter(c => c.parent_id === 0);
   },
   SUB_CATS: state => id => {
     return state.categories.filter(c => c.parent_id === id);
   },
-  PRODUCTS(state){
+  PRODUCTS(state) {
     return state.products;
   },
-  TAB_PRODUCTS(state){
+  TAB_PRODUCTS(state) {
     return state.tabProducts;
   },
-  PRODUCT(state){
+  PRODUCT(state) {
     return state.product;
-  },
-  SEARCH_VALUE(state){
-    return state.searchValue;
   },
   //---------------------------------------------------------------------login,logout,modals
   isUserLoggedIn: state => {
@@ -198,8 +203,8 @@ export const getters = {
   isSignupModalOpen: state => {
     return state.systemInfo.openSignupModal;
   },
-  isCheckoutModalOpen: state => {
-    return state.systemInfo.openCheckoutModal;
+  cart: state => {
+    return state.cart
   },
 //---------------------------------------------------------------------
 

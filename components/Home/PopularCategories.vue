@@ -23,9 +23,9 @@
               <div class="product-item__inner">
                 <div class="product-item__body">
                   <div class="text">
-                    <nuxt-link to="" class="text__wish">
+                    <button class="text__wish" @click="addToFavorites(product)">
                       <i class="ec ec-favorites"></i>
-                    </nuxt-link>
+                    </button>
                   </div>
                   <h5 class="product-item__title">
                     <nuxt-link :to="`/product/${product.id}`">{{ product.name }}</nuxt-link>
@@ -80,10 +80,11 @@ import formattedPrice from "../filters/priceFix";
       methods: {
         ...mapActions([
           'GET_CATEGORIES_LIST',
+          'addToCart',
         ]),
-        addToCart (product) {
-          this.$store.commit('addToCart', product);
-        },
+        addToFavorites(product) {
+          this.$store.commit('addToFavorites', product);
+        }
       },
       mounted() {
         this.GET_CATEGORIES_LIST()
@@ -221,6 +222,10 @@ import formattedPrice from "../filters/priceFix";
 
       &__wish
         margin-left: auto
+        border: none
+        background: transparent
+        outline: none
+        cursor: pointer
 
         .ec
           color: #fed700

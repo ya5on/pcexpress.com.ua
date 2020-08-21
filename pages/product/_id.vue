@@ -105,11 +105,9 @@ export default {
   methods: {
     ...mapActions([
       'GET_PRODUCT',
-      'GET_CATEGORIES_LIST'
+      'GET_CATEGORIES_LIST',
+      'addToCart'
     ]),
-    addToCart (PRODUCT) {
-      this.$store.commit('addToCart', PRODUCT);
-    },
   },
   mounted() {
     this.$store.dispatch('GET_PRODUCT', {id: this.$route.params.id})

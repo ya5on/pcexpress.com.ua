@@ -18,9 +18,11 @@
           <div class="product-item__inner">
             <div class="product-item__body">
               <div class="text">
-                <nuxt-link to="" class="text__wish">
-                  <i class="ec ec-favorites"></i>
-                </nuxt-link>
+                <div class="text__wish">
+                  <button class="text__wish" @click="addToFavorites(product)">
+                    <i class="ec ec-favorites"></i>
+                  </button>
+                </div>
               </div>
               <h5 class="product-item__title">
                 <nuxt-link :to="`/product/${product.id}`">{{ product.name }}</nuxt-link>
@@ -63,19 +65,20 @@
     },
     computed: {
       ...mapGetters([
-        'PRODUCTS'
+        'PRODUCTS',
       ]),
       filteredSix(){
         return this.PRODUCTS.slice(0, 6)
-      }
+      },
     },
     methods: {
       ...mapActions([
-        'GET_PRODUCTS'
+        'GET_PRODUCTS',
+        'addToCart',
       ]),
-      addToCart (product) {
-        this.$store.commit('addToCart', product);
-      },
+      addToFavorites(product) {
+        this.$store.commit('addToFavorites', product);
+      }
     },
     mounted() {
       this.$store.dispatch('GET_PRODUCTS', {cat: 610})
@@ -175,6 +178,10 @@
 
         &__wish
           margin-left: auto
+          border: none
+          background: transparent
+          outline: none
+          cursor: pointer
 
           .ec
             color: #fed700

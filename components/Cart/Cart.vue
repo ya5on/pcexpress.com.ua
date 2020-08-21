@@ -12,7 +12,7 @@
     </ul>
     <!-- End breadcrumb -->
     <div class="cart">
-      <div v-if="$store.state.cart.length > 0" class="cart__main">
+      <div v-if="cart.length > 0" class="cart__main">
         <h1 class="">Корзина</h1>
         <div class="cart__table">
           <div class="cart__form">
@@ -25,12 +25,12 @@
               <div class="product-subtotal">Сумма</div>
             </div>
             <div class="cart__grid"
-                 v-for="product in $store.state.cart"
+                 v-for="product in cart"
                  :key="product.id">
               <div class="product-remove">
                 <span class="removeBtn"
                       title="Удалить из корзины"
-                      @click.prevent="removeFromCart(product)">×</span>
+                      @click.prevent="removeFromCart(product.id)">×</span>
               </div>
               <div class="product-thumbnail">
                 <img class="img-fluid" :src="`${product.img}`" alt="Image Description">
@@ -44,13 +44,23 @@
               </div>
               <div class="product-quantity">
                 <p class="product__sub">Количество:</p>
-                <!--                <span class="quantity__btn" @click="decrement">-</span>-->
-                <p>{{ product.quantity > 0 ? ` ${product.quantity}` : '' }}</p>
-                <!--                <span class="quantity__btn" @click="increment">+</span>-->
+                <div class="border">
+                  <div class="quantity">
+                    {{ product.qty }}
+                  </div>
+                  <div class="col-auto" v-if="product.amnt >= 2">
+                    <button class="btn" @click="reduceQty(product.id)">
+                      <i class="fa fa-minus btn-icon__inner"></i>
+                    </button>
+                    <button class="btn" @click="addQty(product.id)">
+                      <i class="fa fa-plus btn-icon__inner"></i>
+                    </button>
+                  </div>
+                </div>
               </div>
               <div class="product-subtotal">
-                <p class="product__sub">sub_total:</p>
-                <p>{{ product.price * product.quantity | toFix | formattedPrice}}</p>
+                <p class="product__sub">Сумма:</p>
+                <p>{{ product.price * product.qty | toFix | formattedPrice }}</p>
               </div>
             </div>
             <div class="cart__grid">
@@ -58,23 +68,25 @@
                 Итого: {{ cartTotalCost | toFix | formattedPrice }}
               </div>
             </div>
-              <div class="cart__block">
-                <div class="cart__coupon d-none">
-                  <!-- Apply coupon Form -->
-                  <label class="sr-only" for="subscribeSrEmailExample1">Активировать код</label>
-                  <div class="input-group">
-                    <input type="text" class="form-control" name="text" id="subscribeSrEmailExample1" placeholder="Введите код" required="">
-                    <div class="input-group-append">
-                      <button class="btn" type="button" id="subscribeButtonExample2"><span class="">Активировать скидку</span></button>
-                    </div>
+            <div class="cart__block">
+              <div class="cart__coupon d-none">
+                <!-- Apply coupon Form -->
+                <label class="sr-only" for="subscribeSrEmailExample1">Активировать код</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" name="text" id="subscribeSrEmailExample1"
+                         placeholder="Введите код" required="">
+                  <div class="input-group-append">
+                    <button class="btn" type="button" id="subscribeButtonExample2"><span
+                      class="">Активировать скидку</span></button>
                   </div>
-                  <!-- End Apply coupon Form -->
                 </div>
-                <div class="d-flex">
-                  <nuxt-link to="/category" class="btn-next">Продолжить покупки</nuxt-link>
-                  <nuxt-link to="/checkout" class="btn-order">Оформить заказ</nuxt-link>
-                </div>
+                <!-- End Apply coupon Form -->
               </div>
+              <div class="d-flex">
+                <nuxt-link to="/category" class="btn-next">Продолжить покупки</nuxt-link>
+                <nuxt-link to="/checkout" class="btn-order">Оформить заказ</nuxt-link>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -91,49 +103,26 @@
 <script>
 import toFix from "../filters/toFixed";
 import formattedPrice from "../filters/priceFix";
+import {mapActions, mapGetters} from "vuex";
+
 export default {
   name: "Cart",
   filters: {
     toFix,
     formattedPrice
   },
-  props: [],
-  // mounted() {
-  //   this.$store.commit('saveCart', window.localStorage.getItem('cart'))
-  //   this.$store.commit('saveCart', window.localStorage.getItem('cartCount'))
-  // },
+  props: {},
+  mounted() {
+  },
   computed: {
-    // buyLabel() {
-    //   let totalProducts = this.$store.state.cart.length,
-    //     productsAdded = this.$store.state.cart,
-    //     pricesArray = [],
-    //     productLabel = '',
-    //     finalPrice = '',
-    //     quantity = 1;
-    //
-    //   productsAdded.forEach(product => {
-    //
-    //     if (product.quantity >= 1) {
-    //       quantity = product.quantity;
-    //     }
-    //
-    //     pricesArray.push((product.price * quantity));
-    //   });
-    //
-    //   finalPrice = pricesArray.reduce((a, b) => a + b, 0);
-    //
-    //   if (totalProducts > 1) {
-    //     productLabel = 'товара';
-    //   } else {
-    //     productLabel = 'товар';
-    //   }
-    //   return `${totalProducts} ${productLabel} на сумму: ${finalPrice}`;
-    // },
+    ...mapGetters([
+      'cart'
+    ]),
     cartTotalCost() {
       let result = []
-      if (this.$store.state.cart) {
-        for (let product of this.$store.state.cart) {
-          result.push(product.price * product.quantity)
+      if (this.cart) {
+        for (let product of this.cart) {
+          result.push(product.price * product.qty)
         }
         result = result.reduce(function (sum, el) {
           return sum + el;
@@ -145,9 +134,7 @@ export default {
     }
   },
   methods: {
-    removeFromCart(product) {
-      this.$store.commit('removeFromCart', product);
-    },
+    ...mapActions(['addQty', 'reduceQty', 'removeFromCart']),
   }
 }
 </script>
@@ -206,9 +193,9 @@ export default {
   &__title
     border-bottom: 1px solid #dadce0
     padding: 15px 0
-    color: #747474!important
-    font-size: 14px!important
-    +sm(display, none!important)
+    color: #747474 !important
+    font-size: 14px !important
+    +sm(display, none !important)
 
   &__grid
     display: flex
@@ -279,6 +266,35 @@ export default {
       +sm(justify-content, space-between)
       +sm(align-items, flex-start)
       +sm(padding, .5rem 0)
+
+      .border
+        width: 80%
+        padding: 0.25rem 1rem
+        border-radius: 50rem
+        border: 1px solid #ddd
+        display: flex
+        justify-content: space-between
+        +md(width, 100%)
+        +lg(padding, .25rem .3rem)
+        +sm(width, 30%)
+
+      .col-auto
+        .btn
+          outline: none
+          background: transparent
+          border: none
+          cursor: pointer
+          font-size: 0.75rem
+          width: 1.5rem
+          height: 1.5rem
+          padding: 0
+          border-radius: 50%
+          color: #333e48
+          transition: all .4s ease
+
+          &:hover
+            background: #333e48
+            color: #dadce0
 
     .product-subtotal
       +col
@@ -372,6 +388,7 @@ export default {
     border-color: transparent
     padding: 0.67rem 2rem
     margin-right: 10px
+
     &:hover
       color: #dadce0
       background-color: #333e48
@@ -389,6 +406,7 @@ export default {
     line-height: 1.5
     border-radius: 1.4rem
     transition: all 0.2s ease-in-out
+
     &:hover
       color: #dadce0
       background-color: #333e48
