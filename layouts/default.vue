@@ -23,6 +23,9 @@
       Footer,
       Header
     },
+    beforeCreate () {
+      // vueMainPlugins()
+    },
     computed: {
       meta() {
         return [

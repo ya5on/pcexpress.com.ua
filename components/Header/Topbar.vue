@@ -26,7 +26,7 @@
           </li>
           <li class="u-header-topbar__nav-item">
             <!-- Account Sidebar Toggle Button -->
-            <AccountSideBar class="acc" />
+              <AccountSideBar class="acc" />
             <!-- End Account Sidebar Toggle Button -->
           </li>
         </ul>

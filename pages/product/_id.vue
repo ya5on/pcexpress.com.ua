@@ -27,7 +27,7 @@
 <!--              </swiper-slide>-->
 <!--            </swiper>-->
 <!--        </div>-->
-        <div >
+        <div>
           <img :src="`${PRODUCT.img}`" alt="">
         </div>
       </div>

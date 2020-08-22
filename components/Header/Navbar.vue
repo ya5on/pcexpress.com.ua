@@ -91,26 +91,32 @@
                   <i class="font-size-22 ec ec-compare"></i>
                 </nuxt-link>
               </li>
-              <li class="u-header__links--item d-none relative">
-                <nuxt-link to="/user/wishlist" class="" title="Список желаний">
-                  <i class="ec ec-favorites"></i>
-                  <span class="cart-count" v-if="$store.state.favorites.length > 0 ">{{ $store.state.favorites.length }}</span>
-                </nuxt-link>
-              </li>
-              <!-- Mobile Cabinet -->
-              <li class="u-header__links--item mobile-visible">
-                <nuxt-link to="/" class=""title="Кабинет">
-                  <i class="ec ec-user"></i>
-                </nuxt-link>
-              </li>
-              <!-- End Mobile Cabinet -->
-              <li class="u-header__links--item relative">
-                <nuxt-link to="/cart" class="" title="Корзина">
-                  <i class="ec ec-shopping-bag"></i>
-                  <span class="cart-count" v-if="totalQty >= 1">{{ totalQty }}</span>
-                  <span class="d-none cart-price"></span>
-                </nuxt-link>
-              </li>
+                <li class="u-header__links--item d-none relative">
+                  <nuxt-link to="/user/wishlist" class="" title="Список желаний">
+                    <i class="ec ec-favorites"></i>
+                    <span class="cart-count" v-if="$store.state.favorites.length > 0 ">{{ $store.state.favorites.length }}</span>
+                  </nuxt-link>
+                </li>
+                <li class="u-header__links--item relative">
+                  <nuxt-link to="/cart" class="" title="Корзина">
+                    <i class="ec ec-shopping-bag"></i>
+                    <span class="cart-count" v-if="totalQty >= 1">{{ totalQty }}</span>
+                    <span class="d-none cart-price"></span>
+                  </nuxt-link>
+                  <ul v-if="$store.state.cart.length > 0 " class="d-none">
+                    <li>
+                      <span v-if="totalQty >= 1">Товаров: {{ totalQty }}</span>
+                    </li>
+                    <li>
+                      <span>На сумму: {{ cartTotalCost | toFix | formattedPrice }}</span>
+                    </li>
+                    <li>
+                      <nuxt-link to="/cart" class="hover-total">
+                        Перейти в корзину
+                      </nuxt-link>
+                    </li>
+                  </ul>
+                </li>
             </ul>
         </div>
         <!-- End Header Icons -->
@@ -124,6 +130,8 @@
   import SidebarNav from "../SidebarNav/SidebarNav";
   import Burger from "../SidebarNav/Burger";
   import {mapGetters} from "vuex";
+  import toFix from "../filters/toFixed";
+  import formattedPrice from "../filters/priceFix";
   export default {
     name: "Navbar",
     components: {
@@ -133,12 +141,30 @@
     data(){
       return {}
     },
+    filters: {
+      toFix,
+      formattedPrice
+    },
     computed: {
       ...mapGetters([
         'cart',
       ]),
       totalQty(){
         return this.cart.reduce((a, b) => a + b.qty, 0)
+      },
+      cartTotalCost() {
+        let result = []
+        if (this.cart) {
+          for (let product of this.cart) {
+            result.push(product.price * product.qty)
+          }
+          result = result.reduce(function (sum, el) {
+            return sum + el;
+          })
+          return result;
+        } else {
+          return 0
+        }
       }
     },
     methods: {}
@@ -239,6 +265,29 @@
         .ec
           font-size: 30px
           color: #333e48
+
+        ul
+          display: none
+          background: #222222
+          border-radius: 10px
+          position: absolute
+          top: 30px
+          right: 0
+          z-index: 2
+          padding: 15px
+          min-width: 170px
+
+          li
+            color: #dadce0
+
+            &:last-child
+              margin-top: 5px
+
+        &:hover > ul
+          display: block
+
+        .hover-total
+          color: #dadce0
 
   .mobile-visible
     display: none

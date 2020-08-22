@@ -48,7 +48,7 @@
                   <div class="quantity">
                     {{ product.qty }}
                   </div>
-                  <div class="col-auto" v-if="product.amnt >= 2">
+                  <div class="col-auto">
                     <button class="btn" @click="reduceQty(product.id)">
                       <i class="fa fa-minus btn-icon__inner"></i>
                     </button>

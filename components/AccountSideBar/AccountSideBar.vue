@@ -15,17 +15,11 @@
 
     <div v-if="isUserLoggedIn" class="navbar-item has-dropdown is-hoverable">
       <a class="u-header-topbar__nav-link">
-        Welcome {{ getUserName }},
+        Здравствуйте <span style="font-weight: bold">{{ getUserName }}</span>,
         <a class="u-header-topbar__nav-link" style="cursor: pointer" @click="logout">
           {{ logoutLabel }}
         </a>
       </a>
-<!--      <div class="navbar-dropdown is-boxed">-->
-<!--        <nuxt-link class="u-header-topbar__nav-link" :to="{ name: 'user-wishlist' }">-->
-<!--          {{ wishlistLabel }}-->
-<!--        </nuxt-link>-->
-<!--        <hr class="navbar-divider">-->
-<!--      </div>-->
     </div>
   </div>
 </template>
@@ -76,3 +70,6 @@ export default {
 }
 </script>
 
+<style lang="sass" scoped>
+
+</style>

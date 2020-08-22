@@ -45,8 +45,8 @@
         </div>
 
         <div :class="[view ? 'shop__list' : 'shop__plate']">
-          <div v-if="PRODUCTS.length === 0" style="text-align: center; margin: 35px; font-size: 28px">Товаров нет</div>
-          <div v-else class="product-item" v-for="product in paginatedProducts" :key="product.id">
+<!--          <div v-if="PRODUCTS.length === 0" style="text-align: center; margin: 35px; font-size: 28px">Товаров нет</div>-->
+          <div class="product-item" v-for="product in paginatedProducts" :key="product.id">
             <div class="product-item__inner">
               <div class="product-item__body">
                 <h5 class="product-item__title">

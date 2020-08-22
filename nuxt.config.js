@@ -48,21 +48,14 @@ export default {
     { src: '~/plugins/vue-html-remove', ssr: false },
     { src: '~/plugins/vue-carousel', ssr: false },
     { src: '~/plugins/vue-tabs', ssr: false },
+    { src: '~/plugins/vuex-persist', ssr: false }
   ],
 
   modules: [
     '@nuxtjs/axios',
-    // '@nuxtjs/markdownit',
     'nuxt-trailingslash-module',
     'nuxt-webfontloader',
-    'cookie-universal-nuxt',
     '@nuxtjs/style-resources',
-    ['nuxt-vuex-localstorage', {
-      ...(isDev && {
-        mode: 'debug'
-      }),
-      localStorage: [''] //  If not entered, “localStorage” is the default value
-    }]
   ],
 
   webfontloader: {
@@ -146,7 +139,7 @@ export default {
         ignoreOrder: true
       }
     }),
-    transpile: ['vue-lazy-hydration', 'intersection-observer', 'vue-backtotop',],
+    transpile: ['vue-lazy-hydration', 'intersection-observer', 'vue-backtotop', 'vuex-persist'],
     postcss: {
       plugins: {
         ...(!isDev && {

@@ -44,12 +44,12 @@ export const mutations = {
     } else {
       state.cart.push({...product, qty: 1})
     }
-    this.commit('saveData');
+    // this.commit('saveData');
   },
   addQty(state, id){
     const currentProduct = state.cart.find(c => c.id === id);
     currentProduct.qty++
-    this.commit('saveData');
+    // this.commit('saveData');
   },
   reduceQty(state, id){
     const currentProduct = state.cart.find(c => c.id === id);
@@ -58,11 +58,11 @@ export const mutations = {
     } else {
       state.cart = state.cart.filter(c => c.id !== id);
     }
-    this.commit('saveData');
+    // this.commit('saveData');
   },
   removeFromCart(state, id){
     state.cart = state.cart.filter(c => c.id !== id);
-    this.commit('saveData');
+    // this.commit('saveData');
   },
   //-------------------------------------------------------------------FAVORITES
   addToFavorites(state, product){
@@ -72,19 +72,20 @@ export const mutations = {
     } else {
       state.favorites.push({...product, qty: 1})
     }
-    this.commit('saveData');
+    // this.commit('saveData');
   },
   removeFromFavorites(state, product){
     let index = state.favorites.indexOf(product);
     if (index > -1) {
       state.favorites.splice(index, 1);
     }
-    this.commit('saveData');
+    // this.commit('saveData');
   },
-  saveData(state){
-    window.localStorage.setItem('cart', JSON.stringify(state.cart));
-    window.localStorage.setItem('favorites', JSON.stringify(state.favorites));
-  },
+  // saveData(state){
+  //   window.localStorage.setItem('cart', JSON.stringify(state.cart));
+  //   window.localStorage.setItem('favorites', JSON.stringify(state.favorites));
+  //   window.localStorage.setItem('userInfo', JSON.stringify(state.userInfo.name));
+  // },
 
   //---------------------------------------------------------------------
   SET_USER(state, authUser) {
