@@ -36,6 +36,9 @@ export const mutations = {
     state.product = product
   },
   //
+  SET_CURRENT_CATEGORY (state, category) {
+    state.currentCategory = category
+  },
   //---------------------------------------------------------------------CART--
   addProductToCart(state, product){
     const addedProduct = state.cart.find(c => c.id === product.id);
@@ -44,12 +47,10 @@ export const mutations = {
     } else {
       state.cart.push({...product, qty: 1})
     }
-    // this.commit('saveData');
   },
   addQty(state, id){
     const currentProduct = state.cart.find(c => c.id === id);
     currentProduct.qty++
-    // this.commit('saveData');
   },
   reduceQty(state, id){
     const currentProduct = state.cart.find(c => c.id === id);
@@ -58,11 +59,9 @@ export const mutations = {
     } else {
       state.cart = state.cart.filter(c => c.id !== id);
     }
-    // this.commit('saveData');
   },
   removeFromCart(state, id){
     state.cart = state.cart.filter(c => c.id !== id);
-    // this.commit('saveData');
   },
   //-------------------------------------------------------------------FAVORITES
   addToFavorites(state, product){
@@ -72,21 +71,13 @@ export const mutations = {
     } else {
       state.favorites.push({...product, qty: 1})
     }
-    // this.commit('saveData');
   },
   removeFromFavorites(state, product){
     let index = state.favorites.indexOf(product);
     if (index > -1) {
       state.favorites.splice(index, 1);
     }
-    // this.commit('saveData');
   },
-  // saveData(state){
-  //   window.localStorage.setItem('cart', JSON.stringify(state.cart));
-  //   window.localStorage.setItem('favorites', JSON.stringify(state.favorites));
-  //   window.localStorage.setItem('userInfo', JSON.stringify(state.userInfo.name));
-  // },
-
   //---------------------------------------------------------------------
   SET_USER(state, authUser) {
     state.authUser = authUser
@@ -132,7 +123,6 @@ export const actions = {
     })
     commit('SET_CATEGORIES_LIST', categories.data);
     return categories;
-
   },
   async GET_PRODUCTS({commit}, {cat}) {
     const products = await axios("https://b2b.nikolink.com/api/get-items.php", {
@@ -178,6 +168,9 @@ export const getters = {
   },
   SUB_CATS: state => id => {
     return state.categories.filter(c => c.parent_id === id);
+  },
+  CAT: state => route => {
+    return state.categories.find(c => c.id === route.params.id)
   },
   PRODUCTS(state) {
     return state.products;

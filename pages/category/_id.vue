@@ -8,7 +8,7 @@
       <li class="breadcrumb-item">
         <i class="ec ec-arrow-right-categproes"></i>
       </li>
-      <li class="breadcrumb-item">cat title</li>
+      <li class="breadcrumb-item">{{ $route.params.id }}</li>
     </ul>
     <!-- End breadcrumb -->
     <!--SHOP-GRID-->
@@ -100,7 +100,7 @@
 
 
 <script>
-  import {mapActions, mapGetters} from 'vuex'
+import {mapActions, mapGetters, mapState} from 'vuex'
   import Catalogue from "../../components/Catalogue";
   import CategoriesList from "../../components/CategoriesList";
   import toFix from "../../components/filters/toFixed";
@@ -108,6 +108,18 @@
   import CustomSelect from "../../components/CustomSelect";
   export default {
     components: {CustomSelect, Catalogue, CategoriesList},
+    // head() {
+    //   return {
+    //     title: this.PRODUCT.name,
+    //     meta: [
+    //       {
+    //         hid: 'description',
+    //         name: 'description',
+    //         content: this.PRODUCT.name
+    //       }
+    //     ]
+    //   }
+    // },
     data() {
       return {
         view: true,
@@ -125,6 +137,7 @@
         'PRODUCTS',
         'ALL_CATS',
         'MAIN_CATS',
+        'CAT'
       ]),
       pages(){
         return Math.ceil(this.PRODUCTS.length / this.productsPerPage);
@@ -139,7 +152,7 @@
       ...mapActions([
         'GET_PRODUCTS',
         'GET_CATEGORIES_LIST',
-        'addToCart'
+        'addToCart',
       ]),
       toggleView(){
         this.view = !this.view;

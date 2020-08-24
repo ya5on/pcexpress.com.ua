@@ -9,21 +9,13 @@
 <script>
 export default {
   name: "add-to-cart",
-  props: {
-    name: String,
-    price: String,
-    image: String,
-    pId: String
-  },
+  props: {},
   data(){
-    return {
-      item :{
-        productName: this.name,
-        productImage: this.image,
-        productPrice: this.price,
-        productId: this.pId,
-        productQuantity: 1,
-      }
+    return {}
+  },
+  computed: {
+    isProductAdded () {
+      return this.products.find(p => p.id === this.product.id)
     }
   },
   methods:{

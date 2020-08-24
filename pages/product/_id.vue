@@ -12,22 +12,27 @@
         <nuxt-link to="/category/610">{{ PRODUCT.path }}</nuxt-link>
       </li>
 
-      <li class="breadcrumb-item">
+      <li class="breadcrumb-item d-none">
         <i class="ec ec-arrow-right-categproes"></i>
       </li>
-      <li class="breadcrumb-item">{{ PRODUCT.name }}</li>
+      <li class="breadcrumb-item d-none">{{ PRODUCT.name }}</li>
     </ul>
     <!-- End breadcrumb -->
     <div class="product">
       <div class="product__imgs">
-<!--        <div v-if="PRODUCT.imgs">-->
-<!--            <swiper class="swiper gallery-top"  ref="swiperTop">-->
-<!--              <swiper-slide v-for="(image, imageIndex) in PRODUCT.imgs" :key="image">-->
-<!--                <img :src="image" class="img-fluid" :key="imageIndex"/>-->
-<!--              </swiper-slide>-->
-<!--            </swiper>-->
-<!--        </div>-->
-        <div>
+        <div class="tabs" v-if="PRODUCT.imgs">
+          <div class="tabs__content">
+            <img :src=content class="img-fluid"/>
+          </div>
+          <div class="tabs__nav">
+            <div class="tabs__nav_tab"
+                 v-for="(image, index) in PRODUCT.imgs"
+                 :class="[index === active ? 'tabs__nav_tab--active' : '']"
+                 @click="activate(index)">
+              <img :src="image" class="img-fluid" :key="index"/></div>
+          </div>
+        </div>
+        <div v-else>
           <img :src="`${PRODUCT.img}`" alt="">
         </div>
       </div>
@@ -90,7 +95,9 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      active: 0,
+    }
   },
   filters: {
     toFix,
@@ -101,6 +108,9 @@ export default {
       'PRODUCT',
       'ALL_CATS',
     ]),
+    content () {
+      return this.PRODUCT.imgs[this.active]
+    }
   },
   methods: {
     ...mapActions([
@@ -108,6 +118,9 @@ export default {
       'GET_CATEGORIES_LIST',
       'addToCart'
     ]),
+    activate (index) {
+      this.active = index
+    }
   },
   mounted() {
     this.$store.dispatch('GET_PRODUCT', {id: this.$route.params.id})
@@ -117,18 +130,50 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.tabs
+  height: 100%
+  width: 100%
+
+  &__nav
+    display: flex
+
+    &_tab
+      display: flex
+      justify-content: center
+      align-items: center
+      margin: .3rem
+      background: #fff
+      box-shadow: inset 0 -1rem 0.75rem -1rem rgba(0,0,0,0.25)
+      border: 1px solid #aeaeae
+      cursor: pointer
+      opacity: 0.75
+      transition: 100ms linear all
+      max-width: 100px
+      width: 100%
+
+      &--active
+        opacity: 1
+        box-shadow: none
+        border: 1px solid #fed700
+
+  &__content
+    display: flex
+    justify-content: center
+    align-items: center
+    height: 565px
+    margin-bottom: 10px
+    +sm(height, 350px)
 
 .product
   +row-flex
   justify-content: space-between
-  margin-bottom: 6.5rem
+  margin-bottom: 7rem
 
   &__imgs
     +col
     +size(5)
     +size-lg(6)
     +size-sm(12)
-    max-height: 565px
 
   &__desc
     +col

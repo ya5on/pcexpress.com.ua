@@ -12,11 +12,7 @@
             </li>
           </ul>
         </div>
-<!--        <div class="popular__banner">-->
-<!--          <nuxt-link to="/shop" class="d-block">-->
-<!--            <img class="img-fluid" src="../../assets/img/370X608/img1.jpg" alt="Image Description">-->
-<!--          </nuxt-link>-->
-<!--        </div>-->
+
         <div class="popular__carts">
           <div class="carts-list">
             <div class="product-item" v-for="product in filteredTen">
