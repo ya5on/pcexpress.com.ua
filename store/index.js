@@ -1,4 +1,3 @@
-
 import axios, * as others from 'axios'
 
 export const strict = false // костыль!!!

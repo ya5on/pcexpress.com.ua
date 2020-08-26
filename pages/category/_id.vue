@@ -8,7 +8,7 @@
       <li class="breadcrumb-item">
         <i class="ec ec-arrow-right-categproes"></i>
       </li>
-      <li class="breadcrumb-item">{{ $route.params.id }}</li>
+      <li class="breadcrumb-item">{{ CAT }}</li>
     </ul>
     <!-- End breadcrumb -->
     <!--SHOP-GRID-->
@@ -46,7 +46,7 @@
 
         <div :class="[view ? 'shop__list' : 'shop__plate']">
 <!--          <div v-if="PRODUCTS.length === 0" style="text-align: center; margin: 35px; font-size: 28px">Товаров нет</div>-->
-          <div class="product-item" v-for="product in paginatedProducts" :key="product.id">
+          <div class="product-item" v-for="product in PRODUCTS" :key="product.id">
             <div class="product-item__inner">
               <div class="product-item__body">
                 <h5 class="product-item__title">
@@ -101,7 +101,7 @@
 
 <script>
 import {mapActions, mapGetters, mapState} from 'vuex'
-  import Catalogue from "../../components/Catalogue";
+  import Catalogue from "../../components/MobileCatalogue";
   import CategoriesList from "../../components/CategoriesList";
   import toFix from "../../components/filters/toFixed";
   import formattedPrice from "../../components/filters/priceFix";
@@ -162,7 +162,7 @@ import {mapActions, mapGetters, mapState} from 'vuex'
       },
       addToFavorites(product) {
         this.$store.commit('addToFavorites', product);
-      }
+      },
     },
     mounted() {
       this.$store.dispatch('GET_PRODUCTS', { cat: this.$route.params.id })
