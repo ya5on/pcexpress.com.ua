@@ -58,12 +58,7 @@
         <!-- End Nav -->
         <!-- Search Bar -->
         <div class="u-header__search-bar d-none">
-          <form class="search">
-            <input type="text" class="searchTerm" placeholder="Поиск">
-            <button class="searchButton">
-              <i class="fa fa-search"></i>
-            </button>
-          </form>
+          <Search />
         </div>
         <!-- End Search Bar -->
         <!-- Secondary Menu -->
@@ -87,8 +82,8 @@
               </li>
               <!-- End Mobile Search -->
               <li class="u-header__links--item d-none">
-                <nuxt-link to="/compare" class="" title="Сравнение">
-                  <i class="font-size-22 ec ec-compare"></i>
+                <nuxt-link to="/checkout" class="" title="Страница заказа">
+                  <i class="font-size-22 ec ec-tag"></i>
                 </nuxt-link>
               </li>
                 <li class="u-header__links--item d-none relative">
@@ -132,9 +127,11 @@
   import {mapGetters} from "vuex";
   import toFix from "../filters/toFixed";
   import formattedPrice from "../filters/priceFix";
+  import Search from "../Search/Search";
   export default {
     name: "Navbar",
     components: {
+      Search,
       Burger,
       SidebarNav
     },
@@ -204,35 +201,6 @@
       +size(5)
       display: flex
       align-items: center
-
-      .search
-        width: 100%
-        position: relative
-        display: flex
-
-      .searchTerm
-        width: 100%
-        border: 3px solid #fed700
-        border-right: none
-        padding: 5px 5px 5px 2rem
-        border-radius: 20px 0 0 20px
-        outline: none
-        color: #333e48
-        font-size: 1rem
-
-      .searchTerm:focus
-        color: #333e48
-
-      .searchButton
-        width: 55px
-        height: 40px
-        border: 1px solid #fed700
-        background: #fed700
-        text-align: center
-        color: #fff
-        border-radius: 0 20px 20px 0
-        cursor: pointer
-        font-size: 22px
 
     &__social
       +col

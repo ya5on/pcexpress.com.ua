@@ -19,7 +19,7 @@
 <!--        </div>-->
         <div class="popular__carts">
           <div class="carts-list">
-            <div class="product-item" v-for="product in filteredTen">
+            <div class="product-item" v-for="product in filteredProducts">
               <div class="product-item__inner">
                 <div class="product-item__body">
                   <div class="text">
@@ -73,7 +73,7 @@ import formattedPrice from "../filters/priceFix";
           'SUB_CATS',
           'TAB_PRODUCTS',
         ]),
-        filteredTen(){
+        filteredProducts(){
           return this.TAB_PRODUCTS.slice(0, 10)
         }
       },
@@ -89,7 +89,7 @@ import formattedPrice from "../filters/priceFix";
       mounted() {
         this.GET_CATEGORIES_LIST()
         this.$store.dispatch('TAB_PRODUCTS', { cat: this.activeCategory })
-        }
+        },
     }
 </script>
 

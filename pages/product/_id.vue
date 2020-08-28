@@ -27,6 +27,7 @@
           <div class="tabs__nav">
             <div class="tabs__nav_tab"
                  v-for="(image, index) in PRODUCT.imgs"
+                 :key="image.id"
                  :class="[index === active ? 'tabs__nav_tab--active' : '']"
                  @click="activate(index)">
               <img :src="image" class="img-fluid" :key="index"/></div>
@@ -59,7 +60,7 @@
       </div>
       <div class="product__add">
         <div class="product__price">
-          <div class="font-size-36">{{ PRODUCT.price | toFix | formattedPrice }}</div>
+          <div class="font-size-36">{{ PRODUCT.price * currency | toFix | formattedPrice }}</div>
           <a href="#" class="pay-parts">
             <i class="ec ec-favorites mr-1 font-size-15"></i>
             Оплата частями
@@ -74,7 +75,7 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex'
+import {mapGetters, mapActions, mapState} from 'vuex'
 import toFix from "../../components/filters/toFixed";
 import formattedPrice from "../../components/filters/priceFix";
 
@@ -103,13 +104,25 @@ export default {
     toFix,
     formattedPrice
   },
+  created() {
+    return this.$store.dispatch('GET_RATES')
+  },
   computed: {
     ...mapGetters([
       'PRODUCT',
       'ALL_CATS',
+      'RATES'
     ]),
     content () {
       return this.PRODUCT.imgs[this.active]
+    },
+    filteredCurrency(){
+      return this.RATES.filter(item => {
+        return item.ccy.includes("USD");
+      });
+    },
+    currency(){
+      return this.filteredCurrency.map(ele => ele.buy)
     }
   },
   methods: {
@@ -120,7 +133,7 @@ export default {
     ]),
     activate (index) {
       this.active = index
-    }
+    },
   },
   mounted() {
     this.$store.dispatch('GET_PRODUCT', {id: this.$route.params.id})
@@ -156,13 +169,19 @@ export default {
         box-shadow: none
         border: 1px solid #fed700
 
+      .img-fluid
+        max-height: 100px
+
   &__content
     display: flex
     justify-content: center
     align-items: center
     height: 565px
     margin-bottom: 10px
-    +sm(height, 350px)
+    margin-top: 10px
+
+    .img-fluid
+
 
 .product
   +row-flex

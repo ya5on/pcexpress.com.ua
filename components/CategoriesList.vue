@@ -1,7 +1,7 @@
 <template>
   <div class="menu">
     <div class="menu-title">
-      <nuxt-link to="/" class="">Все категории</nuxt-link>
+      <nuxt-link to="/categories" class="">Все категории</nuxt-link>
     </div>
     <ul class="menu-list">
       <li class="menu-item" v-for="category in MAIN_CATS" :key="category.id">
@@ -65,11 +65,9 @@
 
 <style lang="sass" scoped>
   .menu
-    width: 100%
     display: flex
     flex-direction: column
     box-shadow: 0 10px 20px rgba(64, 64, 64, 0.15)
-
     ul
       list-style: none
 

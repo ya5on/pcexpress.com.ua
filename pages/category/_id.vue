@@ -8,7 +8,7 @@
       <li class="breadcrumb-item">
         <i class="ec ec-arrow-right-categproes"></i>
       </li>
-      <li class="breadcrumb-item">{{ CAT }}</li>
+      <li class="breadcrumb-item">cat name</li>
     </ul>
     <!-- End breadcrumb -->
     <!--SHOP-GRID-->
@@ -46,7 +46,7 @@
 
         <div :class="[view ? 'shop__list' : 'shop__plate']">
 <!--          <div v-if="PRODUCTS.length === 0" style="text-align: center; margin: 35px; font-size: 28px">Товаров нет</div>-->
-          <div class="product-item" v-for="product in PRODUCTS" :key="product.id">
+          <div class="product-item" v-for="product in paginatedProducts" :key="product.id">
             <div class="product-item__inner">
               <div class="product-item__body">
                 <h5 class="product-item__title">
@@ -137,7 +137,6 @@ import {mapActions, mapGetters, mapState} from 'vuex'
         'PRODUCTS',
         'ALL_CATS',
         'MAIN_CATS',
-        'CAT'
       ]),
       pages(){
         return Math.ceil(this.PRODUCTS.length / this.productsPerPage);
@@ -164,6 +163,9 @@ import {mapActions, mapGetters, mapState} from 'vuex'
         this.$store.commit('addToFavorites', product);
       },
     },
+    watch: {
+
+    },
     mounted() {
       this.$store.dispatch('GET_PRODUCTS', { cat: this.$route.params.id })
       this.GET_CATEGORIES_LIST()
@@ -173,7 +175,7 @@ import {mapActions, mapGetters, mapState} from 'vuex'
 </script>
 
 
-<style lang="sass" scoped>
+<style lang="sass">
   .shop
     +row-flex
     flex-wrap: nowrap !important

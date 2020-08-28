@@ -1,5 +1,4 @@
 import axios, * as others from 'axios'
-
 export const strict = false // костыль!!!
 
 export const state = () => ({
@@ -17,7 +16,10 @@ export const state = () => ({
     openSignupModal: false,
   },
   cart: [],
-  favorites: []
+  favorites: [],
+  rates: [],
+
+  searchValue: ''
 
 });
 //-------------------------------MUTATIONS-----------------------------
@@ -37,6 +39,9 @@ export const mutations = {
   //
   SET_CURRENT_CATEGORY (state, category) {
     state.currentCategory = category
+  },
+  SET_RATES: (state, rates) => {
+    state.rates = rates
   },
   //---------------------------------------------------------------------CART--
   addProductToCart(state, product){
@@ -96,7 +101,11 @@ export const mutations = {
   showSignupModal: (state, show) => {
     state.systemInfo.openSignupModal = show;
   },
-  //---------------------------------------------------------------------
+  //--------------------------------------------------------------------
+  SET_SEARCH_VALUE: (state, value) => {
+    state.searchValue = value;
+  },
+
 };
 //-------------------------------ACTIONS-----------------------------
 export const actions = {
@@ -123,6 +132,7 @@ export const actions = {
     commit('SET_CATEGORIES_LIST', categories.data);
     return categories;
   },
+
   async GET_PRODUCTS({commit}, {cat}) {
     const products = await axios("https://b2b.nikolink.com/api/get-items.php", {
       method: "GET",
@@ -134,6 +144,7 @@ export const actions = {
     commit('SET_PRODUCTS', products.data)
     return products
   },
+
   async TAB_PRODUCTS({commit}, {cat}) {
     const tabProducts = await axios("https://b2b.nikolink.com/api/get-items.php", {
       method: "GET",
@@ -145,6 +156,7 @@ export const actions = {
     commit('SET_TAB_PRODUCTS', tabProducts.data)
     return tabProducts
   },
+
   async GET_PRODUCT({commit}, {id}) {
     const product = await axios("https://b2b.nikolink.com/api/get-item.php", {
       method: "GET",
@@ -156,6 +168,29 @@ export const actions = {
     commit('SET_PRODUCT', product.data)
     return product
   },
+
+  async GET_RATES({commit}) {
+    const rates = await axios('https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5', {
+      method: "GET",
+    })
+    commit('SET_RATES', rates.data);
+    return rates;
+  },
+
+  // async GET_SEARCH_VALUE({commit}) {
+  //   const search = await axios("https://b2b.nikolink.com/api/get-items.php", {
+  //     method: "GET",
+  //       params: {
+  //         token: "0e94e098eac6e56a22496613b325473b7de8cb0a"
+  //       }
+  //     })
+  //   commit('SET_SEARCH_VALUE', search.data)
+  //   return search;
+  // },
+  GET_SEARCH_VALUE ({commit}, value) {
+    commit('SET_SEARCH_VALUE', value)
+  },
+
 };
 //-------------------------------GETTERS-----------------------------
 export const getters = {
@@ -180,6 +215,9 @@ export const getters = {
   PRODUCT(state) {
     return state.product;
   },
+  RATES(state) {
+    return state.rates;
+  },
   //---------------------------------------------------------------------login,logout,modals
   isUserLoggedIn: state => {
     return state.userInfo.isLoggedIn;
@@ -200,5 +238,7 @@ export const getters = {
     return state.cart
   },
 //---------------------------------------------------------------------
-
+  SEARCH_VALUE(state) {
+    return state.searchValue;
+  },
 };
