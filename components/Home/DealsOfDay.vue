@@ -34,7 +34,7 @@
               </div>
               <div class="product-get">
                 <div class="prodcut-price">
-                  {{ product.price | toFix | formattedPrice }}
+                  {{ product.price * getDollar | toFix | formattedPrice }}
                 </div>
                 <div class="prodcut-add-cart">
                   <button class="btn-add" v-if="" @click="addToCart(product)"><i class="ec ec-add-to-cart"></i></button>
@@ -63,12 +63,19 @@
       toFix,
       formattedPrice
     },
+    created() {
+      return this.$store.dispatch('GET_RATES')
+    },
     computed: {
       ...mapGetters([
         'PRODUCTS',
+        'RATES'
       ]),
       filteredSix(){
         return this.PRODUCTS.slice(0, 6)
+      },
+      getDollar() {
+        return this.RATES.map(e => e.rate).toString()
       },
     },
     methods: {

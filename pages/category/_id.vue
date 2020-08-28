@@ -63,7 +63,7 @@
                   </div>
                   <div class="product-get">
                     <div class="product-price">
-                      {{ product.price | toFix | formattedPrice }}
+                      {{ product.price * getDollar | toFix | formattedPrice }}
                     </div>
                     <div class="product-add-cart">
                       <button class="btn-add" @click="addToCart(product)"><i class="ec ec-add-to-cart"></i></button>
@@ -131,12 +131,15 @@ import {mapActions, mapGetters, mapState} from 'vuex'
       toFix,
       formattedPrice
     },
-    created() {},
+    created() {
+      return this.$store.dispatch('GET_RATES')
+    },
     computed: {
       ...mapGetters([
         'PRODUCTS',
         'ALL_CATS',
         'MAIN_CATS',
+        'RATES'
       ]),
       pages(){
         return Math.ceil(this.PRODUCTS.length / this.productsPerPage);
@@ -145,7 +148,10 @@ import {mapActions, mapGetters, mapState} from 'vuex'
         let from = (this.pageNum -1) * this.productsPerPage,
             to = from + this.productsPerPage;
         return this.PRODUCTS.slice(from, to);
-      }
+      },
+      getDollar() {
+        return this.RATES.map(e => e.rate).toString()
+      },
     },
     methods: {
       ...mapActions([
@@ -162,9 +168,6 @@ import {mapActions, mapGetters, mapState} from 'vuex'
       addToFavorites(product) {
         this.$store.commit('addToFavorites', product);
       },
-    },
-    watch: {
-
     },
     mounted() {
       this.$store.dispatch('GET_PRODUCTS', { cat: this.$route.params.id })

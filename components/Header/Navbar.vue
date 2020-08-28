@@ -103,7 +103,7 @@
                       <span v-if="totalQty >= 1">Товаров: {{ totalQty }}</span>
                     </li>
                     <li>
-                      <span>На сумму: {{ cartTotalCost | toFix | formattedPrice }}</span>
+                      <span>На сумму: {{ cartTotalCost * getDollar | toFix | formattedPrice }}</span>
                     </li>
                     <li>
                       <nuxt-link to="/cart" class="hover-total">
@@ -142,9 +142,13 @@
       toFix,
       formattedPrice
     },
+    created() {
+      return this.$store.dispatch('GET_RATES')
+    },
     computed: {
       ...mapGetters([
         'cart',
+        'RATES'
       ]),
       totalQty(){
         return this.cart.reduce((a, b) => a + b.qty, 0)
@@ -162,9 +166,11 @@
         } else {
           return 0
         }
-      }
+      },
+      getDollar() {
+        return this.RATES.map(e => e.rate).toString()
+      },
     },
-    methods: {}
   }
 </script>
 

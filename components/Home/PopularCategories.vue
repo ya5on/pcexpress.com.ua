@@ -37,7 +37,7 @@
                   </div>
                   <div class="product-get">
                     <div class="product-price">
-                      {{ product.price | toFix | formattedPrice }}
+                      {{ product.price * getDollar | toFix | formattedPrice }}
                     </div>
                     <div class="product-add-cart">
                       <button class="btn-add" v-if="" @click="addToCart(product)"><i class="ec ec-add-to-cart"></i></button>
@@ -68,14 +68,21 @@ import formattedPrice from "../filters/priceFix";
         toFix,
         formattedPrice
       },
+      created() {
+        return this.$store.dispatch('GET_RATES')
+      },
       computed: {
         ...mapGetters([
           'SUB_CATS',
           'TAB_PRODUCTS',
+          'RATES'
         ]),
         filteredProducts(){
           return this.TAB_PRODUCTS.slice(0, 10)
-        }
+        },
+        getDollar() {
+          return this.RATES.map(e => e.rate).toString()
+        },
       },
       methods: {
         ...mapActions([

@@ -170,7 +170,7 @@ export const actions = {
   },
 
   async GET_RATES({commit}) {
-    const rates = await axios('https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5', {
+    const rates = await axios('https://bank.gov.ua/NBUStatService/v1/statdirectory/dollar_info?json', {
       method: "GET",
     })
     commit('SET_RATES', rates.data);

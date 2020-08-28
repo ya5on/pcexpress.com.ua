@@ -40,7 +40,7 @@
               </nuxt-link>
               <div class="product-price">
                 <p class="product__sub">Цена:</p>
-                <p>{{ product.price | toFix | formattedPrice }}</p>
+                <p>{{ product.price * getDollar| toFix | formattedPrice }}</p>
               </div>
               <div class="product-quantity">
                 <p class="product__sub">Количество:</p>
@@ -60,12 +60,12 @@
               </div>
               <div class="product-subtotal">
                 <p class="product__sub">Сумма:</p>
-                <p>{{ product.price * product.qty | toFix | formattedPrice }}</p>
+                <p>{{ product.price * getDollar * product.qty | toFix | formattedPrice }}</p>
               </div>
             </div>
             <div class="cart__grid">
               <div class="total-price">
-                Итого: {{ cartTotalCost | toFix | formattedPrice }}
+                Итого: {{ cartTotalCost * getDollar | toFix | formattedPrice }}
               </div>
             </div>
             <div class="cart__block">
@@ -111,12 +111,13 @@ export default {
     toFix,
     formattedPrice
   },
-  props: {},
-  mounted() {
+  created() {
+    return this.$store.dispatch('GET_RATES')
   },
   computed: {
     ...mapGetters([
-      'cart'
+      'cart',
+      'RATES'
     ]),
     cartTotalCost() {
       let result = []
@@ -131,7 +132,10 @@ export default {
       } else {
         return 0
       }
-    }
+    },
+    getDollar() {
+      return this.RATES.map(e => e.rate).toString()
+    },
   },
   methods: {
     ...mapActions(['addQty', 'reduceQty', 'removeFromCart']),

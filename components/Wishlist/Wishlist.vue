@@ -39,7 +39,7 @@
             </nuxt-link>
             <div class="product-price">
               <p class="product__sub">Цена:</p>
-              <p>{{ product.price | toFix | formattedPrice }}</p>
+              <p>{{ product.price * getDollar | toFix | formattedPrice }}</p>
             </div>
             <div class="add-cart">
               <button class="btn" @click.prevent="addToCart(product)"><i class="ec ec-add-to-cart"></i>Купить</button>
@@ -64,23 +64,31 @@
 <script>
 import toFix from "../filters/toFixed";
 import formattedPrice from "../filters/priceFix";
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 export default {
 name: "Wishlist",
   filters: {
     toFix,
     formattedPrice
   },
+  created() {
+    return this.$store.dispatch('GET_RATES')
+  },
   methods: {
     ...mapActions([
-      'addToCart'
+      'addToCart',
     ]),
     removeFromFavorites(product) {
       this.$store.commit('removeFromFavorites', product);
     }
   },
   computed:{
-
+    ...mapGetters([
+      'RATES'
+    ]),
+    getDollar() {
+      return this.RATES.map(e => e.rate).toString()
+    },
   }
 }
 </script>

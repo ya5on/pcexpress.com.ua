@@ -60,7 +60,7 @@
       </div>
       <div class="product__add">
         <div class="product__price">
-          <div class="font-size-36">{{ PRODUCT.price * currency | toFix | formattedPrice }}</div>
+          <div class="font-size-36">{{ PRODUCT.price * getDollar | toFix | formattedPrice }}</div>
           <a href="#" class="pay-parts">
             <i class="ec ec-favorites mr-1 font-size-15"></i>
             Оплата частями
@@ -116,14 +116,9 @@ export default {
     content () {
       return this.PRODUCT.imgs[this.active]
     },
-    filteredCurrency(){
-      return this.RATES.filter(item => {
-        return item.ccy.includes("USD");
-      });
+    getDollar() {
+      return this.RATES.map(e => e.rate).toString()
     },
-    currency(){
-      return this.filteredCurrency.map(ele => ele.buy)
-    }
   },
   methods: {
     ...mapActions([

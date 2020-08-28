@@ -63,7 +63,7 @@
                   </div>
                   <div class="product-get">
                     <div class="product-price">
-                      {{ product.price | toFix | formattedPrice }}
+                      {{ product.price * getDollar  | toFix | formattedPrice }}
                     </div>
                     <div class="product-add-cart">
                       <button class="btn-add" @click="addToCart(product)"><i class="ec ec-add-to-cart"></i></button>
@@ -129,13 +129,14 @@ export default {
     toFix,
     formattedPrice
   },
-  created() {},
+  created() {
+
+  },
   computed: {
     ...mapGetters([
       'PRODUCTS',
-      'ALL_CATS',
-      'MAIN_CATS',
-      'SEARCH_VALUE'
+      'SEARCH_VALUE',
+      'RATES'
     ]),
     resultQuery(){
       if(this.SEARCH_VALUE){
@@ -145,12 +146,14 @@ export default {
       }else{
         return this.PRODUCTS;
       }
-    }
+    },
+    getDollar() {
+      return this.RATES.map(e => e.rate).toString()
+    },
   },
   methods: {
     ...mapActions([
       'GET_PRODUCTS',
-      'GET_CATEGORIES_LIST',
       'addToCart',
     ]),
     toggleView(){
@@ -162,7 +165,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('GET_PRODUCTS', { cat: this.$route.params.id })
-    this.GET_CATEGORIES_LIST()
+    return this.$store.dispatch('GET_RATES')
   },
 }
 </script>
