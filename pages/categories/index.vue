@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>Категории:</h1>
+    <h1>Категории: {{total}}шт.</h1>
     <ul class="menu-list">
       <li class="menu-item" v-for="category in ALL_CATS" :key="category.id" v-if="category.title">
         <nuxt-link :to="`/category/${category.id}`" class="menu-button">
@@ -19,14 +19,30 @@ import {mapGetters} from 'vuex'
 
 export default {
   data() {
-    return {}
+    return {
+      posts: [],
+    }
   },
   computed: {
     ...mapGetters([
       'ALL_CATS',
     ]),
+      total() {
+        return this.ALL_CATS.length
+      }
+
   },
-  methods: {},
+  methods: {
+    loadPosts() {
+      this.$axios.get('https://jsonplaceholder.typicode.com/comments')
+        .then(res => {
+          this.posts = res.data
+        })
+    }
+  },
+  created() {
+    this.loadPosts()
+  }
 }
 </script>
 <style lang="sass" scoped>

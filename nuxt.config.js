@@ -78,13 +78,6 @@ export default {
 
   },
 
-  // markdownit: {
-  //   preset: "default",
-  //   linkify: true,
-  //   breaks: true,
-  //   injected: true
-  // },
-
   render: {
     // http2: {
     //     push: true,

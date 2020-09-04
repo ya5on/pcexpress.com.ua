@@ -9,7 +9,7 @@
         <i class="ec ec-arrow-right-categproes"></i>
       </li>
       <li class="breadcrumb-item">
-        <nuxt-link to="/category/610">{{ PRODUCT.path }}</nuxt-link>
+        <nuxt-link :to="`/category/${PRODUCT.cat_id}`">{{ category }}</nuxt-link>
       </li>
 
       <li class="breadcrumb-item d-none">
@@ -38,7 +38,7 @@
         </div>
       </div>
       <div class="product__desc">
-        <nuxt-link to="#" class="product__cat">category title</nuxt-link>
+        <nuxt-link to="#" class="product__cat">{{ category }}</nuxt-link>
         <h2 class="product__name">
           {{ PRODUCT.name }}
         </h2>
@@ -118,6 +118,9 @@ export default {
     },
     getDollar() {
       return this.RATES.map(e => e.rate).toString()
+    },
+    category(){
+      return this.ALL_CATS.find(x => x.id === this.PRODUCT.cat_id)
     },
   },
   methods: {

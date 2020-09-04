@@ -141,15 +141,17 @@
     .product-item
       +size(2)
       +size-md(4)
-      +size-sm(6)
       width: 100%
       max-width: 230px
       transition: all .4s ease
       display: flex
       flex-direction: column
       justify-content: space-between
-      +md(margin-bottom, 20px)
-      +xs(border, 1px solid #e7eaf3)
+      margin-bottom: 20px
+      +sm(margin-bottom, 0)
+      +sm(max-width, 50%)
+      +sm(width, 100%)
+      +sm(border, 1px solid #e7eaf3)
 
 
       &:hover

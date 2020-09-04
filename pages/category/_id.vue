@@ -8,7 +8,9 @@
       <li class="breadcrumb-item">
         <i class="ec ec-arrow-right-categproes"></i>
       </li>
-      <li class="breadcrumb-item">cat name</li>
+      <li class="breadcrumb-item">{{ category }}
+<!--        <nuxt-link :to="`/category/${category.id}`">{{ category }}</nuxt-link>-->
+       </li>
     </ul>
     <!-- End breadcrumb -->
     <!--SHOP-GRID-->
@@ -17,7 +19,7 @@
       <div class="shop__grid">
 
         <div class="shop__bar">
-          <h3 class="font-size-25 mb-2 mb-md-0">category title</h3>
+          <h3 class="font-size-25 mb-2 mb-md-0">{{ category }}</h3>
           <p class="font-size-14 text-gray-90 mb-0">Товаров: {{ PRODUCTS.length }}</p>
         </div>
 
@@ -152,6 +154,9 @@ import {mapActions, mapGetters, mapState} from 'vuex'
       getDollar() {
         return this.RATES.map(e => e.rate).toString()
       },
+      category(){
+        return this.ALL_CATS.find(x => x.id === Number(this.$route.params.id))
+      },
     },
     methods: {
       ...mapActions([
@@ -168,11 +173,12 @@ import {mapActions, mapGetters, mapState} from 'vuex'
       addToFavorites(product) {
         this.$store.commit('addToFavorites', product);
       },
+
     },
     mounted() {
       this.$store.dispatch('GET_PRODUCTS', { cat: this.$route.params.id })
       this.GET_CATEGORIES_LIST()
-      console.log(this.$route.params.id)
+      console.log(this.category)
     },
   }
 </script>

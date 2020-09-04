@@ -84,7 +84,7 @@
               </div>
               <div class="d-flex">
                 <nuxt-link to="/category" class="btn-next">Продолжить покупки</nuxt-link>
-                <nuxt-link to="/checkout" class="btn-order">Оформить заказ</nuxt-link>
+                <nuxt-link v-if="cart.length > 0" to="/checkout" class="btn-order">Оформить заказ</nuxt-link>
               </div>
             </div>
           </div>

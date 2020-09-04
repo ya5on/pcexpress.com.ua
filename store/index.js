@@ -36,10 +36,6 @@ export const mutations = {
   SET_PRODUCT: (state, product) => {
     state.product = product
   },
-  //
-  SET_CURRENT_CATEGORY (state, category) {
-    state.currentCategory = category
-  },
   SET_RATES: (state, rates) => {
     state.rates = rates
   },
@@ -202,9 +198,6 @@ export const getters = {
   },
   SUB_CATS: state => id => {
     return state.categories.filter(c => c.parent_id === id);
-  },
-  CAT: state => route => {
-    return state.categories.find(c => c.id === route.params.id)
   },
   PRODUCTS(state) {
     return state.products;
