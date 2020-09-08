@@ -9,7 +9,7 @@
         <i class="ec ec-arrow-right-categproes"></i>
       </li>
       <li class="breadcrumb-item">
-        <nuxt-link :to="`/category/${PRODUCT.cat_id}`">{{ category }}</nuxt-link>
+        <nuxt-link :to="`/category/${PRODUCT.cat_id}`">{{ cat.title }}</nuxt-link>
       </li>
 
       <li class="breadcrumb-item d-none">
@@ -38,7 +38,7 @@
         </div>
       </div>
       <div class="product__desc">
-        <nuxt-link to="#" class="product__cat">{{ category }}</nuxt-link>
+        <nuxt-link to="#" class="product__cat">{{ cat.title }}</nuxt-link>
         <h2 class="product__name">
           {{ PRODUCT.name }}
         </h2>
@@ -122,6 +122,10 @@ export default {
     category(){
       return this.ALL_CATS.find(x => x.id === this.PRODUCT.cat_id)
     },
+    cat(){
+      let catTitle = { ...this.category}
+      return catTitle
+    }
   },
   methods: {
     ...mapActions([

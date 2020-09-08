@@ -1,7 +1,7 @@
 <template>
   <div class="menu">
     <div class="menu-title" @click="toggle">
-      <div>Каталог</div>
+      <div>Каталог товаров</div>
       <i v-if="!show" class="fa fa-plus"/>
       <i v-else class="fa fa-minus"/>
     </div>

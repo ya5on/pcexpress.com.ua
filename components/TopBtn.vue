@@ -21,7 +21,7 @@ export default {
   width: 2.5rem
   height: 2.5rem
   background-color: #fed700
-  color: #fff
+  color: #000
   font-size: 0.75rem
   border-radius: 0.3125rem
   opacity: 0.5
@@ -30,8 +30,6 @@ export default {
 
   &:hover
     opacity: 1
-    border-color: $main-color
-    color: $main-color
 
   .u-go-to__inner
     position: absolute

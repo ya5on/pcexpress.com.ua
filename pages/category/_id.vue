@@ -8,18 +8,79 @@
       <li class="breadcrumb-item">
         <i class="ec ec-arrow-right-categproes"></i>
       </li>
-      <li class="breadcrumb-item">{{ category }}
-<!--        <nuxt-link :to="`/category/${category.id}`">{{ category }}</nuxt-link>-->
-       </li>
+      <li class="breadcrumb-item">{{ cat.title }}
+        <!--        <nuxt-link :to="`/category/${category.id}`">{{ category }}</nuxt-link>-->
+      </li>
     </ul>
     <!-- End breadcrumb -->
     <!--SHOP-GRID-->
     <div class="shop">
-      <CategoriesList class="shop__nav d-none" />
+      <div class="shop__nav d-none">
+        <CategoriesList/>
+        <div class="filters" v-if="cat.id === 610">
+          <h3 class="filters__title">
+            <i class="fa fa-filter"></i>
+            Фильтры</h3>
+          <ul class="filters__list">
+            <li class="filters__bold">Производитель:</li>
+            <li>
+              <input type="radio" id="Dell" value="Dell" v-model="selectBrand">
+              <label for="Dell">Dell</label>
+            </li>
+            <li>
+              <input type="radio" id="Fujitsu" value="Fujitsu" v-model="selectBrand">
+              <label for="Fujitsu">Fujitsu</label>
+            </li>
+            <li>
+              <input type="radio" id="Acer" value="Acer" v-model="selectBrand">
+              <label for="Acer">Acer</label>
+            </li>
+            <li>
+              <input type="radio" id="HP" value="HP" v-model="selectBrand">
+              <label for="HP">HP</label>
+            </li>
+            <li>
+              <input type="radio" id="Lenovo" value="Lenovo" v-model="selectBrand">
+              <label for="Lenovo">Lenovo</label>
+            </li>
+          </ul>
+          <ul class="filters__list">
+            <li class="filters__bold">Socket:</li>
+            <li>
+              <input type="checkbox" id="1150" value="1150" v-model="selectSocket">
+              <label for="1150">1150</label>
+            </li>
+            <li>
+              <input type="checkbox" id="1155" value="1155" v-model="selectSocket">
+              <label for="1155">1155</label>
+            </li>
+          </ul>
+          <ul class="filters__list">
+            <li class="filters__bold">Прооцессор:</li>
+            <li>
+              <input type="checkbox" id="i3" value="i3" v-model="selectCPU">
+              <label for="i3">Intel Core i3</label>
+            </li>
+            <li>
+              <input type="checkbox" id="i5" value="i5" v-model="selectCPU">
+              <label for="i5">Intel Core i5</label>
+            </li>
+            <li>
+              <input type="checkbox" id="i7" value="i7" v-model="selectCPU">
+              <label for="i7">Intel Core i7</label>
+            </li>
+<!--            <li>-->
+<!--              <input type="checkbox" id="xeon" value="xeon" v-model="selectCPU">-->
+<!--              <label for="xeon">Intel Xeon</label>-->
+<!--            </li>-->
+          </ul>
+          <button @click="clear" class="primary small">Сбросить фильтры</button>
+        </div>
+      </div>
       <div class="shop__grid">
 
         <div class="shop__bar">
-          <h3 class="font-size-25 mb-2 mb-md-0">{{ category }}</h3>
+          <h3 class="font-size-25 mb-2 mb-md-0">{{ cat.title }}</h3>
           <p class="font-size-14 text-gray-90 mb-0">Товаров: {{ PRODUCTS.length }}</p>
         </div>
 
@@ -37,17 +98,17 @@
               </li>
             </ul>
           </div>
+          <input v-model.trim="inputSearch" type="text" placeholder="Поиск по категории"/>
           <div class="d-flex">
-              <!-- Select -->
-              <div class="dropdown">
-                <CustomSelect />
-              </div>
-              <!-- End Select -->
+            <!-- Select -->
+            <div class="dropdown">
+              <CustomSelect/>
+            </div>
+            <!-- End Select -->
           </div>
         </div>
 
         <div :class="[view ? 'shop__list' : 'shop__plate']">
-<!--          <div v-if="PRODUCTS.length === 0" style="text-align: center; margin: 35px; font-size: 28px">Товаров нет</div>-->
           <div class="product-item" v-for="product in paginatedProducts" :key="product.id">
             <div class="product-item__inner">
               <div class="product-item__body">
@@ -85,12 +146,12 @@
           </div>
           <div class="shop__pagination">
             <div class="page"
-                 v-if="pages >= 2"
+                 v-if="filteredProducts.length > 20"
                  v-for="page in pages"
                  :key="page"
                  :class="{'page__selected' : page === pageNum}"
                  @click="pageClick(page)">
-            {{ page }}
+              {{ page }}
             </div>
           </div>
         </div>
@@ -102,356 +163,419 @@
 
 
 <script>
-import {mapActions, mapGetters, mapState} from 'vuex'
-  import Catalogue from "../../components/MobileCatalogue";
-  import CategoriesList from "../../components/CategoriesList";
-  import toFix from "../../components/filters/toFixed";
-  import formattedPrice from "../../components/filters/priceFix";
-  import CustomSelect from "../../components/CustomSelect";
-  export default {
-    components: {CustomSelect, Catalogue, CategoriesList},
-    // head() {
-    //   return {
-    //     title: this.PRODUCT.name,
-    //     meta: [
-    //       {
-    //         hid: 'description',
-    //         name: 'description',
-    //         content: this.PRODUCT.name
-    //       }
-    //     ]
-    //   }
-    // },
-    data() {
-      return {
-        view: true,
-        productsPerPage: 20,
-        pageNum: 1,
-      }
+import {mapActions, mapGetters} from 'vuex'
+import Catalogue from "../../components/MobileCatalogue";
+import CategoriesList from "../../components/CategoriesList";
+import toFix from "../../components/filters/toFixed";
+import formattedPrice from "../../components/filters/priceFix";
+import CustomSelect from "../../components/CustomSelect";
+
+export default {
+  components: {CustomSelect, Catalogue, CategoriesList},
+  head() {
+    return {
+      title: this.cat.title,
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.cat.title
+        }
+      ]
+    }
+  },
+  data() {
+    return {
+      view: true,
+      productsPerPage: 20,
+      pageNum: 1,
+      inputSearch: '',
+      selectBrand: [],
+      selectSocket: [],
+      selectCPU: []
+    }
+  },
+  filters: {
+    toFix,
+    formattedPrice
+  },
+  created() {
+    return this.$store.dispatch('GET_RATES')
+  },
+  computed: {
+    ...mapGetters([
+      'PRODUCTS',
+      'ALL_CATS',
+      'MAIN_CATS',
+      'RATES'
+    ]),
+    pages() {
+      return Math.ceil(this.PRODUCTS.length / this.productsPerPage);
     },
-    filters: {
-      toFix,
-      formattedPrice
+    paginatedProducts() {
+      let from = (this.pageNum - 1) * this.productsPerPage,
+        to = from + this.productsPerPage;
+      return this.filteredProducts.slice(from, to);
     },
-    created() {
-      return this.$store.dispatch('GET_RATES')
+    getDollar() {
+      return this.RATES.map(e => e.rate).toString()
     },
-    computed: {
-      ...mapGetters([
-        'PRODUCTS',
-        'ALL_CATS',
-        'MAIN_CATS',
-        'RATES'
-      ]),
-      pages(){
-        return Math.ceil(this.PRODUCTS.length / this.productsPerPage);
-      },
-      paginatedProducts(){
-        let from = (this.pageNum -1) * this.productsPerPage,
-            to = from + this.productsPerPage;
-        return this.PRODUCTS.slice(from, to);
-      },
-      getDollar() {
-        return this.RATES.map(e => e.rate).toString()
-      },
-      category(){
-        return this.ALL_CATS.find(x => x.id === Number(this.$route.params.id))
-      },
+    category() {
+      return this.ALL_CATS.find(x => x.id === Number(this.$route.params.id))
     },
-    methods: {
-      ...mapActions([
-        'GET_PRODUCTS',
-        'GET_CATEGORIES_LIST',
-        'addToCart',
-      ]),
-      toggleView(){
-        this.view = !this.view;
-      },
-      pageClick(page){
-        this.pageNum = page;
-      },
-      addToFavorites(product) {
-        this.$store.commit('addToFavorites', product);
-      },
+    cat() {
+      return {...this.category}
+    },
+
+    filteredProducts() {
+      // Фильтруем товары
+      return this.PRODUCTS
+        // По брендам
+        .filter(x => x.name.includes(this.selectBrand))
+        //Socket
+        .filter(x => x.name.includes(this.selectSocket))
+        //Core
+        .filter(x => x.name.includes(this.selectCPU))
+        //Быстрый поиск покатегории
+        .filter(x => x.name.toLowerCase().includes(this.inputSearch.toLowerCase()))
 
     },
-    mounted() {
-      this.$store.dispatch('GET_PRODUCTS', { cat: this.$route.params.id })
-      this.GET_CATEGORIES_LIST()
-      console.log(this.category)
+  },
+  methods: {
+    ...mapActions([
+      'GET_PRODUCTS',
+      'GET_CATEGORIES_LIST',
+      'addToCart',
+    ]),
+    toggleView() {
+      this.view = !this.view;
     },
-  }
+    pageClick(page) {
+      this.pageNum = page;
+    },
+    addToFavorites(product) {
+      this.$store.commit('addToFavorites', product);
+    },
+    clear() {
+      this.inputSearch = '';
+      this.selectBrand = [];
+      this.selectSocket = [];
+      this.selectCPU = [];
+    },
+  },
+  mounted() {
+    this.$store.dispatch('GET_PRODUCTS', {cat: this.$route.params.id})
+    this.GET_CATEGORIES_LIST()
+  },
+}
 </script>
 
 
 <style lang="sass">
-  .shop
-    +row-flex
-    flex-wrap: nowrap !important
+.shop
+  +row-flex
+  flex-wrap: nowrap !important
+  justify-content: space-between
+  margin-bottom: 4rem
+
+  &__nav
+    +col
+    +size(2.8)
+    height: 100%
+    display: flex
+    flex-direction: column
+
+    .filters
+      padding: 16px
+      font-size: 14px
+      box-sizing: border-box
+
+      &__title
+        position: relative
+        font-size: 1rem
+        padding-bottom: 0.2rem
+        margin-bottom: 0
+        font-weight: 400
+        border-bottom: 1px solid #e7eaf3
+
+        &:after
+          content: ' '
+          height: 2px
+          width: 114px
+          display: block
+          background-color: #fed700
+          position: absolute
+          bottom: -1px
+          left: 0
+
+      &__list
+        margin-bottom: 5px
+
+      &__bold
+        font-weight: 600
+        margin-top: 10px
+
+  &__grid
+    +col
+    +size(9.2)
+    +size-lg(12)
+    display: flex
+    flex-direction: column
+
+  &__bar
+    display: flex
     justify-content: space-between
-    margin-bottom: 4rem
+    align-items: center
+    margin-bottom: 1rem
 
-    &__nav
-      +col
-      +size(2.8)
-      height: 100%
+    h3
+      font-size: 1.56275rem
+      line-height: 1.5
 
-    &__grid
-      +col
-      +size(9.2)
-      +size-lg(12)
+    p
+      font-size: 0.875rem
+
+  &__mobile
+    display: none
+    margin-bottom: 1rem
+    +lg(display, flex)
+
+
+  &__control
+    display: flex
+    align-items: center
+    justify-content: space-between
+    border-radius: 0.563rem
+    padding: 0.5rem 1rem
+    background-color: #f5f5f5
+
+    .nav
       display: flex
-      flex-direction: column
 
-    &__bar
-      display: flex
-      justify-content: space-between
-      align-items: center
-      margin-bottom: 1rem
-      h3
-        font-size: 1.56275rem
-        line-height: 1.5
-
-      p
-        font-size: 0.875rem
-
-    &__mobile
-      display: none
-      margin-bottom: 1rem
-      +lg(display, flex)
-
-
-    &__control
-      display: flex
-      align-items: center
-      justify-content: space-between
-      border-radius: 0.563rem
-      padding: 0.5rem 1rem
-      background-color: #f5f5f5
-
-      .nav
-        display: flex
-
-        &-item
-          margin-right: 7px
-          cursor: pointer
-
-          i
-            font-size: 1.6rem
-            font-weight: 500
-
-    &__list
-      padding-top: 2rem
-      display: flex
-      flex-wrap: wrap
-      +sm(padding-top, 1rem)
-
-      .product-item
-        max-width: 20%
-        display: flex
-        flex-direction: column
-        justify-content: space-between
-        transition: all .3s ease
-        +sm(max-width, 50%)
-
-        &:hover
-          transition: all .3s ease
-          box-shadow: 0 0 10px rgba(75, 54, 124, .5)
-
-          .product-item__footer
-            opacity: 1
-
-        &__inner
-          border-right: 1px solid #e7eaf3
-          height: 100%
-          +sm(border, 1px solid #e7eaf3)
-
-        &__body
-          padding: 16px 20px
-          display: flex
-          flex-direction: column
-          justify-content: space-between
-          height: 100%
-          +sm(padding, 10px 10px)
-
-          .img-fluid
-            max-height: 200px
-
-        &__title
-          font-size: 0.875rem
-          line-height: 1.125rem
-          margin-bottom: 10px
-          display: -webkit-box
-          -webkit-line-clamp: 3
-          -webkit-box-orient: vertical
-          overflow: hidden
-
-          &:hover
-
-          a
-            color: #0062bd
-            font-weight: 700
-
-      .product-get
-        display: flex
-        align-items: baseline
-        justify-content: space-between
-
-      .product-code
-        padding: .3rem 0
-        font-size: .7rem
-
-      .product-price
-        font-size: 1.25038rem
-        +md(font-size, 1rem)
-
-      .product-item__footer
-        margin-top: 5px
-        padding-left: 24px
-        padding-right: 24px
-        padding-bottom: 8px
-        opacity: 0
-        transition: all 0.4s ease-in-out
-        +sm(display,none)
-
-        .border-top
-          border-top: 1px solid #e7eaf3
-          padding-top: .5rem
-          display: flex
-          align-items: baseline
-          justify-content: space-between
-          font-size: 13px
-
-          i
-            font-size: 0.8rem
-            margin-right: 4px
-
-          a
-            font-size: 12px
-
-      .ec
-        color: #333e48
-
-    &__plate
-      padding-top: 2rem
-      display: flex
-      flex-direction: column
-
-      .product-item
-        width: 100%
-        display: flex
-        flex-direction: column
-        transition: all .2s ease
-        margin-bottom: 10px
-        border: 1px solid #e7eaf3
-
-        &__inner
-          height: 100%
-
-        &__body
-          padding: 16px 24px
-          display: flex
-          flex-direction: column
-          justify-content: space-between
-          height: 100%
-
-          .img-fluid
-            max-width: 20%
-            +sm(max-width, 30%)
-            +xs(max-width, 50%)
-
-        &__title
-          font-size: 0.875rem
-          line-height: 1.125rem
-          margin-bottom: 10px
-          display: -webkit-box
-          -webkit-line-clamp: 3
-          -webkit-box-orient: vertical
-          overflow: hidden
-          a
-            color: #0062bd
-            font-weight: 700
-
-      .product-get
-        display: flex
-        align-items: baseline
-        justify-content: space-between
-
-      .product-code
-        padding: .3rem 0
-        font-size: .7rem
-
-      .product-price
-        font-size: 1.25038rem
-        +md(font-size, 1rem)
-
-      .btn-add
-        width: 2.188rem
-        height: 2.188rem
-        background-color: #fed700
-        color: #fff
-        display: flex
-        align-items: center
-        justify-content: center
-        border-radius: 6.1875rem
-        transition: all 0.2s ease-in-out
-        border: none
-        outline: none
+      &-item
+        margin-right: 7px
         cursor: pointer
-        +sm(width, 2rem)
-        +sm(height, 2rem)
+
+        i
+          font-size: 1.6rem
+          font-weight: 500
+
+  &__list
+    padding-top: 2rem
+    display: flex
+    flex-wrap: wrap
+    +sm(padding-top, 1rem)
+
+    .product-item
+      max-width: 20%
+      display: flex
+      flex-direction: column
+      justify-content: space-between
+      transition: all .3s ease
+      +sm(max-width, 50%)
+
+      &:hover
+        transition: all .3s ease
+        box-shadow: 0 0 10px rgba(75, 54, 124, .5)
+
+        .product-item__footer
+          opacity: 1
+
+      &__inner
+        border-right: 1px solid #e7eaf3
+        height: 100%
+        +sm(border, 1px solid #e7eaf3)
+
+      &__body
+        padding: 16px 20px
+        display: flex
+        flex-direction: column
+        justify-content: space-between
+        height: 100%
+        +sm(padding, 10px 10px)
+
+        .img-fluid
+          max-height: 200px
+
+      &__title
+        font-size: 0.875rem
+        line-height: 1.125rem
+        margin-bottom: 10px
+        display: -webkit-box
+        -webkit-line-clamp: 3
+        -webkit-box-orient: vertical
+        overflow: hidden
 
         &:hover
-          transform: translateY(-2px)
-          transition: all 0.2s ease-in-out
-
-        i
-          font-size: 1.25rem
-          color: #fff
-          +sm(font-size, 1.3rem)
-
-      .product-item__footer
-        margin-top: 5px
-        padding-left: 24px
-        padding-right: 24px
-        padding-bottom: 8px
-        transition: all 0.4s ease-in-out
-
-        i
-            font-size: 1.4rem
-            margin-right: 4px
+          //overflow: initial
+          //z-index: 10
+          //position: initial
 
         a
-            font-size: 12px
+          color: #0062bd
+          font-weight: 700
 
-      .ec
-        color: #333e48
+    .product-get
+      display: flex
+      align-items: baseline
+      justify-content: space-between
 
-    &__pagination
+    .product-code
+      padding: .3rem 0
+      font-size: .7rem
+
+    .product-price
+      font-size: 1.25038rem
+      +md(font-size, 1rem)
+
+    .product-item__footer
+      margin-top: 5px
+      padding-left: 24px
+      padding-right: 24px
+      padding-bottom: 8px
+      opacity: 0
+      transition: all 0.4s ease-in-out
+      +sm(display, none)
+
+      .border-top
+        border-top: 1px solid #e7eaf3
+        padding-top: .5rem
+        display: flex
+        align-items: baseline
+        justify-content: space-between
+        font-size: 13px
+
+        i
+          font-size: 0.8rem
+          margin-right: 4px
+
+        a
+          font-size: 12px
+
+    .ec
+      color: #333e48
+
+  &__plate
+    padding-top: 2rem
+    display: flex
+    flex-direction: column
+
+    .product-item
       width: 100%
       display: flex
-      justify-content: center
-      flex-wrap: wrap
-      +sm(margin-top, 15px)
+      flex-direction: column
+      transition: all .2s ease
+      margin-bottom: 10px
+      border: 1px solid #e7eaf3
 
-      .page
-        width: 35px
-        height: 35px
-        line-height: 34px
-        text-align: center
-        border-radius: 20px
-        border: 1px solid #e6e6e6
-        padding: 0
-        color: #7d7d7d
-        margin: 0 5px
-        cursor: pointer
+      &__inner
+        height: 100%
 
-        &:hover
-          background-color: #E6E6E6
+      &__body
+        padding: 16px 24px
+        display: flex
+        flex-direction: column
+        justify-content: space-between
+        height: 100%
 
-        &__selected
+        .img-fluid
+          max-width: 20%
+          +sm(max-width, 30%)
+          +xs(max-width, 50%)
+
+      &__title
+        font-size: 0.875rem
+        line-height: 1.125rem
+        margin-bottom: 10px
+        display: -webkit-box
+        -webkit-line-clamp: 3
+        -webkit-box-orient: vertical
+        overflow: hidden
+
+        a
+          color: #0062bd
           font-weight: 700
-          color: #262626
-          background-color: #fed700
-          border-color: #fed700
+
+    .product-get
+      display: flex
+      align-items: baseline
+      justify-content: space-between
+
+    .product-code
+      padding: .3rem 0
+      font-size: .7rem
+
+    .product-price
+      font-size: 1.25038rem
+      +md(font-size, 1rem)
+
+    .btn-add
+      width: 2.188rem
+      height: 2.188rem
+      background-color: #fed700
+      color: #fff
+      display: flex
+      align-items: center
+      justify-content: center
+      border-radius: 6.1875rem
+      transition: all 0.2s ease-in-out
+      border: none
+      outline: none
+      cursor: pointer
+      +sm(width, 2rem)
+      +sm(height, 2rem)
+
+      &:hover
+        transform: translateY(-2px)
+        transition: all 0.2s ease-in-out
+
+      i
+        font-size: 1.25rem
+        color: #fff
+        +sm(font-size, 1.3rem)
+
+    .product-item__footer
+      margin-top: 5px
+      padding-left: 24px
+      padding-right: 24px
+      padding-bottom: 8px
+      transition: all 0.4s ease-in-out
+
+      i
+        font-size: 1.4rem
+        margin-right: 4px
+
+      a
+        font-size: 12px
+
+    .ec
+      color: #333e48
+
+  &__pagination
+    width: 100%
+    display: flex
+    justify-content: center
+    flex-wrap: wrap
+    +sm(margin-top, 15px)
+
+    .page
+      width: 35px
+      height: 35px
+      line-height: 34px
+      text-align: center
+      border-radius: 20px
+      border: 1px solid #e6e6e6
+      padding: 0
+      color: #7d7d7d
+      margin: 0 5px
+      cursor: pointer
+
+      &:hover
+        background-color: #E6E6E6
+
+      &__selected
+        font-weight: 700
+        color: #262626
+        background-color: #fed700
+        border-color: #fed700
 </style>

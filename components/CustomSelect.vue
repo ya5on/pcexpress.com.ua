@@ -7,8 +7,8 @@
       <i class="ec ec-arrow-down-search"></i>
     </div>
     <div class="options" v-if="optionsVisible">
-      <p @click="sortByPriceLow">От дешевых к дорогим</p>
-      <p @click="sortByPriceHigh">От дорогих к дешевым</p>
+      <p @click="sortByPriceLow">По цене, сначала дешевые</p>
+      <p @click="sortByPriceHigh">По цене, сначала дорогие</p>
     </div>
   </div>
 </template>

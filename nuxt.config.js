@@ -48,7 +48,7 @@ export default {
     { src: '~/plugins/vue-html-remove', ssr: false },
     { src: '~/plugins/vue-carousel', ssr: false },
     { src: '~/plugins/vue-tabs', ssr: false },
-    { src: '~/plugins/vuex-persist', ssr: false }
+    { src: '~/plugins/vuex-persist', ssr: false },
   ],
 
   modules: [

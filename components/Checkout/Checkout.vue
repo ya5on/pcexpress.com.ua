@@ -90,23 +90,28 @@
               <div class="input-fields__dropdown">
                 <div class="p-3">
                   <div class="custom-control">
-                    <input type="radio" class="custom-control-input" id="Radio1" name="stylishRadio1" checked="">
+                    <input type="radio" class="custom-control-input" id="Radio1"  value="a" v-model="checked">
                     <label class="custom-control-label form-label" for="Radio1">
                       Самовывоз из магазина
                     </label>
+                    <div v-if="checked === 'a'">
+                      <p>Киев, ул. Амвросия Бучмы 5, офис 201</p>
+                      <p>Харьков, ул. Тарасовская 3</p>
+                    </div>
                   </div>
                 </div>
                 <div class="p-3">
                   <div class="custom-control">
-                    <input type="radio" class="custom-control-input" id="Radio2" name="stylishRadio1">
+                    <input type="radio" class="custom-control-input" id="Radio2" value="b" v-model="checked">
                     <label class="custom-control-label form-label" for="Radio2">
                       Новой Почтой
                     </label>
+                    <div v-if="checked === 'b'">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet, ut.</div>
                   </div>
                 </div>
                 <div class="p-3">
                   <div class="custom-control">
-                    <input type="radio" class="custom-control-input" id="Radio3" name="stylishRadio1">
+                    <input type="radio" class="custom-control-input" id="Radio3" value="c" v-model="checked">
                     <label class="custom-control-label form-label" for="Radio3">
                       Адресная доставка
                     </label>
@@ -276,12 +281,29 @@
 </template>
 
 <script>
+import NovaPoshta from 'novaposhta';
 
+const api = new NovaPoshta({ apiKey: 'e6ac5221a16aa8bc3f1a08a8424c40b4' });
 export default {
   name: "Checkout",
   data() {
-    return {}
+    return {
+      checked: 'a',
+      cities: []
+    }
   },
+  mounted() {
+    api.address
+      .getCities()
+      .then((response) => {
+      (this.cities = response.data)
+      })
+      .catch((errors) => {
+        if (Array.isArray(errors)) {
+          errors.forEach((error) => console.log(`[${ error.code || '-' }] ${ error.en || error.uk || error.ru || error.message }`));
+        }
+      });
+  }
 }
 </script>
 
