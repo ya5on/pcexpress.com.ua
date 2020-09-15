@@ -59,7 +59,7 @@
                   </nuxt-link>
                 </li>
                 <li class="dropdown__menu-item" @click.prevent="toggle">
-                  <nuxt-link exact no-prefetch active-class="link-active" to="/category/610"
+                  <nuxt-link exact no-prefetch active-class="link-active" to="/category/"
                              class="dropdown__menu-link">
                     <div class="dropdown__menu-svg">
                       <img src="https://img.icons8.com/small/22/000000/blockchain-technology.png"/>

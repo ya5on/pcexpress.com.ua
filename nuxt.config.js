@@ -49,6 +49,7 @@ export default {
     { src: '~/plugins/vue-carousel', ssr: false },
     { src: '~/plugins/vue-tabs', ssr: false },
     { src: '~/plugins/vuex-persist', ssr: false },
+    { src: '~/plugins/vue-notification', ssr: false },
   ],
 
   modules: [

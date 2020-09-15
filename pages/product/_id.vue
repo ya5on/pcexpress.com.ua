@@ -18,6 +18,9 @@
       <li class="breadcrumb-item d-none">{{ PRODUCT.name }}</li>
     </ul>
     <!-- End breadcrumb -->
+    <client-only>
+      <notifications group="foo" position="top right" width="170" />
+    </client-only>
     <div class="product">
       <div class="product__imgs">
         <div class="tabs" v-if="PRODUCT.imgs">
@@ -38,7 +41,7 @@
         </div>
       </div>
       <div class="product__desc">
-        <nuxt-link to="#" class="product__cat">{{ cat.title }}</nuxt-link>
+        <nuxt-link :to="`/category/${PRODUCT.cat_id}`" class="product__cat">← в каталог {{ cat.title }}</nuxt-link>
         <h2 class="product__name">
           {{ PRODUCT.name }}
         </h2>
@@ -67,7 +70,7 @@
           </a>
         </div>
         <div class="add-cart">
-          <button class="btn" @click="addToCart(PRODUCT)"><i class="ec ec-add-to-cart"></i>Купить</button>
+          <button class="btn" @click="addToCart(PRODUCT); pushNotification()"><i class="ec ec-add-to-cart"></i>Купить</button>
         </div>
       </div>
     </div>
@@ -136,6 +139,13 @@ export default {
     activate (index) {
       this.active = index
     },
+    pushNotification(){
+      this.$notify({
+        group: 'foo',
+        text: 'Товар добавлен!',
+        duration: 3000,
+      });
+    },
   },
   mounted() {
     this.$store.dispatch('GET_PRODUCT', {id: this.$route.params.id})
@@ -181,9 +191,6 @@ export default {
     height: 565px
     margin-bottom: 10px
     margin-top: 10px
-
-    .img-fluid
-
 
 .product
   +row-flex

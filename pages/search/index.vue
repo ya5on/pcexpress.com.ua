@@ -11,6 +11,9 @@
       <li class="breadcrumb-item">Поиск</li>
     </ul>
     <!-- End breadcrumb -->
+    <client-only>
+      <notifications group="foo" position="top right" width="170" />
+    </client-only>
     <!--SHOP-GRID-->
     <div class="shop">
       <CategoriesList class="shop__nav d-none" />
@@ -66,7 +69,7 @@
                       {{ product.price * getDollar  | toFix | formattedPrice }}
                     </div>
                     <div class="product-add-cart">
-                      <button class="btn-add" @click="addToCart(product)"><i class="ec ec-add-to-cart"></i></button>
+                      <button class="btn-add" @click="addToCart(product); pushNotification()"><i class="ec ec-add-to-cart"></i></button>
                     </div>
                   </div>
                 </div>
@@ -161,6 +164,13 @@ export default {
     },
     addToFavorites(product) {
       this.$store.commit('addToFavorites', product);
+    },
+    pushNotification(){
+      this.$notify({
+        group: 'foo',
+        text: 'Товар добавлен!',
+        duration: 3000,
+      });
     },
   },
   mounted() {

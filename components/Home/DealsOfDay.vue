@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <client-only>
+      <notifications group="foo" position="top right" width="170" />
+    </client-only>
     <div class="deals">
       <div class="deals__timer">
         <div class="d-flex">
@@ -37,7 +40,7 @@
                   {{ product.price * getDollar | toFix | formattedPrice }}
                 </div>
                 <div class="prodcut-add-cart">
-                  <button class="btn-add" v-if="" @click="addToCart(product)"><i class="ec ec-add-to-cart"></i></button>
+                  <button class="btn-add" v-if="" @click="addToCart(product); pushNotification()"><i class="ec ec-add-to-cart"></i></button>
                 </div>
               </div>
             </div>
@@ -85,7 +88,14 @@
       ]),
       addToFavorites(product) {
         this.$store.commit('addToFavorites', product);
-      }
+      },
+      pushNotification(){
+        this.$notify({
+          group: 'foo',
+          text: 'Товар добавлен!',
+          duration: 2000,
+        });
+      },
     },
     mounted() {
       this.$store.dispatch('GET_PRODUCTS', {cat: 610})

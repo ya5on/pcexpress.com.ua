@@ -13,6 +13,9 @@
       </li>
     </ul>
     <!-- End breadcrumb -->
+    <client-only>
+      <notifications group="foo" position="top right" width="170" />
+    </client-only>
     <!--SHOP-GRID-->
     <div class="shop">
       <div class="shop__nav d-none">
@@ -76,12 +79,148 @@
           </ul>
           <button @click="clear" class="primary small">Сбросить фильтры</button>
         </div>
+        <div class="filters" v-if="cat.id === 24">
+          <h3 class="filters__title">
+            <i class="fa fa-filter"></i>
+            Фильтры</h3>
+          <ul class="filters__list">
+            <li class="filters__bold">Прооцессор:</li>
+            <li>
+              <input type="checkbox" id="i33" value="i3" v-model="selectCPU">
+              <label for="i3">Intel Core i3</label>
+            </li>
+            <li>
+              <input type="checkbox" id="i55" value="i5" v-model="selectCPU">
+              <label for="i5">Intel Core i5</label>
+            </li>
+            <li>
+              <input type="checkbox" id="i77" value="i7" v-model="selectCPU">
+              <label for="i7">Intel Core i7</label>
+            </li>
+            <li>
+              <input type="checkbox" id="xeon" value="xeon" v-model="selectCPU">
+              <label for="xeon">Intel Xeon</label>
+            </li>
+          </ul>
+          <button @click="clear" class="primary small">Сбросить фильтры</button>
+        </div>
+        <div class="filters" v-if="cat.id === 54">
+          <h3 class="filters__title">
+            <i class="fa fa-filter"></i>
+            Фильтры</h3>
+          <ul class="filters__list">
+            <li class="filters__bold">Диагональ:</li>
+            <li>
+              <input type="radio" id="19" value='19"' v-model="selectInches">
+              <label for="19">19"</label>
+            </li>
+            <li>
+              <input type="radio" id="20" value='20"' v-model="selectInches">
+              <label for="20">20"</label>
+            </li>
+            <li>
+              <input type="radio" id="22" value='22"' v-model="selectInches">
+              <label for="22">22"</label>
+            </li>
+            <li>
+              <input type="radio" id="23" value='23"' v-model="selectInches">
+              <label for="23">23"</label>
+            </li>
+            <li>
+              <input type="radio" id="24" value='24"' v-model="selectInches">
+              <label for="24">24"</label>
+            </li>
+          </ul>
+          <ul class="filters__list">
+            <li class="filters__bold">Разрешение:</li>
+            <li>
+              <input type="checkbox" id="1280x1024" value="1280x1024" v-model="selectResolution">
+              <label for="1280x1024">1280x1024px</label>
+            </li>
+            <li>
+              <input type="checkbox" id="1600x900" value="1600x900" v-model="selectResolution">
+              <label for="1600x900">1600x900px</label>
+            </li>
+            <li>
+              <input type="checkbox" id="1680x1050" value="1680x1050" v-model="selectResolution">
+              <label for="1680x1050">1680x1050px</label>
+            </li>
+            <li>
+              <input type="checkbox" id="1920x1080" value="1920x1080" v-model="selectResolution">
+              <label for="1920x1080">1920x1080px</label>
+            </li>
+            <li>
+              <input type="checkbox" id="1920x1200" value="1920x1200" v-model="selectResolution">
+              <label for="1920x1200">1920x1200px</label>
+            </li>
+          </ul>
+          <button @click="clear" class="primary small">Сбросить фильтры</button>
+        </div>
+        <div class="filters" v-if="cat.id === 27">
+          <h3 class="filters__title">
+            <i class="fa fa-filter"></i>
+            Фильтры</h3>
+          <ul class="filters__list">
+            <li class="filters__bold">Тип памяти:</li>
+            <li>
+              <input type="radio" id="DDR3" value="DDR3" v-model="selectDDR">
+              <label for="DDR3">DDR3</label>
+            </li>
+            <li>
+              <input type="radio" id="DDR4" value="DDR4" v-model="selectDDR">
+              <label for="DDR4">DDR4</label>
+            </li>
+          </ul>
+          <ul class="filters__list">
+            <li class="filters__bold">Объем памяти:</li>
+            <li>
+              <input type="checkbox" id="2GB" value="2GB" v-model="selectM">
+              <label for="2GB">2GB</label>
+            </li>
+            <li>
+              <input type="checkbox" id="4GB" value="4GB" v-model="selectM">
+              <label for="4GB">4GB</label>
+            </li>
+            <li>
+              <input type="checkbox" id="8GB" value="8GB" v-model="selectM">
+              <label for="8GB">8GB</label>
+            </li>
+          </ul>
+          <ul class="filters__list">
+            <li class="filters__bold">Частота памяти:</li>
+            <li>
+              <input type="checkbox" id="1066MHz" value="1066Mhz" v-model="selectMHz">
+              <label for="1066MHz">1066MHz</label>
+            </li>
+            <li>
+              <input type="checkbox" id="1333MHz" value="1333Mhz" v-model="selectMHz">
+              <label for="1333MHz">1333MHz</label>
+            </li>
+            <li>
+              <input type="checkbox" id="1600MHz" value="1600Mhz" v-model="selectMHz">
+              <label for="1600MHz">1600MHz</label>
+            </li>
+            <li>
+              <input type="checkbox" id="1866MHz" value="1866Mhz" v-model="selectMHz">
+              <label for="1866MHz">1866MHz</label>
+            </li>
+            <li>
+              <input type="checkbox" id="2133MHz" value="2133Mhz" v-model="selectMHz">
+              <label for="2133MHz">2133MHz</label>
+            </li>
+            <li>
+              <input type="checkbox" id="2400MHz" value="2400Mhz" v-model="selectMHz">
+              <label for="2400MHz">2400MHz</label>
+            </li>
+          </ul>
+
+          <button @click="clear" class="primary small">Сбросить фильтры</button>
+        </div>
       </div>
       <div class="shop__grid">
-
         <div class="shop__bar">
           <h3 class="font-size-25 mb-2 mb-md-0">{{ cat.title }}</h3>
-          <p class="font-size-14 text-gray-90 mb-0">Товаров: {{ PRODUCTS.length }}</p>
+          <p class="font-size-14 text-gray-90 mb-0">Товаров: {{ filteredProducts.length }}</p>
         </div>
 
         <div class="shop__mobile">
@@ -98,7 +237,7 @@
               </li>
             </ul>
           </div>
-          <input v-model.trim="inputSearch" type="text" placeholder="Поиск по категории"/>
+          <input class="d-none" v-model.trim="inputSearch" type="text" placeholder="Поиск по категории"/>
           <div class="d-flex">
             <!-- Select -->
             <div class="dropdown">
@@ -129,7 +268,7 @@
                       {{ product.price * getDollar | toFix | formattedPrice }}
                     </div>
                     <div class="product-add-cart">
-                      <button class="btn-add" @click="addToCart(product)"><i class="ec ec-add-to-cart"></i></button>
+                      <button class="btn-add" @click="addToCart(product); pushNotification()"><i class="ec ec-add-to-cart"></i></button>
                     </div>
                   </div>
                 </div>
@@ -137,9 +276,7 @@
             </div>
             <div class="product-item__footer">
               <div class="border-top">
-                <a href="#" class="">
-                  <i class="ec ec-compare mr-1 font-size-15"></i>Сравнить</a>
-                <a href="#" class="" @click="addToFavorites(product)">
+                <a href="#" v-if="" @click="addToFavorites(product)">
                   <i class="ec ec-favorites mr-1 font-size-15"></i>Сохранить</a>
               </div>
             </div>
@@ -192,7 +329,12 @@ export default {
       inputSearch: '',
       selectBrand: [],
       selectSocket: [],
-      selectCPU: []
+      selectCPU: [],
+      selectInches: [],
+      selectResolution: [],
+      selectDDR: [],
+      selectM: [],
+      selectMHz: []
     }
   },
   filters: {
@@ -234,8 +376,18 @@ export default {
         .filter(x => x.name.includes(this.selectBrand))
         //Socket
         .filter(x => x.name.includes(this.selectSocket))
-        //Core
-        .filter(x => x.name.includes(this.selectCPU))
+        //CPU
+        .filter(x => x.name.toLowerCase().includes(this.selectCPU))
+        //Дюймы
+        .filter(x => x.name.toLowerCase().includes(this.selectInches))
+        //Resolution
+        .filter(x => x.name.toLowerCase().includes(this.selectResolution))
+        //DDR
+        .filter(x => x.name.includes(this.selectDDR))
+        //Memory
+        .filter(x => x.name.includes(this.selectM))
+        //MHz
+        .filter(x => x.name.includes(this.selectMHz))
         //Быстрый поиск покатегории
         .filter(x => x.name.toLowerCase().includes(this.inputSearch.toLowerCase()))
 
@@ -247,6 +399,16 @@ export default {
       'GET_CATEGORIES_LIST',
       'addToCart',
     ]),
+    removeFromFavorites(product) {
+      this.$store.commit('removeFromFavorites', product);
+    },
+    pushNotification(){
+      this.$notify({
+        group: 'foo',
+        text: 'Товар добавлен!',
+        duration: 2000,
+      });
+    },
     toggleView() {
       this.view = !this.view;
     },
@@ -261,6 +423,9 @@ export default {
       this.selectBrand = [];
       this.selectSocket = [];
       this.selectCPU = [];
+      this.selectInches = [];
+      this.selectResolution = [];
+      this.selectDDR = [];
     },
   },
   mounted() {
@@ -310,6 +475,10 @@ export default {
 
       &__list
         margin-bottom: 5px
+        border-bottom: 1px solid #e7eaf3
+
+        li
+          padding: 3px 0
 
       &__bold
         font-weight: 600

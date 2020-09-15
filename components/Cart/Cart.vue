@@ -125,9 +125,7 @@ export default {
         for (let product of this.cart) {
           result.push(product.price * product.qty)
         }
-        result = result.reduce(function (sum, el) {
-          return sum + el;
-        })
+        result = result.reduce((sum, el) => sum + el, 0)
         return result;
       } else {
         return 0
