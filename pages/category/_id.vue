@@ -368,7 +368,6 @@ export default {
     cat() {
       return {...this.category}
     },
-
     filteredProducts() {
       // Фильтруем товары
       return this.PRODUCTS
@@ -500,6 +499,7 @@ export default {
     h3
       font-size: 1.56275rem
       line-height: 1.5
+      +md(font-size, 1.2rem)
 
     p
       font-size: 0.875rem

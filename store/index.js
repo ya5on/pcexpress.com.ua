@@ -1,11 +1,13 @@
-import axios, * as others from 'axios'
-export const strict = false // костыль!!!
+import axios from 'axios'
+
+export const strict = false
 
 export const state = () => ({
   categories: [],
   products: [],
   tabProducts: [],
   product: [],
+
   userInfo: {
     isLoggedIn: false,
     isSignedUp: false,
@@ -20,7 +22,6 @@ export const state = () => ({
   rates: [],
 
   searchValue: ''
-
 });
 //-------------------------------MUTATIONS-----------------------------
 export const mutations = {
@@ -128,16 +129,22 @@ export const actions = {
     commit('SET_CATEGORIES_LIST', categories.data);
     return categories;
   },
-
   async GET_PRODUCTS({commit}, {cat}) {
-    const products = await axios("https://b2b.nikolink.com/api/get-items.php", {
-      method: "GET",
-      params: {
-        cat,
-        token: "0e94e098eac6e56a22496613b325473b7de8cb0a"
-      }
-    })
-    commit('SET_PRODUCTS', products.data)
+    let products = []
+    for (let i = 0; true; i++) { // <--- loop forever
+      let arr = await axios.get(
+        `https://b2b.nikolink.com/api/get-items.php`, {
+          params: {
+            cat,
+            token: "0e94e098eac6e56a22496613b325473b7de8cb0a",
+            p: i
+          }
+        }
+      )
+      products = products.concat(arr.data) // <--- concatenate new array to the old one
+      commit('SET_PRODUCTS', products)
+      if (arr.data.length < 100) break // <--- exit the cycle
+    }
     return products
   },
 
@@ -146,7 +153,8 @@ export const actions = {
       method: "GET",
       params: {
         cat,
-        token: "0e94e098eac6e56a22496613b325473b7de8cb0a"
+        token: "0e94e098eac6e56a22496613b325473b7de8cb0a",
+        p: '',
       }
     })
     commit('SET_TAB_PRODUCTS', tabProducts.data)
@@ -202,6 +210,7 @@ export const getters = {
   PRODUCTS(state) {
     return state.products;
   },
+
   TAB_PRODUCTS(state) {
     return state.tabProducts;
   },

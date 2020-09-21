@@ -62,7 +62,7 @@
                   <nuxt-link exact no-prefetch active-class="link-active" to="/category/"
                              class="dropdown__menu-link">
                     <div class="dropdown__menu-svg">
-                      <img src="https://img.icons8.com/small/22/000000/blockchain-technology.png"/>
+                      <img style="width: 19px" src="../../assets/img/menu-icon/grid.png"/>
                     </div>
                     <div class="dropdown__menu-text">Каталог товаров</div>
                   </nuxt-link>
@@ -251,7 +251,7 @@ hr {
 
 .dropdown__menu {
   top: 100%;
-  left: 0;
+  left: -20px;
   position: absolute;
   z-index: 10;
   height: 30rem;
@@ -259,9 +259,7 @@ hr {
   margin-top: 1rem;
   overflow-y: auto;
   padding: 2rem 1rem;
-  border-radius: 12px;
-  backdrop-filter: blur(20px);
-  background-color: rgba(255, 255, 2550, 0.6);
+  background-color: #fff;
   border: 1px solid #333e48;
   background-clip: padding-box;
   box-shadow: 0 0 10px rgba(75, 54, 124, .3);
@@ -297,6 +295,7 @@ hr {
     font-weight: 300;
     margin-left: 1rem;
     margin-right: 1rem;
+    font-size: 16px;
   }
 
   .social--link {
@@ -344,13 +343,13 @@ hr {
 
 .dropdown-enter-active,
 .dropdown-leave-active {
-  transition: all 1s;
+  transition: all .5s;
 }
 
 .dropdown-enter,
 .dropdown-leave-to {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateX(-30px);
 }
 
 </style>

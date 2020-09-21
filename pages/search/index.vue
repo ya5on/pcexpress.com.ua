@@ -18,16 +18,12 @@
     <div class="shop">
       <CategoriesList class="shop__nav d-none" />
       <div class="shop__grid">
-
         <div class="shop__bar">
           <h3 class="font-size-25 mb-2 mb-md-0">Найдено товаров: {{ resultQuery.length }}</h3>
-
         </div>
-
         <div class="shop__mobile">
           <Catalogue class="shop__mobile--catalog"/>
         </div>
-
         <div class="shop__control">
           <div>
             <ul class="nav">

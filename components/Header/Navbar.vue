@@ -78,7 +78,7 @@
             <ul class="u-header__links--items">
               <!-- Mobile Search -->
               <li class="u-header__links--item mobile-visible">
-                  <i class="ec ec-search"></i>
+                  <MobileSearch />
               </li>
               <!-- End Mobile Search -->
               <li class="u-header__links--item d-none">
@@ -128,9 +128,11 @@
   import toFix from "../filters/toFixed";
   import formattedPrice from "../filters/priceFix";
   import Search from "../Search/Search";
+  import MobileSearch from "../Search/MobileSearch";
   export default {
     name: "Navbar",
     components: {
+      MobileSearch,
       Search,
       Burger,
       SidebarNav

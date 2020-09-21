@@ -45,11 +45,13 @@ export default {
   ],
   plugins: [
     '~/plugins/vue-backtotop',
+    { src: '~/plugins/swal', ssr: false },
     { src: '~/plugins/vue-html-remove', ssr: false },
     { src: '~/plugins/vue-carousel', ssr: false },
     { src: '~/plugins/vue-tabs', ssr: false },
     { src: '~/plugins/vuex-persist', ssr: false },
     { src: '~/plugins/vue-notification', ssr: false },
+    { src: '~/plugins/v-mask', ssr: false },
   ],
 
   modules: [
@@ -133,7 +135,7 @@ export default {
         ignoreOrder: true
       }
     }),
-    transpile: ['vue-lazy-hydration', 'intersection-observer', 'vue-backtotop', 'vuex-persist'],
+    transpile: ['vue-lazy-hydration', 'intersection-observer', 'vue-backtotop', 'vuex-persist', 'swal'],
     postcss: {
       plugins: {
         ...(!isDev && {

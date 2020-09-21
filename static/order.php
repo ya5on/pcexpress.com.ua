@@ -1,60 +1,26 @@
+
 <?php
+header('Content-type: application/json');
+header('Access-Control-Allow-Headers: Content-Type');
+header("Access-Control-Allow-Origin: *");
 
-$method = $_SERVER['REQUEST_METHOD'];
+$inputJSON = file_get_contents('php://input');
+$input = json_decode($inputJSON, TRUE);
 
-//Script Foreach
-$c = true;
-if ( $method === 'POST' ) {
+$name = $input['name'];
+$email = $input['email'];
+$message = $input['message'];
+$theme = $input['theme'];
 
-	$project_name = "pcexpress.com.ua";
-  	$admin_email  = "spaunfrom@gmail.com";
-  	$form_subject = "Заказ с сайта";
 
-	foreach ( $_POST as $key => $value ) {
-		if ( $value != "" && $key != "project_name" && $key != "admin_email" && $key != "form_subject" ) {
-			$message .= "
-			" . ( ($c = !$c) ? '<tr>':'<tr style="background-color: #f8f8f8;">' ) . "
-			<td style='padding: 10px; border: #e9e9e9 1px solid;'><b>$key</b></td>
-			<td style='padding: 10px; border: #e9e9e9 1px solid;'>$value</td>
-		</tr>
-		";
-	}
-}
-} else if ( $method === 'GET' ) {
+$to = "spaunfrom@gmail.com";
+$subject = 'Новый заказ';
+$mess = "<div style='background-color: #60606e; padding: 15px'><h1 style='font-size: 26px; color: #29a450'>Тема: $theme</h1><hr style='background-color: #fff; height: 2px'><p style='font-size: 20px; color: #0e0f13'><span style='font-size: 26px; display: block'>Сообщение:</span> $message</p></div>";
 
-	$project_name = "pcexpress.com.ua";
-	$admin_email  = "spaunfrom@gmail.com";
-	$form_subject = "Заказ с сайта";
 
-	foreach ( $_GET as $key => $value ) {
-		if ( $value != "" && $key != "project_name" && $key != "admin_email" && $key != "form_subject" ) {
-			$message .= "
-			" . ( ($c = !$c) ? '<tr>':'<tr style="background-color: #f8f8f8;">' ) . "
-			<td style='padding: 10px; border: #e9e9e9 1px solid;'><b>$key</b></td>
-			<td style='padding: 10px; border: #e9e9e9 1px solid;'>$value</td>
-		</tr>
-		";
-	}
-}
-}
-
-$message = "<table style='width: 100%;'>$message</table>";
-
-function adopt($text) {
-	return '=?UTF-8?B?'.base64_encode($text).'?=';
-}
-
-$headers = "MIME-Version: 1.0" . PHP_EOL .
-"Content-type: text/html; charset=utf-8" . PHP_EOL .
-'From: '.adopt($project_name).' <'.$admin_email.'>' . PHP_EOL .
-'Reply-To: '.$admin_email.'' . PHP_EOL;
-
-mail($admin_email, adopt($form_subject), $message, $headers );
-
-$token = "";
-$chat_id = "";
-foreach ( $_POST as $key => $value ) {
-  $txt .= "<b>".$key."</b> ".$value."%0A";
-};
-//$sendToTelegram = fopen("https://api.telegram.org/bot{$token}/sendMessage?chat_id={$chat_id}&parse_mode=html&text={$txt}","r");
-?>
+$headers = "From: pcexpress.com.ua <spaunfrom@gmail.com>\r\n";
+$headers .= "Reply-To: " . $name . " <" . $email . ">\r\n";
+$headers .= 'X-Mailer: PHP/' . phpversion();
+$headers .= "MIME-Version: 1.0\r\n";
+$headers .= "Content-type: text/html; charset=utf-8\r\n";
+mail($to, $subject, $mess, $headers);

@@ -18,7 +18,7 @@
     <div class="title d-block">
       <h1 class="text-center">Оформление заказа</h1>
     </div>
-    <form class="order">
+    <form class="order" @submit.prevent="formSubmit">
       <div class="order__box">
         <div class="order__form">
           <div class="">
@@ -36,7 +36,7 @@
                     Имя
                     <span class="text-danger">*</span>
                   </label>
-                  <input type="text" class="input-fields__control" name="firstName" placeholder="John" required="">
+                  <input type="text" class="input-fields__control" name="firstName" placeholder="John" v-model="orderName">
                 </div>
                 <!-- End Input -->
               </div>
@@ -48,7 +48,7 @@
                     Фамилия
                     <span class="text-danger">*</span>
                   </label>
-                  <input type="text" class="input-fields__control" name="lastName" placeholder="Doe" required="">
+                  <input type="text" class="input-fields__control" name="lastName" placeholder="Doe" v-model="orderSecondName">
                 </div>
                 <!-- End Input -->
               </div>
@@ -58,10 +58,12 @@
                 <!-- Input -->
                 <div class="">
                   <label class="input-fields__label">
-                    Эл. Почта
+                    Телефон
+                    <span class="text-danger">*</span>
                   </label>
-                  <input type="email" class="input-fields__control" name="emailAddress"
-                         placeholder="johndoe@gmail.com">
+                  <input type="text" class="input-fields__control" placeholder="+38 (062) 109-92-22"
+                         v-mask="'+38 (###) ###-##-##'"
+                         v-model="orderPhone">
                 </div>
                 <!-- End Input -->
               </div>
@@ -70,10 +72,10 @@
                 <!-- Input -->
                 <div class="">
                   <label class="input-fields__label">
-                    Телефон
-                    <span class="text-danger">*</span>
+                    Эл. Почта
                   </label>
-                  <input type="text" class="input-fields__control" placeholder="+38 (062) 109-9222" required="">
+                  <input type="email" class="input-fields__control" name="emailAddress"
+                         placeholder="johndoe@gmail.com" v-model="orderEmail">
                 </div>
                 <!-- End Input -->
               </div>
@@ -88,23 +90,22 @@
               </label>
               <div class="input-fields__dropdown">
                 <div class="custom-control">
-                  <input type="radio" class="custom-control-input" id="Radio1" value="a" v-model="checked">
+                  <input type="radio" class="custom-control-input" id="Radio1" value="Самовывоз из магазина" v-model="orderDelivery">
                   <label class="custom-control-label" for="Radio1">
                     Самовывоз из магазина
                   </label>
                   <div class="check"></div>
                 </div>
                 <div class="custom-control">
-                  <input type="radio" class="custom-control-input" id="Radio2" value="b" v-model="checked">
+                  <input type="radio" class="custom-control-input" id="Radio2" value="Новой Почтой" v-model="orderDelivery">
                   <label class="custom-control-label" for="Radio2">
                     Новой Почтой
                   </label>
                   <div class="check"></div>
-                  <div class="custom-control-text" v-if="checked === 'b'">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet, ut.
-                  </div>
+<!--                  <div class="custom-control-text" v-if="checked === 'b'">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet, ut.</div>-->
                 </div>
                 <div class="custom-control">
-                  <input type="radio" class="custom-control-input" id="Radio3" value="c" v-model="checked">
+                  <input type="radio" class="custom-control-input" id="Radio3" value="Адресная доставка" v-model="orderDelivery">
                   <label class="custom-control-label" for="Radio3">
                     Адресная доставка
                   </label>
@@ -118,7 +119,7 @@
               <div class="mb-4">
                 <label class="input-fields__label">Коментарий:</label>
                 <div class="input-group">
-                  <textarea class="form-control p-5" rows="4" name="text" placeholder="Примечания к вашему заказу, например особые примечания к доставке."></textarea>
+                  <textarea v-model="orderComment" class="form-control p-5" rows="4" name="text" placeholder="Примечания к вашему заказу, например особые примечания к доставке."></textarea>
                 </div>
               </div>
             </div>
@@ -142,17 +143,15 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr class="cart_item" v-for="product in cart" :key="product.id">
-                    <th class="cart_item--1">{{ product.name }}<strong class="product-quantity"> × {{
-                        product.qty
-                      }}</strong></th>
-                    <th class="cart_item--2">{{ product.price * getDollar | toFix | formattedPrice }}</th>
-                  </tr>
+                    <tr class="cart_item" v-for="product in cart" :key="product.id" >
+                      <th class="cart_item--1">{{ product.name }}<strong class="product-quantity"> × {{ product.qty }}</strong></th>
+                      <th class="cart_item--2">{{ product.price * getDollar | toFix | formattedPrice }}</th>
+                    </tr>
                   </tbody>
                   <tfoot>
                   <tr>
                     <th class="table__footer"><strong>Сумма:</strong></th>
-                    <td class="table__footer"><strong>{{ cartTotalCost * getDollar | toFix | formattedPrice }}</strong></td>
+                    <td class="table__footer"><strong>{{ cartTotalCost | toFix | formattedPrice }}</strong></td>
                   </tr>
                   </tfoot>
                 </table>
@@ -163,41 +162,41 @@
                     <!-- Card -->
                     <div class="input-fields__dropdown">
                       <div class="custom-control-order">
-                        <input type="radio" class="custom-control-input" id="Radio4" value="a" v-model="checkedPay">
+                        <input type="radio" class="custom-control-input" id="Radio4" value="Наличными (Самовывоз / Курьером По Киеву)" v-model="orderPay">
                         <label class="custom-control-label form-label " for="Radio4">
                           Наличными (Самовывоз / Курьером По Киеву)
                         </label>
-                        <div class="custom-control-text" v-if="checkedPay === 'a'">
+                        <div class="custom-control-text" v-if="orderPay === 'Наличными (Самовывоз / Курьером По Киеву)'">
                           Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.
                         </div>
                         <div class="check"></div>
                       </div>
                       <div class="custom-control-order">
-                        <input type="radio" class="custom-control-input" id="Radio5" value="b" v-model="checkedPay">
+                        <input type="radio" class="custom-control-input" id="Radio5" value="Картой На Сайте - (VISA / MasterCard)" v-model="orderPay">
                         <label class="custom-control-label form-label" for="Radio5">
                           Картой На Сайте - <span>(VISA / MasterCard)</span>
                         </label>
-                        <div class="custom-control-text" v-if="checkedPay === 'b'">
+                        <div class="custom-control-text" v-if="orderPay === 'Картой На Сайте - (VISA / MasterCard)'">
                           Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.
                         </div>
                         <div class="check"></div>
                       </div>
                       <div class="custom-control-order">
-                        <input type="radio" class="custom-control-input" id="Radio6" value="c" v-model="checkedPay">
+                        <input type="radio" class="custom-control-input" id="Radio6" value="Наложенный Платеж (Новая Почта)" v-model="orderPay">
                         <label class="custom-control-label form-label" for="Radio6">
                           Наложенный Платеж (Новая Почта)
                         </label>
-                        <div class="custom-control-text" v-if="checkedPay === 'c'">
+                        <div class="custom-control-text" v-if="orderPay === 'Наложенный Платеж (Новая Почта)'">
                           Pay with cash upon delivery.
                         </div>
                         <div class="check"></div>
                       </div>
                       <div class="custom-control-order">
-                        <input type="radio" class="custom-control-input" id="Radio7" value="d" v-model="checkedPay">
+                        <input type="radio" class="custom-control-input" id="Radio7" value="Безналичный Расчет (ПДВ / ФОП)" v-model="orderPay">
                         <label class="custom-control-label form-label" for="Radio7">
                           Безналичный Расчет (ПДВ / ФОП)
                         </label>
-                        <div class="custom-control-text" v-if="checkedPay === 'd'">
+                        <div class="custom-control-text" v-if="orderPay === 'Безналичный Расчет (ПДВ / ФОП)'">
                           Pay via PayPal; you can pay with your credit card if you don’t have a PayPal account.
                         </div>
                         <div class="check"></div>
@@ -205,11 +204,11 @@
                     </div>
                   <!-- End Basics Accordion -->
                 </div>
-
-                <button type="submit" class="order-btn">
+                <button :submit="true" class="order-btn">
                   Оформить ЗАКАЗ
                 </button>
               </div>
+            <div id="liqpay_checkout"></div>
               <!-- End Order Summary -->
             </div>
         </div>
@@ -219,19 +218,41 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import NovaPoshta from 'novaposhta';
 import toFix from "../filters/toFixed";
 import formattedPrice from "../filters/priceFix";
 import {mapGetters} from "vuex";
+import axios, * as others from 'axios'
 
 const api = new NovaPoshta({apiKey: 'e6ac5221a16aa8bc3f1a08a8424c40b4'});
 export default {
   name: "Checkout",
+  head: {
+    // script: [
+    //   {
+    //     src: '//static.liqpay.ua/libjs/checkout.js'
+    //   }
+    // ]
+  },
   data() {
     return {
-      checked: 'a',
-      checkedPay: '',
-      cities: []
+      orderName: '',
+      orderSecondName: '',
+      orderPhone: '',
+      orderEmail: '',
+      orderComment: '',
+      orderDelivery: 'Самовывоз из магазина',
+      orderPay: 'Наличными (Самовывоз / Курьером По Киеву)',
+      errs: [],
+      // cities: []
+      token: '721569016:AAGj-BkOM-ni_Pd-7tyRONMAs2jNVqLoRC8',
+      chatId: '-354813176',
+      product:[
+        {
+          name: ''
+        }
+      ]
     }
   },
   filters: {
@@ -250,7 +271,7 @@ export default {
       let result = []
       if (this.cart) {
         for (let product of this.cart) {
-          result.push(product.price * product.qty)
+          result.push(product.price * product.qty * this.getDollar)
         }
         result = result.reduce((sum, el) => sum + el, 0)
         return result;
@@ -262,6 +283,105 @@ export default {
       return this.RATES.map(e => e.rate).toString()
     },
   },
+  methods: {
+    formSubmit(){
+      let name = this.orderName;
+      let secondName = this.orderSecondName;
+      let phone = this.orderPhone;
+      let email = this.orderEmail;
+      let comment = this.orderComment;
+      let delivery = this.orderDelivery;
+      let payMethod = this.orderPay;
+      let total = this.cartTotalCost;
+
+      // if(name.length > 0){
+      //   this.removeError('name');
+      // } else {
+      //   this.addError('name');
+      // }
+      // if(secondName.length > 0){
+      //   this.removeError('secondName');
+      // } else {
+      //   this.addError('secondName');
+      // }
+      // if(phone.length > 0){
+      //   this.removeError('phone');
+      // } else {
+      //   this.addError('phone');
+      // }
+
+      if(this.checkErrors()){
+        let msg =	'Новый заказ от <b>' + name + ' ' + secondName + '!</b>\n';
+        msg +=	'Номер телефона: <b>' + phone + '.</b>\n';
+        msg +=	'Email: <b>' + email + '.</b>\n';
+        msg +=	'Способ доставки: <b>' + delivery + '.</b>\n';
+        msg +=	'Коментарий: <b>' + comment + '.</b>\n';
+        msg +=	'Способ оплаты: <b>' + payMethod + '.</b>\n';
+        msg +=	'Сумма: <b>' + total.toFixed(0) + ' грн' + '.</b>\n';
+        msg +=	'Товары: <b>' + ' ' + '.</b>\n';
+        this.sendForm(msg);
+
+      } else {
+        let msg = "";
+        Array.prototype.forEach.call(this.errs, function(err){
+          if(err === 'name'){
+            msg += 'Поле имя не должно быть пустое' + '!<br>\n';
+          }
+          if(err === 'secondName'){
+            msg += 'Поле фамилия не должно быть пустое' + '!<br>\n';
+          }
+          if(err === 'phone'){
+            msg += 'Поле телефон не должно быть пустое' + '!<br>\n';
+          }
+        });
+        this.showErrorAlert(msg);
+      }
+    },
+    checkError(err){
+      return this.errs.indexOf(err);
+    },
+    addError(err){
+      if(this.checkError(err) === -1){
+        this.errs.push(err);
+      }
+    },
+    removeError(err){
+      if(this.checkError(err) !== -1){
+        this.errs.splice(this.checkError(err), 1);
+      }
+    },
+    checkErrors(){
+      return this.errs.length === 0;
+    },
+    showErrorAlert(msg){
+      Vue.swal("Ошибка", msg, "error");
+      console.log(msg);
+    },
+    showSuccessAlert(){
+      Vue.swal("Успешно!", "Ваш заказ принят", "success",);
+      this.orderName = '';
+      this.orderSecondName = '';
+      this.orderPhone = '';
+      this.orderEmail = '';
+      this.orderComment= '';
+    },
+    sendForm(msg){
+      let url = 'https://api.telegram.org/bot' + this.token + '/sendMessage?chat_id=' + this.chatId + '&text=' + encodeURI(msg) + '&parse_mode=html';
+      let $this = this;
+
+      axios.get(url).then((response) => {
+        let ok = response.data.ok;
+        if(ok){
+          $this.showSuccessAlert();
+        } else {
+          $this.showErrorAlert('Случилась какая-то ошибка. Повторите еще раз.');
+        }
+      }).catch((error) => {
+        console.log(error);
+        $this.showErrorAlert('Случилась какая-то ошибка. Повторите еще раз.');
+      });
+    },
+    },
   mounted() {
     api.address
       .getCities()
@@ -273,11 +393,30 @@ export default {
           errors.forEach((error) => console.log(`[${error.code || '-'}] ${error.en || error.uk || error.ru || error.message}`));
         }
       });
+    // window.LiqPayCheckoutCallback = function() {
+    //   LiqPayCheckout.init({
+    //     data: "data",
+    //     signature: "QvJD5u9Fg55PCx/Hdz6lzWtYwcI=",
+    //     embedTo: "#liqpay_checkout",
+    //     language: "ru",
+    //     mode: "popup" // embed || popup
+    //   }).on("liqpay.callback", function(data){
+    //     console.log(data.status);
+    //     console.log(data);
+    //   }).on("liqpay.ready", function(data){
+    //     // ready
+    //   }).on("liqpay.close", function(data){
+    //     // close
+    //   });
+    // };
   }
 }
 </script>
 
 <style lang="sass" scoped>
+.hidden
+  display: none
+
 .title
   text-align: center
   margin-bottom: 2rem
@@ -369,9 +508,11 @@ export default {
     flex-wrap: wrap
 
     &__box
-      +col
       +size(6)
+      +size-sm(12)
       margin-bottom: 2.5rem
+      +sm(margin-bottom, 1rem)
+      +sm(width, 100%)
 
     &__label
       display: block

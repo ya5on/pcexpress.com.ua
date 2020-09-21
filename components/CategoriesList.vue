@@ -4,6 +4,9 @@
       <nuxt-link to="/categories" class="">Все категории</nuxt-link>
     </div>
     <ul class="menu-list">
+      <li class="menu-item">
+        <nuxt-link class="menu-button" to="/category/">Все товары</nuxt-link>
+      </li>
       <li class="menu-item" v-for="category in MAIN_CATS" :key="category.id">
         <nuxt-link :to="`/category/${category.id}`" class="menu-button">
           {{ category.title }}
@@ -32,6 +35,7 @@
         </div>
       </li>
     </ul>
+
   </div>
 </template>
 

@@ -65,7 +65,7 @@
             </div>
             <div class="cart__grid">
               <div class="total-price">
-                Итого: {{ cartTotalCost * getDollar | toFix | formattedPrice }}
+                Итого: {{ cartTotalCost | toFix | formattedPrice }}
               </div>
             </div>
             <div class="cart__block">
@@ -123,7 +123,7 @@ export default {
       let result = []
       if (this.cart) {
         for (let product of this.cart) {
-          result.push(product.price * product.qty)
+          result.push(product.price * product.qty * this.getDollar)
         }
         result = result.reduce((sum, el) => sum + el, 0)
         return result;
