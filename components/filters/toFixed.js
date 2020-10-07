@@ -1,4 +1,4 @@
 export default function toFix(value){
-  value = parseFloat(value);
+  value = Math.ceil(value);
   return value.toFixed(0) + ' грн.'
 }

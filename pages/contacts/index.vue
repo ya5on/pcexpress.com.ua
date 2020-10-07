@@ -21,8 +21,15 @@
         </div>
         <address class="contacts__address">
           г. Киев, ул. Амвросия Бучмы 5, офис 201
-          <div class="">(067) 604-34-68</div>
-          <div class="">(066) 096-00-12</div>
+          <div class="">
+            <a href="tel:+380676043468" class="">(067) 604-34-68</a>
+          </div>
+          <div class="">
+            <a href="tel:+380660960012" class="">(066) 096-00-12</a>
+          </div>
+          <div class="">
+            <a href="tel:+380444999786" class="">(044) 499-97-86</a>
+          </div>
           <div class="">Email: <a class="" href="mailto:nikolink.com@gmail.com">nikolink.post@gmail.com</a>
           </div>
         </address>
@@ -31,8 +38,8 @@
         <div class="mb-6">Суббота - Воскресенье online и отправка товара</div>
         <h5 class="">Карьера</h5>
         <p class="mb-6">If you’re interested in employment opportunities at Electro, please email us: <br>
-          <a class="text-decoration-on" href="mailto:nikolink.com@gmail.com">nikolink.com@gmail.com</a></p>
-
+          <a class="text-decoration-on" href="mailto:nikolink.com@gmail.com">nikolink.com@gmail.com</a>
+        </p>
       </div>
       <div class="contacts__map">
         <div class="mb-6">

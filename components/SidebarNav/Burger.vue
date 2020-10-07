@@ -106,12 +106,12 @@
                 <hr>
                 <ul class="d-flex">
                   <li class="dropdown__menu-item">
-                    <a class="social--link" href="https://t.me/Mikola_Dziuba" target="_blank">
+                    <a class="social--link" href="viber://chat?number=+380676043468" target="_blank">
                       <img src="../../assets/svg/components/viber.svg" alt="" title="Написать в Viber">
                     </a>
                   </li>
                   <li class="dropdown__menu-item">
-                    <a class="social--link" href="viber://chat?number=+380637857462" title="Написать в Telegram"
+                    <a class="social--link" href="https://t.me/Mikola_Dziuba" title="Написать в Telegram"
                        target="_blank">
                       <img src="../../assets/svg/components/telegram.svg" alt="">
                     </a>

@@ -64,10 +64,10 @@
         <!-- Secondary Menu -->
         <div class="u-header__social d-none">
           <div class="u-header__social--block">
-            <a class="u-header__social--link" href="https://t.me/Mikola_Dziuba">
+            <a class="u-header__social--link" href="viber://chat?number=+380676043468">
               <img src="../../assets/svg/components/viber.svg" alt="" title="Написать в Viber">
             </a>
-            <a class="u-header__social--link" href="viber://chat?number=+380637857462" title="Написать в Telegram">
+            <a class="u-header__social--link" href="https://t.me/Mikola_Dziuba" title="Написать в Telegram">
               <img src="../../assets/svg/components/telegram.svg" alt="">
             </a>
           </div>
@@ -81,11 +81,11 @@
                   <MobileSearch />
               </li>
               <!-- End Mobile Search -->
-              <li class="u-header__links--item d-none">
-                <nuxt-link to="/checkout" class="" title="Страница заказа">
-                  <i class="font-size-22 ec ec-tag"></i>
-                </nuxt-link>
-              </li>
+<!--              <li class="u-header__links&#45;&#45;item d-none">-->
+<!--                <nuxt-link to="/checkout" class="" title="Страница заказа">-->
+<!--                  <i class="font-size-22 ec ec-tag"></i>-->
+<!--                </nuxt-link>-->
+<!--              </li>-->
                 <li class="u-header__links--item d-none relative">
                   <nuxt-link to="/user/wishlist" class="" title="Список желаний">
                     <i class="ec ec-favorites"></i>

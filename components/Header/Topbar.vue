@@ -5,13 +5,16 @@
       <div class="u-header-topbar__nav-items">
         <ul class="u-header-topbar__left">
           <li class="u-header-topbar__nav-item">
-            <a href="tel:+380676043468" class="u-header-topbar__nav-link"><i class="ec ec-phone"></i>+38(067)604-34-68</a>
+            <a href="tel:+380676043468" class="u-header-topbar__nav-link"><i class="ec ec-phone"></i>+38 (067) 604-34-68</a>
           </li>
           <li class="u-header-topbar__nav-item">
-            <a href="tel:+380660960012" class="u-header-topbar__nav-link"><i class="ec ec-phone"></i>+38(066)096-00-12</a>
+            <a href="tel:+380660960012" class="u-header-topbar__nav-link"><i class="ec ec-phone"></i>+38 (066) 096-00-12</a>
           </li>
           <li class="u-header-topbar__nav-item">
-            <a href="mailto:info@electro.com" class="u-header-topbar__nav-link"><i class="ec ec-mail"></i>nikolink.post@gmail.com</a>
+            <a href="tel:+380444999786" class="u-header-topbar__nav-link"><i class="ec ec-phone"></i>+38 (044) 499-97-86</a>
+          </li>
+          <li class="u-header-topbar__nav-item">
+            <a href="mailto:nikolink.post@gmail.com" class="u-header-topbar__nav-link"><i class="ec ec-mail"></i>nikolink.post@gmail.com</a>
           </li>
         </ul>
         <ul class="u-header-topbar__right">

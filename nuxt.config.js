@@ -52,6 +52,7 @@ export default {
     { src: '~/plugins/vuex-persist', ssr: false },
     { src: '~/plugins/vue-notification', ssr: false },
     { src: '~/plugins/v-mask', ssr: false },
+    { src: '~/plugins/vue-paginate', ssr: false },
   ],
 
   modules: [

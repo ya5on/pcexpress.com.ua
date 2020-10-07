@@ -18,7 +18,7 @@
     <div class="title d-block">
       <h1 class="text-center">Оформление заказа</h1>
     </div>
-    <form class="order" @submit.prevent="formSubmit">
+    <form v-if="cart.length > 0" class="order" @submit.prevent="formSubmit">
       <div class="order__box">
         <div class="order__form">
           <div class="">
@@ -61,7 +61,7 @@
                     Телефон
                     <span class="text-danger">*</span>
                   </label>
-                  <input type="text" class="input-fields__control" placeholder="+38 (062) 109-92-22"
+                  <input type="text" class="input-fields__control" placeholder="+38 (000) 000-00-00"
                          v-mask="'+38 (###) ###-##-##'"
                          v-model="orderPhone">
                 </div>
@@ -144,8 +144,8 @@
                   </thead>
                   <tbody>
                     <tr class="cart_item" v-for="product in cart" :key="product.id" >
-                      <th class="cart_item--1">{{ product.name }}<strong class="product-quantity"> × {{ product.qty }}</strong></th>
-                      <th class="cart_item--2">{{ product.price * getDollar | toFix | formattedPrice }}</th>
+                      <th class="cart_item--1">{{ product.name }}<strong class="product-quantity"> × {{ product.qty }}шт</strong></th>
+                      <th class="cart_item--2">{{ product.price * getDollar * product.qty  | toFix | formattedPrice }}</th>
                     </tr>
                   </tbody>
                   <tfoot>
@@ -214,20 +214,24 @@
         </div>
       </div>
     </form>
+    <div v-else class="cart__main">
+      <h1 class="">пусто</h1>
+    </div>
+<!--    <Novaposhta />-->
   </div>
 </template>
 
 <script>
 import Vue from 'vue';
-import NovaPoshta from 'novaposhta';
 import toFix from "../filters/toFixed";
 import formattedPrice from "../filters/priceFix";
 import {mapGetters} from "vuex";
 import axios, * as others from 'axios'
+import Novaposhta from "../Novaposhta";
 
-const api = new NovaPoshta({apiKey: 'e6ac5221a16aa8bc3f1a08a8424c40b4'});
 export default {
   name: "Checkout",
+  components: {Novaposhta},
   head: {
     // script: [
     //   {
@@ -245,7 +249,6 @@ export default {
       orderDelivery: 'Самовывоз из магазина',
       orderPay: 'Наличными (Самовывоз / Курьером По Киеву)',
       errs: [],
-      // cities: []
       token: '721569016:AAGj-BkOM-ni_Pd-7tyRONMAs2jNVqLoRC8',
       chatId: '-354813176',
       product:[
@@ -257,7 +260,8 @@ export default {
   },
   filters: {
     toFix,
-    formattedPrice
+    formattedPrice,
+    // currency: num => `$${num / 100}`,
   },
   created() {
     return this.$store.dispatch('GET_RATES')
@@ -284,7 +288,7 @@ export default {
     },
   },
   methods: {
-    formSubmit(){
+    formSubmit: function () {
       let name = this.orderName;
       let secondName = this.orderSecondName;
       let phone = this.orderPhone;
@@ -293,44 +297,52 @@ export default {
       let delivery = this.orderDelivery;
       let payMethod = this.orderPay;
       let total = this.cartTotalCost;
+      let cart = [];
+      for (let p of this.cart) {
+        cart.push(p.name + ' ',
+          '\n Код продукта: ' + p.code,
+          '\n Количество: ' + p.qty + ' шт',
+          '\n Цена: ' + Math.ceil(p.price * p.qty * this.getDollar).toFixed(0)  + ' грн' +
+          '\n ------------------------\n ')
+      }
 
-      // if(name.length > 0){
-      //   this.removeError('name');
-      // } else {
-      //   this.addError('name');
-      // }
-      // if(secondName.length > 0){
-      //   this.removeError('secondName');
-      // } else {
-      //   this.addError('secondName');
-      // }
-      // if(phone.length > 0){
-      //   this.removeError('phone');
-      // } else {
-      //   this.addError('phone');
-      // }
+      if(name.length > 0){
+        this.removeError('name');
+      } else {
+        this.addError('name');
+      }
+      if(secondName.length > 0){
+        this.removeError('secondName');
+      } else {
+        this.addError('secondName');
+      }
+      if(phone.length > 0){
+        this.removeError('phone');
+      } else {
+        this.addError('phone');
+      }
 
-      if(this.checkErrors()){
-        let msg =	'Новый заказ от <b>' + name + ' ' + secondName + '!</b>\n';
-        msg +=	'Номер телефона: <b>' + phone + '.</b>\n';
-        msg +=	'Email: <b>' + email + '.</b>\n';
-        msg +=	'Способ доставки: <b>' + delivery + '.</b>\n';
-        msg +=	'Коментарий: <b>' + comment + '.</b>\n';
-        msg +=	'Способ оплаты: <b>' + payMethod + '.</b>\n';
-        msg +=	'Сумма: <b>' + total.toFixed(0) + ' грн' + '.</b>\n';
-        msg +=	'Товары: <b>' + ' ' + '.</b>\n';
+      if (this.checkErrors()) {
+        let msg = 'Новый заказ от <b>' + name + ' ' + secondName + '!</b>\n';
+        msg += 'Номер телефона: <b>' + phone + '.</b>\n';
+        msg += 'Email: <b>' + email + '.</b>\n';
+        msg += 'Способ доставки: <b>' + delivery + '.</b>\n';
+        msg += 'Коментарий: <b>' + comment + '.</b>\n';
+        msg += 'Способ оплаты: <b>' + payMethod + '.</b>\n';
+        msg += 'Товары: <b>\n' + cart + '</b>\n';
+        msg += 'Сумма: <b>' + Math.ceil(total).toFixed(0) + ' грн' + '.</b>\n';
         this.sendForm(msg);
 
       } else {
         let msg = "";
-        Array.prototype.forEach.call(this.errs, function(err){
-          if(err === 'name'){
+        Array.prototype.forEach.call(this.errs, function (err) {
+          if (err === 'name') {
             msg += 'Поле имя не должно быть пустое' + '!<br>\n';
           }
-          if(err === 'secondName'){
+          if (err === 'secondName') {
             msg += 'Поле фамилия не должно быть пустое' + '!<br>\n';
           }
-          if(err === 'phone'){
+          if (err === 'phone') {
             msg += 'Поле телефон не должно быть пустое' + '!<br>\n';
           }
         });
@@ -364,6 +376,8 @@ export default {
       this.orderPhone = '';
       this.orderEmail = '';
       this.orderComment= '';
+      this.$store.commit("clearCart");
+      this.$router.push('/category')
     },
     sendForm(msg){
       let url = 'https://api.telegram.org/bot' + this.token + '/sendMessage?chat_id=' + this.chatId + '&text=' + encodeURI(msg) + '&parse_mode=html';
@@ -383,16 +397,7 @@ export default {
     },
     },
   mounted() {
-    api.address
-      .getCities()
-      .then((response) => {
-        (this.cities = response.data)
-      })
-      .catch((errors) => {
-        if (Array.isArray(errors)) {
-          errors.forEach((error) => console.log(`[${error.code || '-'}] ${error.en || error.uk || error.ru || error.message}`));
-        }
-      });
+
     // window.LiqPayCheckoutCallback = function() {
     //   LiqPayCheckout.init({
     //     data: "data",

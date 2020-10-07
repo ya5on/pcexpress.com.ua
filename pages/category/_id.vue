@@ -283,12 +283,12 @@
           </div>
           <div class="shop__pagination">
             <div class="page"
-                 v-if="filteredProducts.length > 20"
+                 v-if="filteredProducts.length > productsPerPage"
                  v-for="page in pages"
                  :key="page"
-                 :class="{'page__selected' : page === pageNum}"
+                 :class="{'page__selected' : page == pageNum}"
                  @click="pageClick(page)">
-              {{ page }}
+                {{ page }}
             </div>
           </div>
         </div>
@@ -306,9 +306,11 @@ import CategoriesList from "../../components/CategoriesList";
 import toFix from "../../components/filters/toFixed";
 import formattedPrice from "../../components/filters/priceFix";
 import CustomSelect from "../../components/CustomSelect";
+import Pagination from "../../components/Pagination";
+
 
 export default {
-  components: {CustomSelect, Catalogue, CategoriesList},
+  components: {CustomSelect, Catalogue, CategoriesList, Pagination},
   head() {
     return {
       title: this.cat.title,
@@ -326,6 +328,7 @@ export default {
       view: true,
       productsPerPage: 20,
       pageNum: 1,
+
       inputSearch: '',
       selectBrand: [],
       selectSocket: [],
@@ -334,14 +337,21 @@ export default {
       selectResolution: [],
       selectDDR: [],
       selectM: [],
-      selectMHz: []
+      selectMHz: [],
+
     }
   },
   filters: {
     toFix,
     formattedPrice
   },
+  watch: {
+    async "$route.query.page"() {
+      this.pageNum = this.$route.query.page || 1;
+    },
+  },
   created() {
+    this.pageNum = this.$route.query.page || 1;
     return this.$store.dispatch('GET_RATES')
   },
   computed: {
@@ -412,6 +422,12 @@ export default {
       this.view = !this.view;
     },
     pageClick(page) {
+      this.$router.push({
+        query: {
+          ...this.$route.query,
+          page: page,
+        },
+      })
       this.pageNum = page;
     },
     addToFavorites(product) {
